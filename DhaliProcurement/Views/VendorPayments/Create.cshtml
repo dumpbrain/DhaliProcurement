@@ -172,36 +172,36 @@
 
     });
 
-    //$('#ProjectId').change(function () {
-    //    var id = $('#ProjectId option:selected').val();
+    $('#VendorId').change(function () {
+        var id = $('#VendorId option:selected').val();
         
-    //    $.ajax({
-    //        url: "/VendorPayments/GetSites",
-    //        type: "post",
-    //        data: {
-    //            ProjectId: id
-    //        },
-    //        dataType: "json",
-    //        success: function (siteList) {
-    //            alert('test');
-    //            $('#SiteId').removeAttr("disabled");
+        $.ajax({
+            url: "/VendorPayments/GetProjects",
+            type: "post",
+            data: {
+                VendorId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                //alert('test');
+                //$('#SiteId').removeAttr("disabled");
 
-    //            var listOfSites = data.sites.length;
-    //            alert('listOfSites' + listOfSites);
-    //            var sites = "<select id='sites'>";
-    //            sites = sites + '<option value="">--Select--</option>';
-    //            for (var i = 0; i < listOfSites; i++) {
-    //                sites = sites + '<option value=' + data.sites[i].Value + '>' + data.sites[i].Text + '</option>';
-    //            }
-    //            sites = sites + '</select>';
-    //            $('#SiteId').html(sites);
+                var listOfSites = data.ProjectList.length;
+                //alert('listOfSites' + listOfSites);
+                var sites = "<select id='ProjectId'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.ProjectList[i].Value + '>' + data.ProjectList[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#ProjectId').html(sites);
 
-    //        },
-    //        error: function (xhr) {
-    //            alert('error');
-    //        }
-    //    });
-    //});
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
 
     $('#ProjectId').change(function () {
         var id = $('#ProjectId option:selected').val();

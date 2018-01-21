@@ -415,7 +415,6 @@ namespace DhaliProcurement.Controllers
                           where requisitionMas.Rcode == ReqNo && requisitionDet.ItemId == itemId
                           select purchaseMas).Distinct().ToList();
 
-
             var totalMaterial = (from total in db.ProcProjectItem
                                  join procProject in db.ProcProject on total.ProcProjectId equals procProject.Id
                                  where procProject.ProjectSiteId == siteId && total.ItemId == itemId
