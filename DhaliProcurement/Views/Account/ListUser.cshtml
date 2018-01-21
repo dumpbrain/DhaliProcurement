@@ -1,0 +1,119 @@
+﻿@model PagedList.IPagedList<DhaliProcurement.Models.User>
+@using PagedList.Mvc;
+
+
+@{
+    ViewBag.Title = "User List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="panel panel-flat">
+    <div class="panel-heading">
+        <h5 class="panel-title"><i class=" icon-stack3 position-left"></i>@ViewBag.Title</h5><hr />
+        <div class="heading-elements">
+            <ul class="icons-list">
+                <li><a data-action="collapse"></a></li>
+                <li><a data-action="reload"></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body">
+        <p>
+            @Html.ActionLink("Create New", "CreateUser", null, new { @class = "btn btn-info btn-xs", @style = "background-color: grey;border: none;" })
+        </p>
+        <div class="table-responsive">
+
+            <table class="table table-xxs table-bordered">
+                <tr class="bg-grey">
+
+                    <th class="col-lg-2">
+                        User Name
+                    </th>
+                    <th  class="col-lg-2">
+                        Fast Name
+                    </th>
+                    <th   class="col-lg-2">
+                        Last Name
+                    </th>
+                    <th   class="col-lg-3">
+                        Email
+                    </th>
+                    <th class="col-lg-4"></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.ActionLink(" ", "EditUser", new { id = item.Id }, new { @class = "btn btn-xs text-info icon-pencil4", @title = "Edit" }) 
+                            @Html.ActionLink(" ", "UserDetails", new { id = item.Id }, new { @class = "btn btn-xs text-info  icon-file-text2", @title = "Details" }) 
+                            @Html.ActionLink(" ", "ChangePassUser", new { id = item.Id }, new { @class = "btn btn-xs text-info icon-fence", @title = "Change Password" })
+                            <a class="btn btn-xs text-danger icon-cross2" , title="Delete" href="javascript:deleteFunction(@item.Id)"></a>
+
+                        </td>
+                    </tr>
+                }
+
+            </table>
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+            @Html.PagedListPager(Model, page => Url.Action("ListUser", new { page = page }))
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<script>
+    function deleteFunction(UserId) {
+        var Con = confirm("are you sure want to delete this ?");
+        if (Con == true) {
+            $.ajax({
+                url: "/Account/DeleteUser",
+               type:"post",
+            data: {
+                id:UserId
+                },
+            dataType: "json",
+
+            success: function (flag) {
+                console.log(flag);
+                if (flag==true) {
+                    window.location = "/Account/ListUser";
+                    alert("Successfully deleted !");
+                }
+                if(flag=="No")
+                {
+                    alert("Failed ! Delete ursers role first.");
+                }
+            },
+
+            error: function (xhr) {
+                alert('error');
+
+            }
+
+
+        });
+    }
+
+    }
+</script>
+

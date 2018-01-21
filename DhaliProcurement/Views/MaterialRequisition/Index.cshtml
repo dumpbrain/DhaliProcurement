@@ -1,0 +1,168 @@
+﻿@using DhaliProcurement.Helper
+@model IEnumerable<DhaliProcurement.Models.Proc_RequisitionMas>
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DhaliProcurement.Models.DCPSContext db = new DhaliProcurement.Models.DCPSContext();
+    var counter = 0;
+}
+
+<div class="panel panel-flat">
+    <div class="panel-heading">
+        <h5 class="panel-title "><i class="icon-task position-left"></i>Material Requisition List</h5><hr />
+        <div class="heading-elements">
+            <ul class="icons-list">
+                <li><a data-action="collapse"></a></li>
+                <li><a data-action="reload"></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body">       
+        <div class="col-md-2">
+            @Html.ActionLink("Create Requisition", "Create", null, new { @class = "btn btn-info", @style = "background-color: grey;border: none;" })
+        </div>
+        <div class="col-md-5 col-lg-offset-2">
+
+            @using (@Html.BeginForm("Index", "MaterialRequisition", FormMethod.Post))
+            {
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.Label("Requisition No.", htmlAttributes: new { @class = "control-label col-md-3" })
+
+                        <div class="col-md-9">
+
+                            @Html.DropDownList("ReqId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @Id = "ReqId" })
+
+                        </div>
+                        <input value="Search" class="btn btn-primary" type="submit" style="background-color: grey;border: none;" />
+                    </div>
+                </div>
+            }
+
+        </div>
+        <table class="table table-responsive  table-bordered">
+            <tr class="bg-grey">
+                <th>SL. No.</th>
+                <th>
+                    Project Name
+                </th>
+                <th>
+                    Requisition No.
+                </th>
+                <th>
+                    Requisition Date
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                counter++;
+
+                //var ProjectName = db.Project.Where(x => x.Id == item.ProcProjectId).Select(y => y.Name).FirstOrDefault();
+                var ProjectName = (from projectRequisition in db.Proc_RequisitionMas
+                                   join procProject in db.ProcProject on projectRequisition.ProcProjectId equals procProject.Id
+                                   join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
+                                   join project in db.Project on site.ProjectId equals project.Id
+                                   where projectRequisition.Id == item.Id
+                                   select new { project, site }).FirstOrDefault();
+
+                <tr>
+                    <td style="text-align:center;">
+                       @counter
+                    </td>
+                    <td>
+                        @*<label>@ProjectName</label>*@
+                        @Html.ActionLink(ProjectName.project.Name, "Edit", new { RequisitionMasId = item.Id }) 
+                        @*<br />
+                        <small>@ProjectName.site.Name</small>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rcode)
+                    </td>
+                    <td>
+                        <label>@NullHelper.DateToString(item.ReqDate)</label>
+
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.Status)*@
+                        @if (item.Status == "A")
+                        {
+                            <span class="badge badge-success">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-danger">Pending</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink(" ", "Edit", new { RequisitionMasId = item.Id }, new { @class = "btn btn-xs text-info  icon-pencil4", @title = "Edit Requisition" })
+                        @Html.ActionLink(" ", "Details", new { RequisitionMasId = item.Id }, new { @class = "btn btn-xs text-info  icon-file-text2" })
+                        @if (User.IsInRole("Management"))
+                        {
+                            <a class="btn btn-xs text-danger icon-cross2" title="Delete" href="javascript:deleteFunction( @item.Id)"></a>
+                        }
+                        @*@Html.ActionLink("Edit", "ProjectSites", new { id = item.ProcProjectId }, null)*@
+
+
+
+                        @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+                    </td>
+
+                </tr>
+            }
+
+        </table>
+    </div>
+    
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.select2').select2();
+    });
+
+    function deleteFunction(ProcRequisitionMId) {
+        var Con = confirm("are you sure want to delete this ?");
+        if (Con == true) {
+            $.ajax({
+                url: "/MaterialRequisition/DeletePlan",
+                type: "post",
+                data: {
+                    ProcRequisitionMId: ProcRequisitionMId
+                },
+                dataType: "json",
+
+                success: function (flag) {
+                    console.log(flag);
+
+                    if (flag.flag == true) {
+                        window.location = "/MaterialRequisition/Index";
+                        alert("Successfully deleted !");
+                    } else {
+                        alert(flag.message);
+                    }
+                },
+
+                error: function (xhr) {
+                    alert('error');
+
+                }
+
+
+            });
+        }
+
+    }
+</script>
+
+@*<style>
+    .select2-choice { background-color: #00f !important; }
+</style>*@

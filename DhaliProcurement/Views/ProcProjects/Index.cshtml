@@ -1,0 +1,279 @@
+﻿@model IEnumerable<DhaliProcurement.Models.ProcProject>
+@using DhaliProcurement.HtmlHelpers
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DhaliProcurement.Models.DCPSContext db = new DhaliProcurement.Models.DCPSContext();
+    var counter = 0;
+}
+
+<div class="panel panel-flat">
+    <div class="panel-heading">
+        <h5 class="panel-title"><i class="icon-stack3 position-left"></i>Project Information Costing List</h5><hr />
+        <div class="heading-elements">
+            <ul class="icons-list">
+                <li><a data-action="collapse"></a></li>
+                <li><a data-action="reload"></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="col-lg-12">
+
+            <div class="col-md-3">
+                @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-info", @style = "background-color: grey;border: none;" })
+            </div>
+
+
+            <div class="col-md-6">
+                @using (@Html.BeginForm("Index", "ProcProjects", FormMethod.Post))
+                {
+                    <div class="form-horizontal">
+                        @*@Html.Hidden("ProjectId")*@
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                        <div class="form-group">
+                            @Html.Label("Project", htmlAttributes: new { @class = "control-label col-md-3" })
+
+                            <div class="col-md-9">
+
+                                @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @Id = "ProjectId" })
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Site", htmlAttributes: new { @class = "control-label col-md-3" })
+
+                            <div class="col-md-9">
+
+                                @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @Id = "SiteId" })
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-md-9">
+                                <input value="Search" class="btn btn-primary" type="submit"  style="background-color: grey;border: none;" />
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+
+            <!--End-->
+
+        </div>
+        <div class="col-lg-12">
+
+            <table class="table table-xs table-bordered table-responsive">
+                <tr class="bg-grey">
+                    <th class="col-xs-1">
+                        SL. No.
+                    </th>
+                    <th class="col-lg-3">
+                        Project Name
+                    </th>
+                    <th class="col-lg-3">
+                        Site Name
+                    </th>
+
+                    <th class="col-lg-1">Status</th>
+                    <th class="col-lg-1">BOQ Date</th>
+                    @*<th class="col-lg-">NOA Date</th>*@
+                    <th class="col-lg-3">&nbsp;</th>
+                </tr>
+
+
+                @*@{
+                    int counter = ViewBag.Row;
+                }*@
+
+
+                @foreach (var item in Model)
+            {
+                    counter++;
+                    <tr>
+                        <td>
+                            <label>@counter</label>
+                        </td>
+
+                        <td>
+                            @{
+                                var projName = (from site in db.ProjectSite
+                                                join project in db.Project on site.ProjectId equals project.Id
+                                                where site.Id == item.ProjectSite.Id
+                                                select project).FirstOrDefault();
+                            }
+                            @*<label>@projName.Name</label>*@
+                            @Html.ActionLink(projName.Name, "Edit", new { projectId = item.Id, siteId = item.ProjectSite.Id })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProjectSite.Name)
+                        </td>
+
+                        <td>
+                            @*@Html.DisplayFor(model => item.Status)*@
+                            @if (item.Status.ToString() == "Running")
+                            {
+                                <span class="badge badge-info">@item.Status</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">@item.Status</span>
+                            }
+                        </td>
+                        <td>@Html.DisplayFor(model => item.BOQDate)</td>
+                        @*<td>@Html.DisplayFor(model => item.NOADate)</td>*@
+                        @*<td>@Html.DisplayFor(model => item.Remarks)</td>*@
+
+
+
+
+                        <td>
+                            @Html.ActionLink(" ", "Edit", new { projectId = item.Id, siteId = item.ProjectSiteId }, new { @class = "btn btn-xs text-info icon-pencil4", @title = "Edit" })
+                            @Html.ActionLink(" ", "Details", new { projectId = item.Id, siteId = item.ProjectSiteId }, new { @class = "btn btn-xs text-info  icon-file-text2", @title = "Details" })
+                            @*@Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "btn btn-xs text-danger icon-cross2", @title = "Delete" })*@
+                            @if (User.IsInRole("Management"))
+                            {
+                                <a class="btn btn-xs text-danger icon-cross2" title="Delete" href="javascript:deleteFunction(@item.Id,@item.Id)"></a>
+                            }
+                        </td>
+                    </tr>
+                                }
+
+            </table>
+
+        </div>
+
+
+    </div>
+
+
+
+ 
+
+
+
+
+</div>
+
+
+
+
+<script>
+
+
+    //$(document).ready(function () {
+    //    $('#SiteId').attr("disabled", "true");
+    //});
+
+    $('#ProjectId').change(function () {
+
+        var id = $('#ProjectId option:selected').val();
+
+        $.ajax({
+            url: "/ProcProjects/GetPId",
+            type: "post",
+            data: {
+                ProjectId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#SiteId').removeAttr("disabled");
+
+                var listOfSites = data.Sites.length;
+
+                var sites = "<select id='sites'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#SiteId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
+
+
+    function deleteFunction(procProjectId) {
+        var Con = confirm("Are you sure want to delete this ?");
+        if (Con === true) {
+            $.ajax({
+                url: "/ProcProjects/DeleteProcProjects",
+                type: "post",
+                data: {
+                    procProjectId: procProjectId
+                },
+                dataType: "json",
+                success: function (flag) {
+                    console.log(flag);
+
+                    if (flag.flag === true) {
+                        alert("Successfully deleted !");
+                        window.location = "/ProcProjects/Index";
+                    } else {
+                        alert(flag.message);
+                    }
+                },
+
+                error: function (xhr) {
+                    alert('error');
+
+                }
+
+
+            });
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+@section Scripts {
+
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Plugins/select2/select2.min.js"></script>
+    <script>
+        $(".select2").select2();
+    </script>
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

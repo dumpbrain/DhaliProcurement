@@ -1,0 +1,158 @@
+﻿@model IEnumerable<DhaliProcurement.Models.Proc_TenderMas>
+@using DhaliProcurement.Helper
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var counter = 0;
+}
+<div class="panel panel-flat">
+    <div class="panel-heading">
+        <h5 class="panel-title "><i class="icon-task position-left"></i>Materials Tender Quotation List</h5><hr />
+        <div class="heading-elements">
+            <ul class="icons-list">
+                <li><a data-action="collapse"></a></li>
+                <li><a data-action="reload"></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="col-md-2">
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-info", @style = "background-color: grey;border: none;" })
+        </div>
+        <div class="col-md-5 col-lg-offset-2">
+
+            @using (@Html.BeginForm("Index", "TenderQuotation", FormMethod.Post))
+            {
+                <div class="form-horizontal">
+                    @*@Html.Hidden("ProjectId")*@
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                    <div class="form-group">
+                        @Html.Label("Tender No.", htmlAttributes: new { @class = "control-label col-md-3" })
+
+                        <div class="col-md-9">
+
+                            @Html.DropDownList("TenderId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @Id = "TenderId" })
+
+                        </div>
+                        <input value="Search" class="btn btn-primary" type="submit" style = "background-color: grey;border: none;" />
+                    </div>
+                    @*<div class="col-md-offset-3 col-md-9">
+                        <input value="Search" class="btn btn-primary" type="submit" />
+                    </div>*@
+
+                </div>
+                @*<div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input value="Search" class="btn btn-primary" type="submit" />
+                    </div>
+                </div>*@
+            }
+
+        </div>
+        <table class="table table-responsive table-xs  table-bordered">
+            @*<tr class="bg-grey" style="font-weight:bold;font-size:110%;">*@
+            <tr class="bg-grey" style="font-weight:bold;">
+                <th>
+                    SL. No.
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.TNo)*@
+                    <label>Tender No.</label>
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.TDate)*@
+                    <label>Tender Date</label>
+                </th>
+                <th>
+                    <label>Specification</label>
+                </th>
+                <th>
+                    <label>Status</label>
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                counter++;
+                <tr>
+                    <td style="text-align:center;">
+                        @counter
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.TNo)*@
+                        @Html.ActionLink(item.TNo, "Edit", new { TenderId = item.Id })
+                    </td>
+                    <td>
+                        <label>@NullHelper.DateToString(item.TDate)</label>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Specs)
+                    </td>
+                    <td>
+                        @if (item.isApproved == "A")
+                        {
+                            <span class="badge badge-success">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-danger">Pending</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink(" ", "Edit", new { TenderId = item.Id }, new { @class = "btn btn-xs text-info  icon-pencil4", @title = "Edit Requisition" })
+                        @Html.ActionLink(" ", "Details", new { TenderId = item.Id }, new { @class = "btn btn-xs text-info  icon-file-text2" })
+                        @if (User.IsInRole("Management"))
+                        {
+                            <a class="btn btn-xs text-danger icon-cross2" title="Delete" href="javascript:deleteFunction(@item.Id)"></a>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.select2').select2();
+    });
+
+    function deleteFunction(TenderQuotarionMasId) {
+        var Con = confirm("are you sure want to delete this ?");
+        if (Con == true) {
+            $.ajax({
+                url: "/TenderQuotation/DeleteTenderQuotation",
+                type: "post",
+                data: {
+                    TenderQuotarionMasId: TenderQuotarionMasId
+                },
+                dataType: "json",
+
+                success: function (flag) {
+                    console.log(flag);
+
+                    if (flag.flag == true) {
+                        window.location = "/TenderQuotation/Index";
+                        alert("Successfully deleted !");
+                    } else {
+                        alert(flag.message);
+                    }
+                },
+
+                error: function (xhr) {
+                    alert('error');
+
+                }
+
+
+            });
+        }
+
+    }
+</script>

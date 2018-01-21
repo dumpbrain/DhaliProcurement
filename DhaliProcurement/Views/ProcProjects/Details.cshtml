@@ -1,0 +1,285 @@
+﻿@model DhaliProcurement.ViewModel.VMProjectItem
+@using DhaliProcurement.HtmlHelpers
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    DhaliProcurement.Models.DCPSContext db = new DhaliProcurement.Models.DCPSContext();
+    //var ProjectItems = db.ProcProjectItem.Where(x => x.ProjectId == Model.ProjectId && x.ProjectSiteId == Model.ProjectSiteId).ToList();
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i> Project Information Costing</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+                    <table class="table">
+                        <tr>
+                            <td>Project Name</td>
+                            <td>
+                                @*@Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @id = "ProjectId", @class = "form-control select2", @style = "width: 500px !important", disabled = "disabled" })
+                                    @Html.ValidationMessage("ProjectId", "", new { @class = "text-danger" })*@
+
+                                <input type="text" value="@ViewBag.ProcProjectIdDetailsForm" class="form-control" disabled="disabled" />
+
+                            </td>
+                            <td>Project Start Date</td>
+                            <td>
+
+                                <input type="text" value="@ViewBag.StartDate" class="form-control" disabled="disabled" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Site Name</td>
+                            <td>
+                                @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @id = "SiteId", @class = "form-control select2", @style = "width: 500px !important", disabled = "disabled" })
+                                @Html.ValidationMessage("SiteId", "", new { @class = "text-danger" })
+                            </td>
+                            <td>Project End Date</td>
+                            <td>
+                                <input type="text" value="@ViewBag.EndDate" class="form-control" disabled="disabled" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Site Engineer</td>
+                            <td>
+                                <input type="text" value="@ViewBag.StEng" class="form-control" disabled="disabled" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Project Manager</td>
+                            <td>
+                                <input type="text" value="@ViewBag.PrMan" class="form-control" disabled="disabled" />
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>BOQ Date</td>
+                            <td>
+                                @*@Html.TextBox("BOQDate", null, new { @class = "form-control datepicker" })*@
+                                <input type="text" value="@ViewBag.BOQDate" id="BOQDate" class="form-control datepicker" disabled="disabled" />
+                            </td>
+
+                            <td>BOQ No</td>
+                            <td>
+                                @*@Html.TextBox("BOQNo", null, new { @class = "form-control" })*@
+                                <input type="text" value="@ViewBag.BOQNo" id="BOQNo" class="form-control" disabled="disabled" />
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>NOA Date</td>
+                            <td>
+                                @*@Html.TextBox("NOADate", null, new { @class = "form-control datepicker" })*@
+                                <input type="text" value="@ViewBag.NOADate" id="NOADate" class="form-control datepicker" disabled="disabled" />
+                            </td>
+
+                            <td>NOA No</td>
+                            <td>
+                                @*@Html.TextBox("NOANo", null, new { @class = "form-control" })*@
+                                <input type="text" value="@ViewBag.NOANo" id="NOANo" class="form-control" disabled="disabled" />
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Project Type</td>
+                            <td>
+                                @Html.DropDownList("ProjectType", null, "Select", new { @class = "form-control select2", disabled = "disabled" })
+                                @*@Html.DropDownList("PType", null, "--Select--", htmlAttributes: new { @id = "ProjectType", @class = "form-control select2"})*@
+
+
+                            </td>
+
+                            <td>Status</td>
+                            <td>
+                                @*@Html.TextBox("ProjectStatus", null, new { @class = "form-control" })*@
+                                <input type="text" value="@ViewBag.PStatus" id="ProjectStatus" class="form-control" disabled="disabled" />
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Remarks</td>
+                            <td>
+                                @*@Html.TextBox("ProjectRemarks", "", new { @class = "form-control" })*@
+                                <input type="text" value="@ViewBag.PRemarks" id="ProjectRemarks" class="form-control" disabled="disabled" />
+
+                            </td>
+                        </tr>
+
+                    </table>
+                    <hr />
+
+                }
+
+
+
+                <div class="details well" style=" border 1px solid black;">
+                    <h4>Project Procurement Items</h4>
+
+
+                    <table class="Resource-list table table-bordered" id="Item-list">
+                        <tr class="bg-grey-300">
+                            <th class="col-lg-3">Item Name</th>
+                            <th  class="col-lg-2">Qty</th>
+                            <th  class="col-lg-2">Unit</th>
+                            <th  class="col-lg-2">Costing</th>
+                            <th  class="col-lg-3">Remarks</th>
+                        </tr>
+
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>Total Costing</td>
+                                <td><input type="text" value="" id="totalCost" class="form-control" disabled="disabled" /></td>
+                                <td></td>
+
+                            </tr>
+                        </tfoot>
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<p style="text-align:center;"><button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='@Url.Action("Index")';" style ="background-color: grey;border: none;"><i class="icon-circle-left2 position-left"></i> Go back</button></p>
+
+<script>
+    var counter = 0; //counter for the serial
+
+    $(document).ready(function (){
+
+
+
+        var Projectid = @ViewBag.PId;
+        var ProjectSiteId = @ViewBag.SId;
+        debugger;
+
+        ResourceDetails = JSON.stringify({
+
+            ProjectId: Projectid,
+            ProjectSiteId: ProjectSiteId
+
+        });
+
+        var Unit = $('#Unit option:selected').text();
+
+
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/ProcProjects/getProjectItems/',
+            traditional: true,
+            data: ResourceDetails,
+            success: function (data) {
+                console.log(data);
+                for (var i = 0; i < data.length; i++) {
+
+                    var newRow = jQuery('<tr><td> <input value="' + data[i].ItemISLNO + '" type="hidden" name="ItemId"/>  <label>'+data[i].ItemName+'</label> <input type="hidden" class="form-control" value="' + data[i].ItemName + '" readonly="true" type="text" name="ItemName' +
+                    counter + '"/></td><td> <label>'+data[i].PQuantity+'</label><input type="hidden" class="form-control" value="' + data[i].PQuantity + '" readonly="true" type="text" name="Quantity' +
+                    '"/></td><td><input value="' + data[i].UnitUSLNO + '" type="hidden" name="UnitId"/> <label>'+data[i].UnitName+'</label><input type="hidden" class="form-control" value="' + data[i].UnitName + '" " readonly="true" type="text" name="ItemUnit' +
+                    '"/></td><td><label>'+data[i].PCost+'</label><input type="hidden" class="form-control" value="' + data[i].PCost + '" readonly="true" type="text" name="ItemCost' +
+                    '"/></td><td><label>'+data[i].Remarks+'</label><input type="hidden" class="form-control" value="' + data[i].Remarks + '" readonly="true" type="text" name="ItemRemarks' +
+                    '"/></td></tr>');
+
+                    jQuery('table.Resource-list').append(newRow);
+                }
+
+               totalItemCost();
+
+            },
+            error: function (data) {
+                alert('Error: ');
+            }
+        });
+
+    });
+
+
+
+
+
+
+    $('#Item-list').on({
+        'change':function(){
+            var ItemTotalCost = 0;
+            for(var cn =1; cn < $('#Item-list tr').length-1; cn++){
+                var quantity =$('#Item-list tr').eq(cn).find("td input[name=Quantity]").val();
+                console.log('Quantity: '+quantity);
+                var cost = $('#Item-list tr').eq(cn).find("td input[name=ItemCost]").val();
+                console.log('Cost: '+cost);
+                var result = parseFloat(quantity) * parseFloat(cost);
+                ItemTotalCost = parseFloat(ItemTotalCost +result);
+            }
+
+            $('#totalCost').val(ItemTotalCost);
+
+        }
+    });
+
+
+    function totalItemCost(){
+
+        var ItemTotalCost = 0;
+        for(var cn =1; cn < $('#Item-list tr').length-1; cn++){
+            var quantity =$('#Item-list tr').eq(cn).find("td input[name=Quantity]").val();
+            console.log('Quantity: '+quantity);
+            var cost = $('#Item-list tr').eq(cn).find("td input[name=ItemCost]").val();
+            console.log('Cost: '+cost);
+            var result = parseFloat(quantity) * parseFloat(cost);
+            ItemTotalCost = parseFloat(ItemTotalCost +result);
+        }
+
+        $('#totalCost').val(ItemTotalCost);
+
+    }
+
+
+
+
+</script>
+
+@section Scripts {
+
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Plugins/select2/select2.min.js"></script>
+    <script>
+        $(".select2").select2();
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            todayBtn: true,
+            autoclose: true
+        });
+    </script>
+
+}
+

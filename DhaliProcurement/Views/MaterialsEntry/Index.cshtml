@@ -1,0 +1,159 @@
+﻿@model IEnumerable<DhaliProcurement.Models.Proc_MaterialEntryMas>
+@using DhaliProcurement.Helper
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DhaliProcurement.Models.DCPSContext db = new DhaliProcurement.Models.DCPSContext();
+    var counter = 0;
+}
+
+<div class="panel panel-flat">
+    <div class="panel-heading">
+        <h5 class="panel-title "><i class="icon-task position-left"></i>Materials Entry List</h5><hr />
+        <div class="heading-elements">
+            <ul class="icons-list">
+                <li><a data-action="collapse"></a></li>
+                <li><a data-action="reload"></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="col-lg-2">
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-info", @style = "background-color: grey;border: none;" })
+        </div>
+        <div class="col-lg-10">
+
+            @using (@Html.BeginForm("Index", "MaterialsEntry", FormMethod.Post))
+            {
+               
+                   @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                       
+                        <div class="col-lg-4 form-group">
+                            <div class="col-lg-4">
+                                @Html.Label("Project", htmlAttributes: new { @class = "control-label col-md-3" })
+                            </div>
+                            <div class="col-lg-8">
+                                @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @Id = "ProjectId" })
+                            </div>                      
+
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <div class="col-md-4">
+                                @Html.Label("Site", htmlAttributes: new { @class = "control-label col-md-3" })
+                            </div>
+                            <div class="col-md-8">
+                                @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @Id = "SiteId" })
+                            </div>
+
+                        </div>
+                        <input value="Search" class="btn btn-primary" type="submit" style="background-color: grey;border: none;" />
+                    </div>
+
+               
+            }
+
+        </div>
+
+        <table class="table table-responsive table-xs  table-bordered">
+            <tr class="bg-grey">
+                <th>SL. No.</th>
+                <th>
+                    <label>Project Name</label>
+                </th>
+                <th>
+                    <label>Site Name</label>
+                </th>
+                <th>
+                    <label>Materials Entry Date</label>
+                </th>
+
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                counter++;
+                <tr style="text-align:center">
+                   <td>@counter</td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.ProcProjectId)*@
+                        @{
+                            var ProjectName = (from procProject in db.ProcProject
+                                               join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
+                                               join project in db.Project on site.ProjectId equals project.Id
+                                               where procProject.Id == item.ProcProjectId
+                                               select project).SingleOrDefault();
+                        }
+                        @*<label>@ProjectName.Name</label>*@
+                        @Html.ActionLink(ProjectName.Name, "Edit", new { MaterialEntryMasId = item.Id })
+                    </td>
+                    <td>
+                        @{
+                            var SitetName = (from procProject in db.ProcProject
+                                             join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
+                                             where procProject.Id == item.ProcProjectId
+                                             select site).SingleOrDefault();
+                        }
+                        <label>@SitetName.Name</label>
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.EDate)*@
+                        <label>@NullHelper.DateToString(item.EDate)</label>
+                    </td>
+
+                    <td>
+                        @Html.ActionLink(" ", "Edit", new { MaterialEntryMasId = item.Id }, new { @class = "btn btn-xs text-info  icon-pencil4", @title = "Edit Requisition" })
+                        @Html.ActionLink(" ", "Details", new { MaterialEntryMasId = item.Id }, new { @class = "btn btn-xs text-info  icon-file-text2" })
+                        @*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+                        @if (User.IsInRole("Management"))
+                        {
+                            <a class="btn btn-xs text-danger icon-cross2" title="Delete" href="javascript:deleteFunction(@item.Id)"></a>
+                        }
+                    </td>
+                </tr>
+                            }
+
+        </table>
+
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.select2').select2();
+    });
+    function deleteFunction(MaterialEntryMasId) {
+        var Con = confirm("are you sure want to delete this ?");
+        if (Con == true) {
+            $.ajax({
+                url: "/MaterialsEntry/DeleteMaterialEntry",
+                type: "post",
+                data: {
+                    MaterialEntryMasId: MaterialEntryMasId
+                },
+                dataType: "json",
+
+                success: function (flag) {
+                    console.log(flag);
+
+                    if (flag.flag == true) {
+                        window.location = "/MaterialsEntry/Index";
+                        alert("Successfully deleted !");
+                    } else {
+                        alert(flag.message);
+                    }
+                },
+
+                error: function (xhr) {
+                    alert('error');
+
+                }
+
+
+            });
+        }
+
+    }
+</script>

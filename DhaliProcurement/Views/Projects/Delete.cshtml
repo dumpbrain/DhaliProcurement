@@ -1,0 +1,110 @@
+﻿@model DhaliProcurement.Models.Project
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.Exists == true)
+{
+    <div class="alert alert-warning">
+        <strong>Warning!</strong> @ViewBag.Count sites under this project. If you delete this project, you have to delete sites first.
+    </div>
+}
+
+
+
+<div class="row">
+    <div class="col-md-10">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class=" icon-stack-minus position-left"></i>Are you sure you want to delete this?</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="well well-lg">
+                    <dl class="dl-horizontal" style="font-size:16px;">
+                        <dt>
+                            Client Name:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Client.Name)
+                        </dd>
+
+                        <dt>
+                            Project Group Name:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ProjectGroup.Name)
+                        </dd>
+
+                        <dt>
+                            Project Name:
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Name)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.StartDate):
+                        </dt>
+
+                        <dd>
+                            @Convert.ToString(string.Format("{0:MM/dd/yyyy}", Model.StartDate))
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.EndDate):
+                        </dt>
+
+                        <dd>
+                            @Convert.ToString(string.Format("{0:MM/dd/yyyy}", Model.EndDate))
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Status):
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Status)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Remarks):
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Remarks)
+                        </dd>
+
+                    </dl>
+
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        if (ViewBag.Exists != true)
+                        {
+                            <div class="form-actions pull-right no-color">
+                                <button type="submit" class="btn btn-xs btn-danger"><i class=" icon-cross2 position-left"></i>  Delete</button>
+                                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-xs btn-primary" })
+                            </div>
+                        }
+
+                    }
+
+                    <br />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

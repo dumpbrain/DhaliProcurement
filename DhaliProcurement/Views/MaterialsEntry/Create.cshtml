@@ -1,0 +1,716 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Materials Entry</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>                      
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+                    <table class="table">
+                        <tr>
+                            <td>Project Name</td>
+                            <td>
+                                @*@Html.TextBox("TNo", "", new { @class = "form-control" })*@
+                                @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @id = "ProjectId", @class = "form-control select2", @style = "width: 500px !important" })                             
+                            </td>
+                        </tr>
+                        <tr>
+                               <td>Site Name</td>
+                                <td>
+                                    @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @id = "SiteId", @class = "form-control select2", @style = "width: 500px !important" })
+
+                                </td>
+
+                            </tr>
+                        <tr>
+                            <td class="col col-lg-1">Date</td>
+                            <td class="col col-lg-6">
+                                @Html.TextBox("EDate", "", new { @class = "form-control datepicker" })
+                            </td>
+                        </tr>
+
+                    </table>
+
+                    <hr />
+                    <br />
+                    <div class="details well" style=" border 1px solid black;">
+                        <h4>Items Entry</h4>
+                        <table style="width: 100%;">
+                            <tr>
+                                @*<td style="font-size: 15px; font-weight: bold;">Sl. No.</td>*@
+                                <th style="font-size: 15px; font-weight: bold;">Required Material</th>
+                                <th style="font-size: 15px; font-weight: bold;">Unit</th>
+                                <th style="font-size: 15px; font-weight: bold;">Req. No.</th>
+                                <th style="font-size: 15px; font-weight: bold;">PO No.</th>
+                                <th style="font-size: 15px; font-weight: bold;">Vendor Name</th>
+                                <th style="font-size: 15px; font-weight: bold;">Total Material</th>
+                                <th style="font-size: 15px; font-weight: bold;">Previous Received Qty</th>
+                                <th style="font-size: 15px; font-weight: bold;">Remaining Qty</th>
+                                <th style="font-size: 15px; font-weight: bold;">Challan No.</th>
+                                <th style="font-size: 15px; font-weight: bold;">Challan Date</th>
+                                <th style="font-size: 15px; font-weight: bold;">Material Entry(Qty)</th>
+                                <th style="font-size: 15px; font-weight: bold;">Unit Price</th>
+                                <th style="font-size: 15px; font-weight: bold;">Cost</th>
+                                @*<th>&nbsp;</th>*@
+                            </tr>
+                            <tr>
+                                <td>
+
+                                    @Html.DropDownList("ItemName", null, "Select item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ItemName", @style = "width: 100px;" })
+
+                                </td>
+                                <td>
+                                    @Html.TextBox("Unit", "", new { @disabled = "disabled", @class = "form-control", @id = "UnitName" })
+                                    <input type="hidden" value="" id="UnitId" />
+                                </td>
+                                <td>
+                                    @Html.DropDownList("ReqNo", null, "Select item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ReqNo", @style = "width: 100px;" })
+                                    <input type="hidden" value="" id="RCode" />
+                                </td>
+                                <td>
+                                    @*@Html.TextBox("PONo", null, new {@class = "form-control", @id = "PONo" })*@
+                                    @Html.DropDownList("PONo", null, "Select item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "PONo", @style = "width: 100px;" })
+                                    @*<input type="text" class="form-control" value="" id="PONo" />*@
+                                </td>
+                                <td>
+                                    @*@Html.DropDownList("VendorId", null, "Select Vendor", htmlAttributes: new { @class = "form-control select2",@data_required = "required", @id = "VendorId", @style = "width: 100px;" })*@
+                                    @*@Html.TextBox("Unit", "", new { @disabled = "disabled", @class = "form-control", @id = "UnitName" })*@
+                                    <input type="text" class="form-control" value="" id="VendorName" disabled="disabled"/>
+                                    <input type="hidden" value="" id="VendorId" />
+                                 </td>
+                                <td>
+                                    <input type="text" id="TotalMaterial" class="form-control" disabled="disabled" />
+                                </td>
+                                <td>
+                                    @*@Html.DropDownList("VendorId", null, "Select Vendor", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "VendorId"})*@
+                                    <input type="text" id="PreviousQty" class="form-control"  disabled="disabled" />
+                                </td>
+                                <td>
+                                    <input type="text" id="RemainingQty" class="form-control"  disabled="disabled" />
+                                </td>
+                                <td>
+                                    <input type="text" id="ChallanNo" class="form-control" />
+                                </td>
+                                <td>
+                                   
+                                    <input type="text" id="ChallanDate" class="form-control datepicker" />
+                                </td>
+                                <td>
+                                    <input type="text" id="MaterialEntry" class="form-control" name="ItemEntry"/>
+                                </td>
+                                <td>
+                                    <input type="text" id="UnitPrice" class="form-control" disabled="disabled" />
+                                </td>
+                                <td>
+                                    <input type="text" id="Cost" class="form-control" disabled="disabled" />
+                                </td>
+                                <td>
+                                    <input type="button" id="addNewRow" value="+" class="btn btn-primary" style ="background-color: grey;border: none;"/>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><span class="error" id="ItemName_Error">Item name required</span></td>
+                                <td></td>
+                                <td><span class="error" id="ReqNo_Error">Req No. required</span></td>
+                                <td><span class="error" id="PONo_Error">PO No. required</span></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><span class="error" id="ChallanNo_Error">Challan No. required</span></td>
+                                <td></td>
+                                <td><span class="error" id="MaterialEntry_Error">Material Entry required</span> </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <br />
+                        <div class="table-responsive scrolling">
+                            <table class="Resource-list table table-bordered" id="RequisitionDetails">
+                                <tr class="bg-grey">
+                                    @*<th>Sl. No.</th>*@
+                                    <th>Required Material</th>
+                                    <th>Unit</th>
+                                    <th>Req. No.</th>
+                                    <th>PO No.</th>
+                                    <th>Vendor Name</th>
+                                    <th>Total Material</th>
+                                    <th>Previous Received Qty</th>
+                                    <th>Remaining Qty</th>
+                                    <th>Challan No.</th>
+                                    <th>Challan Date</th>
+                                    <th>Material Entry(Qty)</th>
+                                    <th>Unit Price</th>
+                                    <th>Cost</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+
+                }
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info" , @style = "background-color: grey;border: none;" })
+            <button type="button" id="SaveItem" class="btn btn-success" style = "background-color: grey;border: none;" ><i class="icon-floppy-disk position-left"></i>Create</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var counter = 0;
+    $(document).ready(function () {
+        //$(".datepicker").datepicker({
+        //    dateFormat: 'dd/mm/yyyy',
+        //    autoclose: true,
+        //    changeYear: true
+        //});
+
+        $('#SiteId').attr("disabled", "true");
+        $("#ItemName").attr("disabled", "true");
+        $("#ReqNo").attr("disabled", "true");
+        $("#PONo").attr("disabled", "true");
+
+        $('#ItemName_Error').hide();
+        $('#ReqNo_Error').hide();
+        $('#PONo_Error').hide();
+        $('#ChallanNo_Error').hide();
+        $('#MaterialEntry_Error').hide();
+
+        RebindDatePicker();
+    });
+
+    $('#ProjectId').change(function () {
+        var id = $('#ProjectId option:selected').val();
+
+        $.ajax({
+            url: "/MaterialsEntry/GetSites",
+            type: "post",
+            data: {
+                ProjectId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#SiteId').removeAttr("disabled");
+                $('#ProjectManager').val(data.manager);
+                var listOfSites = data.Sites.length;
+
+                var sites = "<select id='sites'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#SiteId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
+
+    $("#SiteId").change(function () {
+        var SiteId = $('#SiteId  option:selected').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        //alert(ProjectId);
+
+        $.ajax({
+            type: "post",
+            url: "/MaterialsEntry/GetItemList",
+            data: { SiteId, ProjectId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#ItemName').removeAttr("disabled");
+
+                var listOfitems = data.Items.length;
+                var items = "<select id='ItemName'>";
+                items = items + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfitems; i++) {
+                    items = items + '<option value=' + data.Items[i].Value + '>' + data.Items[i].Text + '</option>';
+                }
+                items = items + '</select>';
+                $('#ItemName').html(items);
+
+            }
+
+        });
+    });
+
+    $("#ItemName").change(function () {
+        var ItemId = $('#ItemName option:selected').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        var SiteId = $('#SiteId option:selected').val();
+
+        if (ProjectId == "" && SiteId == "") {
+            alert('Please Select Project Id and Site Id');
+        }
+
+        $.ajax({
+            type: "post",
+            url: "/MaterialsEntry/GetUnit",
+            data: { ItemId, ProjectId, SiteId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#UnitId').val(data.UnitId);
+                $('#UnitName').val(data.UnitName);
+                //$('#TotalRequired').val(data.TotalRequired);
+                $('#ReqNo').removeAttr("disabled");
+                var listOfitems = data.ReqList.length;
+                var items = "<select id='ReqNo'>";
+                items = items + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfitems; i++) {
+                    items = items + '<option value=' + data.ReqList[i].Value + '>' + data.ReqList[i].Text + '</option>';
+                }
+                items = items + '</select>';
+                $('#ReqNo').html(items);
+
+
+            }
+
+        });
+    });
+
+    //$("#ReqNo").change(function () {
+    //    var ItemId = $('#ItemName option:selected').val();
+    //    var ProjectId = $('#ProjectId option:selected').val();
+    //    var SiteId = $('#SiteId option:selected').val();
+    //    var ReqNo = $('#ReqNo option:selected').val();
+
+    //    if (ProjectId == "" && SiteId == "") {
+    //        alert('Please Select Project Id and Site Id');
+    //    }
+
+    //    $.ajax({
+    //        type: "post",
+    //        url: "/MaterialsEntry/GetVendor",
+    //        data: { ItemId, ProjectId, SiteId, ReqNo },
+    //        datatype: "json",
+    //        traditional: true,
+    //        success: function (data) {
+    //            $('#VendorName').val(data.vendorName);
+    //            $('#VendorId').val(data.VendorId);
+    //            $('#TotalMaterial').val(data.TotalMaterial);                
+    //            $('#RemainingQty').val(data.RemainingQty);
+    //            $('#UnitPrice').val(data.UnitPrice);
+    //            var previousRemaining = data.TotalMaterial - data.RemainingQty;
+    //            $('#PreviousQty').val(previousRemaining);
+    //        }
+
+    //    });
+    //});
+
+    $("#ReqNo").change(function () {
+        var ItemId = $('#ItemName option:selected').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        var SiteId = $('#SiteId option:selected').val();
+        var ReqNo = $('#ReqNo option:selected').val();
+
+        if (ProjectId == "" && SiteId == "") {
+            alert('Please Select Project Id and Site Id');
+        }
+
+        $.ajax({
+            type: "post",
+            url: "/MaterialsEntry/GetPO",
+            data: { ItemId, ProjectId, SiteId, ReqNo },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                //$('#VendorName').val(data.vendorName);
+                //$('#VendorId').val(data.VendorId);
+                $('#TotalMaterial').val(data.TotalMaterial);
+                $('#RemainingQty').val(data.RemainingQty);
+                $('#UnitPrice').val(data.UnitPrice);
+                var previousRemaining = data.TotalMaterial - data.RemainingQty;
+                $('#PreviousQty').val(previousRemaining);
+                $('#PONo').removeAttr("disabled");
+                //alert('test');
+                var listOfitems = data.POs.length;
+                //alert(listOfitems);
+                var items = "<select id='PONo'>";
+                items = items + '<option value="">--Select--</option>';
+
+                for (var i = 0; i < listOfitems; i++) {
+                    items = items + '<option value=' + data.POs[i].Value + '>' + data.POs[i].Text + '</option>';
+                }
+
+                items = items + '</select>';
+                $('#PONo').html(items);
+
+
+            }            
+
+        });
+    })
+
+    $("#PONo").change(function () {
+        var ItemId = $('#ItemName option:selected').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        var SiteId = $('#SiteId option:selected').val();
+        var ReqNo = $('#ReqNo option:selected').val();
+        var PONo = $('#PONo option:selected').val();
+
+        if (ProjectId == "" && SiteId == "") {
+            alert('Please Select Project Id and Site Id');
+        }
+
+        $.ajax({
+            type: "post",
+            url: "/MaterialsEntry/GetVendor",
+            data: { ItemId, ProjectId, SiteId, ReqNo, PONo },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#VendorName').val(data.vendorName);
+                $('#VendorId').val(data.VendorId);
+            }
+
+        });
+    });
+
+
+    $(document).on({
+        'change': function () {
+            var entry = $(this).val();
+            //alert('Material Entry :' + entry);
+            var unitprice = $('#UnitPrice').val();
+            var totalPrice = entry * unitprice;
+            if (isNaN(totalPrice)) {
+                alert('Material Entry must be a numeric value!!')
+                $('#MaterialEntry').val("");
+                $('#Cost').val("");
+            }
+            else {
+                $('#Cost').val(totalPrice);
+            }
+          
+        }
+    }, 'input[name=ItemEntry]');
+
+    $(document).on({
+        'change': function () {
+            var entry = $(this).closest('tr').find("td:eq(10) input.MaterialEntry").val();
+            //var row = $(this).closest('tr');
+
+            //alert('entry :' + entry);
+            var quantity = $(this).closest('tr').find("td:eq(11) input.UnitPrice").val();
+            //alert('quantity :' + quantity);
+            var totalPrice = entry * quantity;
+            
+
+            if (isNaN(totalPrice)) {
+                alert('Material entry must be a numeric value!!')
+                //$('#TQPrice').val("");
+                //$('#TotalPrice').val("");
+            }
+            else {
+                $(this).closest('tr').find("td:eq(12) input.Cost").val(totalPrice);
+            }
+
+        }
+    }, 'input[name=MaterialEntry]');
+
+
+    //add new row
+    $('#addNewRow').click(function (event) {
+        event.preventDefault();
+        counter++;
+        var isAllValid = true;
+        //var ProjectId = $('#ProjectId option:selected').val();
+        ////alert('ProjectID: ' + ProjectId);
+        //var ProjectName = $('#ProjectId option:selected').text();
+        ////alert('ProjectName: ' + ProjectName);
+        //var SiteId = $('#SiteId option:selected').val();
+        //var SiteName = $('#SiteId option:selected').text();
+        var ItemId = $('#ItemName option:selected').val();
+        var ItemName = $('#ItemName option:selected').text();
+
+        var UnitId = $('#UnitId').val();
+        var UnitName = $('#UnitName').val();
+
+        var RCode = $('#ReqNo option:selected').val();
+        //alert('Requisition: ' + RCode);
+
+        //var Proc_RequisitionDetId = $('#Proc_RequisitionDetId').val();
+        //alert('ProcRequisitionDetId: ' + Proc_RequisitionDetId);
+
+        //var Qty = $('#Qty').val();
+        //var PONo = $('#PONo').val();
+        var PONo = $('#PONo option:selected').val();
+        //alert(Unit);
+        //alert(UnitId);
+        var VendorId = $('#VendorId').val();
+        //alert('Vendor Id: ' + VendorId);
+        var VendorName = $('#VendorName').val();
+        //alert('Vendor Name: ' + VendorName);
+        var TotalMaterial = $('#TotalMaterial').val();
+        var PreviousQty = $('#PreviousQty').val();
+        var RemainingQty = $('#RemainingQty').val();
+        var ChallanNo = $('#ChallanNo').val();
+        var ChallanDate = $('#ChallanDate').val();
+        //alert(ReqQty);
+        var MaterialEntry = $('#MaterialEntry').val();
+        //alert('TotalPrice: ' + TotalPrice);
+        var UnitPrice = $('#UnitPrice').val();
+        var Cost = $('#Cost').val();
+
+        if (ItemName == "" || ItemName == "Select item") {
+            $('#ItemName_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ItemName_Error').hide();
+        }
+
+        if (RCode == "" || RCode == "Select item") {
+            $('#ReqNo_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ReqNo_Error').hide();
+        }
+        if (PONo == "" || PONo == "Select item") {
+            $('#PONo_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#PONo_Error').hide();
+        }
+        if (ChallanNo == "") {
+            $('#ChallanNo_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ChallanNo_Error').hide();
+        }
+        if (MaterialEntry == "") {
+            //if(isNaN(MaterialEntry)) {
+            //    alert('Material Entry must be a numeric value!!')
+            //}
+            //else {
+            //    $('#MaterialEntry_Error').show();
+            //}
+            $('#MaterialEntry_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#MaterialEntry_Error').hide();
+        }
+
+        if (isAllValid) {
+            var newRow = jQuery('<tr>'
+                //+ '<td><input value="' + ProjectId + '" type="hidden" name="ProjectId"/><label>' + ProjectName + '<label></td>'
+                //+ '<td><input value="' + SiteId + '" type="hidden" name="SiteId"/><label>' + SiteName + '<label></td>'
+                + '<td><input value="' + ItemId + '" type="hidden" name="ItemId"/><label>' + ItemName + '<label>'
+                + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>' + UnitName + '</label></td>'
+                + '<td><input value="' + RCode + '" type="hidden" name="RCode" class="form-control" style="width:50px;"/><label>' + RCode + '</label></td>'            
+                + '<td><input value="' + PONo + '" type="hidden" name="PayOrderNo" class="form-control" style="width:50px;"/><label>' + PONo + '</label></td>'
+                + '<td><input value="' + VendorId + '" type="hidden" name="VendorId"/><label>' + VendorName + '</label></td>'
+                + '<td><input value="' + TotalMaterial + '" type="hidden" name="TotalMaterial" class="form-control" style="width:50px;"/><label>' + TotalMaterial + '</label></td>'
+                + '<td><input value="' + PreviousQty + '" type="hidden" name="PreviousQty" class="form-control" style="width:50px;"/><label>' + PreviousQty + '</label></td>'
+                + '<td><input value="' + RemainingQty + '" type="hidden" name="RemainingQty" class="form-control" style="width:50px;"/><label>' + RemainingQty + '</label></td>'
+                + '<td><input value="' + ChallanNo + '" type="text" name="ChallanNo" class="form-control" style="width:80px;"/></td>'
+                + '<td><input value="' + ChallanDate + '" type="text" name="ChallanDate" class="form-control datepicker" style="width:80px;"/></td>'
+                + '<td><input value="' + MaterialEntry + '" type="text" name="MaterialEntry" class="form-control MaterialEntry" style="width:80px;"/></td>'
+                + '<td><input value="' + UnitPrice + '" type="hidden" name="UnitPrice" class="form-control UnitPrice" style="width:80px;"/><label>' + UnitPrice + '</label></td>'
+                + '<td><input value="' + Cost + '" type="text" name="Cost" class="form-control Cost" style="width:80px;" disabled="disabled"/></td>'
+                + '<td><button class="btn  text-warning-600 btn-flat btn-icon btn-rounded"  onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
+
+            jQuery('table.Resource-list').append(newRow);
+
+            //$('#ProjectId').val("");
+            //$('#SiteId').val("");
+            $('#ReqNo').val("");
+            $('#ItemName').val("");
+            $('#PONo').val("");
+            $('#UnitName').val("");
+            $('#VendorName').val("");
+            $('#TotalMaterial').val("");
+            $('#PreviousQty').val("");
+            $('#RemainingQty').val("");
+            $('#ChallanNo').val("");
+            $('#ChallanDate').val("");
+            $('#MaterialEntry').val("");
+            $('#UnitPrice').val("");
+            $('#Cost').val("");
+
+            //$('#SiteId').attr("disabled", true);
+            $('#ReqNo').attr("disabled", true);
+            //$('#ItemName').attr("disabled", true);
+            RebindDatePicker();
+        }
+
+    });
+
+
+
+    $('#SaveItem').click(function (e) {
+        //alert('Length:' + $('.Resource-list tr').length)
+
+        if ($('#ProjectId option:selected').text() === "--Select--") {
+            alert('Please select project');
+            $('#ProjectId option:selected').focus();
+        }
+        else if ($('#SiteId option:selected').text() === "--Select--") {
+            alert('Please select site');
+            $('#SiteId option:selected').focus();
+        }
+        else if ($.trim($('#EDate').val()) === "") {
+            alert('Entry date required');
+            $('#EDate').focus();
+        }
+        else if ($('.Resource-list tr').length < 2) {
+            alert('Please Add Item to this Entry Form!');
+        }
+        else {
+            CreateSitePlanTask();
+        }
+    });
+
+    function CreateSitePlanTask() {
+        //==========Master Form==========
+
+        //var ProjectId = document.getElementById("ProjectId");
+        var ProjectId = $("#ProjectId  option:selected").val();
+        //alert('project Id: ' + ProjectId);
+        var SiteId = $("#SiteId  option:selected").val();
+        //alert('Site Id: ' + SiteId);
+        var EDate = $("#EDate").val();
+        //alert('EntryDate: ' + EDate);
+
+
+        //===========Detail Form===========
+        var ItemId = document.getElementsByName("ItemId");
+        var RCode = document.getElementsByName("RCode");
+        var PONo = document.getElementsByName("PayOrderNo");
+        var ChallanNo = document.getElementsByName("ChallanNo");
+        var ChallanDate = document.getElementsByName("ChallanDate");
+        var MaterialEntry = document.getElementsByName("MaterialEntry");
+        //var Status = document.getElementsByName("Status");
+        var Status = 'A';
+
+        var RequisitionItems = [];
+        //alert($('#RequisitionDetails tr').length - 1)
+
+        var tableCounter = $('#RequisitionDetails tr').length - 1;
+        //alert('Length: ' + tableCounter);
+
+        for (var i = 0; i < tableCounter; i++) {
+            RequisitionItems.push({
+                ItemId: ItemId[i].value,
+                RCode: RCode[i].value,
+                PONo: PONo[i].value,
+                ChallanNo: ChallanNo[i].value,
+                ChallanDate: ChallanDate[i].value,
+                EntryQty: MaterialEntry[i].value,
+                //Status: Status[i].value
+                Status: Status
+            });
+            console.log('---------->');
+            console.log('ItemId: ' + RequisitionItems[i].ItemId);
+            console.log('RCode: ' + RequisitionItems[i].RCode);
+            console.log('PONo: ' + RequisitionItems[i].PONo);
+            console.log('ChallanNo: ' + RequisitionItems[i].ChallanNo);
+            console.log('ChallanDate: ' + RequisitionItems[i].ChallanDate);
+            console.log('EntryQty: ' + RequisitionItems[i].EntryQty);
+            console.log('Status: ' + RequisitionItems[i].Status);
+            console.log('---------->');
+
+        }
+
+        TaskDetails = JSON.stringify({
+            RequisitionItems: RequisitionItems,
+            ProjectId: ProjectId,
+            SiteId: SiteId,
+            EDate: EDate
+        });
+
+        //alert('Success!!!');
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/MaterialsEntry/CreateMaterialsEntry',
+            data: TaskDetails,
+            success: function (result) {
+                console.log(result);
+                if (result.flag === true) {
+                    alert("Record save successfully!");
+
+                    $('#ProjectId').val("");
+                    $('#SiteId').val("");
+                    $('#RequisitionDate').val("");
+                    $('#ReqNo').val("");
+                    $('#SiteEngineer').val("");
+                    $('#ProjectManager').val("");
+                    $('#ProjectRemarks').val("");
+
+                    window.location.replace("/MaterialsEntry/Index");
+
+
+                }
+                else {
+                    alert(result.message);
+                }
+
+
+            },
+            failure: function (response) {
+                alert('error');
+            }
+        });
+    }
+
+
+    function RebindDatePicker() {
+        $('.datepicker').datepicker("destroy");
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            todayBtn: true,
+        });
+        // jquery validator bug fix using moment
+        //$.validator.methods.date = function (value, element) {
+        //    return this.optional(element) || moment(value, "DD/MM/YYYY", true).isValid();
+        //}
+
+    }
+
+</script>
+
+<style>
+    span.error {
+        display: block;
+        /*visibility: hidden;*/
+        color: red;
+        font-size: 90%;
+    }
+</style>

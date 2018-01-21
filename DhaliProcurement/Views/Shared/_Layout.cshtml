@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Project Procurement System</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/icomoon/styles.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+    @*<script src="~/Scripts/jquery-3.2.1.min.js"></script>*@
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="https://code.jquery.com/ui/1.12.1/themes/cupertino/jquery-ui.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    @*<script src="/Scripts/jquery.validate.js"></script>
+        <script src="/Scripts/jquery.validate.unobtrusive.js"></script>*@
+    <script src="~/Scripts/ui/moment/moment.min.js"></script>
+    <script src="~/Scripts/tables/datatables.min.js"></script>
+
+
+    <style>
+        .modal-backdrop {
+            z-index: -1;
+        }
+    </style>
+    @*<style>
+            #dvLoading {
+                background: url(../../Content/images/loader.gif) no-repeat center center;
+                height: 100px;
+                width: 100px;
+                position: fixed;
+                z-index: 1000;
+                left: 50%;
+                top: 50%;
+                margin: -25px 0 0 -25px;
+            }
+        </style>*@
+
+    <style>
+        /*#dvLoading {
+            background: url(~/Content/images/loader.gif) no-repeat center center;
+            height: 100px;
+            width: 100px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            margin: -25px 0 0 -25px;
+        }*/
+    </style>
+
+    <script>
+        $(window).load(function () {
+            $('#dvLoading').fadeOut(500);
+        });
+    </script>
+</head>
+<body>
+    <!-- Main navbar -->
+    <div class="navbar navbar-inverse header-highlight">
+
+        <div class="navbar-header">
+            @*<a class="navbar-brand" href="@Url.Action("Index","Home")"><img src="~/Content/images/logo_light.png" alt=""></a>*@
+            <a class="navbar-brand" href="@Url.Action("Index","Home")"><img src="~/Content/images/Dhaly Group.png" alt=""></a>
+            <ul class="nav navbar-nav visible-xs-block">
+                <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+                <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+            </ul>
+
+        </div>
+
+        <div class="navbar-collapse collapse" id="navbar-mobile">
+            <ul class="nav navbar-nav">
+                <li><a class="sidebar-control sidebar-main-toggle hidden-xs"><i class="icon-paragraph-justify3"></i></a></li>
+                <li class="dropdown">
+                    @*<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-shield-notice"></i>
+                        <span class="visible-xs-inline-block position-right">Notification</span>
+                        <span class="badge bg-warning-400">1</span>
+                    </a>*@
+
+                    @*<div class="dropdown-menu dropdown-content">
+                        <div class="dropdown-content-heading">
+                            Notifications
+                            <ul class="icons-list">
+                                <li><a href="#"><i class="icon-sync"></i></a></li>
+                            </ul>
+                        </div>
+                        <ul class="media-list dropdown-content-body width-350">
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="@Url.Action("NearTask", "ProjectSitePlanTasks")" class="btn border-primary text-primary btn-flat btn-rounded btn-icon btn-sm"><i class="icon-task"></i></a>
+                                </div>
+                                <div class="media-body">
+                                   *You have task(s) end date less than 7 days. <a href="@Url.Action("NearTask", "ProjectSitePlanTasks")">Show List</a>
+                                    <div class="media-annotation">Today</div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="dropdown-content-footer">
+                            <a href="#" data-popup="tooltip" title="All notification"><i class="icon-menu display-block"></i></a>
+                        </div>
+                    </div>*@
+                </li>
+            </ul>
+
+            @Html.Partial("_LoginPartial")
+
+        </div>
+    </div>
+    <!-- /main navbar -->
+    <!-- Page container -->
+    <div class="page-container">
+        <!-- Page content -->
+        <div class="page-content">
+            <!-- Main sidebar -->
+            <div class="sidebar sidebar-main">
+                <div class="sidebar-content">
+
+
+                    <!-- Main navigation -->
+                    <div class="sidebar-category sidebar-category-visible">
+                        <div class="category-content no-padding">
+                            <ul class="navigation navigation-main navigation-accordion">
+                                <!-- Main -->
+                                <li class="navigation-header"><span>Main Navigation</span> <i class="icon-menu" title="Main pages"></i></li>
+                                @*<li><a href="@Url.Action("Index","Home")"><i class="icon-home4"></i> <span>Dashboard</span></a></li>*@
+                                <li><a href="@Url.Action("Index","Home")"><i class="icon-home4"></i> <span>Dashboard</span></a></li>
+
+                                <li>
+                                    <a href="#"><i class="icon-stack3"></i> <span>Project Information</span></a>
+                                    <ul>
+                                        @*<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Clients" ? "active" : "")"><a href="@Url.Action("Index", "Clients")"><span>Client</span></a></li>*@
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Projects" ? "active" : "")"><a href="@Url.Action("Index", "Projects")"><span>Project Information</span></a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ProcProjects" ? "active" : "")"><a href="@Url.Action("Index", "ProcProjects")"><span>Project Information Costing</span></a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "MaterialRequisition" ? "active" : "")"><a href="@Url.Action("Index", "MaterialRequisition")"><span>Material Requisition</span></a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "TenderQuotation" ? "active" : "")"><a href="@Url.Action("Index", "TenderQuotation")"><span>Tender Quotations</span></a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "PurchaseOrders" ? "active" : "")"><a href="@Url.Action("Index", "PurchaseOrders")"><span>Purchase Orders</span></a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "MaterialsEntry" ? "active" : "")"><a href="@Url.Action("Index", "MaterialsEntry")"><span>Materials Entry</span></a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "VendorPayments" ? "active" : "")"><a href="@Url.Action("Index", "VendorPayments")"><span>Vendor Payments</span></a></li>
+
+                                        
+
+
+                                        @*@if (User.IsInRole("Management"))
+                                        {
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "TenderQuotation" && ViewContext.RouteData.Values["Action"].ToString() == "PendingTender" ? "active" : "")"><a href="@Url.Action("PendingTender", "TenderQuotation")"><span>Pending Status</span></a></li>
+
+                                        }*@
+                                        @*<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ManualStatus" ? "active" : "")"><a href="@Url.Action("Index", "ManualStatus")"><span>Project Status</span></a></li>*@
+
+
+                                    </ul>
+                                </li>
+                                @if (User.IsInRole("Management"))
+                                {
+                                    <li>
+                                        <a href="#"><i class="icon-user-check"></i> <span>Pending Tasks</span></a>
+                                        <ul>
+                                            @*<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "TenderQuotation" && ViewContext.RouteData.Values["Action"].ToString() == "PendingTender" ? "active" : "")"><a href="@Url.Action("PendingTender", "TenderQuotation")"><span>Pending Tender</span></a></li>*@
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "PendingTasks" && ViewContext.RouteData.Values["Action"].ToString() == "PendingRequisition" ? "active" : "")"><a href="@Url.Action("PendingRequisition", "PendingTasks")"><span>Pending Requisition</span></a></li>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "PendingTasks" && ViewContext.RouteData.Values["Action"].ToString() == "PendingTender" ? "active" : "")"><a href="@Url.Action("PendingTender", "PendingTasks")"><span>Pending Tender</span></a></li>
+                                            @*<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "PendingTasks" && ViewContext.RouteData.Values["Action"].ToString() == "PendingPurchase" ? "active" : "")"><a href="@Url.Action("PendingPurchase", "PendingTasks")"><span>Pending Purchase</span></a></li>*@
+
+                                        </ul>
+                                    </li>
+                                }
+                                @*@if (User.IsInRole("Admin"))
+                                    {
+                                        <li>
+                                            <a href="#"><i class="icon-stack3"></i> <span>Pending Status</span></a>
+                                            <ul>
+                                                <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Projects" ? "active" : "")"><a href="@Url.Action("Index", "Projects")"><span>Authorize Status</span></a></li>
+                                                <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ProjectSitePlanTasks" && ViewContext.RouteData.Values["Action"].ToString() == "PendingStatus" ? "active" : "")"><a href="@Url.Action("PendingStatus", "ProjectSitePlanTasks")"><span>Authorize Status</span></a></li>
+                                                <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ProjectSites" ? "active" : "")"><a href="@Url.Action("Index", "ProjectSites")"><span>Delete Plan Authorize</span></a></li>
+                                                <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ProjectSitePlanTasks" ? "active" : "")"><a href="@Url.Action("Index", "ProjectSitePlanTasks")"><span>Delete Status Authorize</span></a></li>
+                                                <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ProjectSitePlanTasks" && ViewContext.RouteData.Values["Action"].ToString() == "PendingStatus" ? "active" : "")"><a href="@Url.Action("PendingStatus", "ProjectSitePlanTasks")"><span>Pending Status</span></a></li>
+                                                <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "ManualStatus" ? "active" : "")"><a href="@Url.Action("Index", "ManualStatus")"><span>Project Status</span></a></li>
+
+
+                                            </ul>
+                                        </li>
+                                    }*@
+
+                                @*<li><a href="@Url.Action("Gallery","SiteImage")"><i class="icon-image2"></i> <span>Gallery</span></a></li>*@
+                                <li>
+                                    <a href="#"><i class="icon-file-empty"></i> <span>Parameter</span></a>
+                                    <ul>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "CompanyInformations" ? "active" : "")"><a href="@Url.Action("Details","CompanyInformations")" id="layout1">Company Information</a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "CompanyResources" ? "active" : "")"><a href="@Url.Action("Index", "CompanyResources")" id="layout1">Employee Information</a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Vendors" ? "active" : "")"><a href="@Url.Action("Index", "Vendors")" id="layout1">Vendor Information</a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Items" ? "active" : "")"><a href="@Url.Action("Index", "Items")" id="layout1">Item Information</a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Clients" ? "active" : "")"><a href="@Url.Action("Index", "Clients")" id="layout1">Client</a></li>
+                                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Units" ? "active" : "")"><a href="@Url.Action("Index", "Units")" id="layout1">Unit</a></li>
+
+
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a href="#"><i class="icon-file-check"></i> <span>Reports</span></a>
+                                    <ul>
+                                        @*<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Report" && ViewContext.RouteData.Values["Action"].ToString() == "ProjectStatusReport" ? "active" : "")"><a href="@Url.Action("ProjectStatusReport", "Report")" target="_blank">Project Status Report</a></li>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Report" && ViewContext.RouteData.Values["Action"].ToString() == "ExportProjectLists" ? "active" : "")"><a href="@Url.Action("ExportProjectLists", "Report")" target="_blank">Project Lists Report</a></li>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Report" && ViewContext.RouteData.Values["Action"].ToString() == "ProjectSitesReport" ? "active" : "")"><a href="@Url.Action("ProjectSitesReport", "Report")" target="_blank">Project Sites Report</a></li>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Report" && ViewContext.RouteData.Values["Action"].ToString() == "ProjectSitePlanTaskReport" ? "active" : "")"><a href="@Url.Action("ProjectSitePlanTaskReport", "Report")" target="_blank">Site Plan Task Report</a></li>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Report" && ViewContext.RouteData.Values["Action"].ToString() == "ProjectStatusSummary" ? "active" : "")"><a href="@Url.Action("ProjectStatusSummary", "Report")">Project Status Monthly</a></li>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Report" && ViewContext.RouteData.Values["Action"].ToString() == "ProjectStatusPeriod" ? "active" : "")"><a href="@Url.Action("ProjectStatusPeriod", "Report")">Project Status Period</a></li>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Report" && ViewContext.RouteData.Values["Action"].ToString() == "ProjectStatusDetail" ? "active" : "")"><a href="@Url.Action("ProjectStatusDetail", "Report")">Project Status Detail</a></li>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Report" && ViewContext.RouteData.Values["Action"].ToString() == "ProjectRunningDeviation" ? "active" : "")"><a href="@Url.Action("ProjectRunningDeviation", "Report")">Project Running Deviation</a></li>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Report" && ViewContext.RouteData.Values["Action"].ToString() == "ProjectTotalCompletion" ? "active" : "")"><a href="@Url.Action("ProjectTotalCompletion", "Report")">Project Total Completion</a></li>*@
+
+                                    </ul>
+                                </li>
+                                @*<li><a href="@Url.Action("StatusSlide","ProjectStatusSlideShow")"><i class="fa fa-film "></i> <span>Slide Show</span></a></li>*@
+                                <li>
+                                    <a href="#"><i class="icon-file-check"></i> <span>Tools</span></a>
+                                    <ul>
+                                        @*<li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Tools" ? "active" : "")"><a href="@Url.Action("ImportData", "Tools")">Import Data</a></li>*@
+
+                                    </ul>
+                                </li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a href="#"><i class="icon-user-check"></i> <span>Admin</span></a>
+                                        <ul>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Account" && ViewContext.RouteData.Values["Action"].ToString() == "ListUser" ? "active" : "")"><a href="@Url.Action("ListUser", "Account")">Users</a></li>
+                                            <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Account" && ViewContext.RouteData.Values["Action"].ToString() == "ListUserRole" ? "active" : "")"><a href="@Url.Action("ListUserRole", "Account")">Permissions</a></li>
+
+                                        </ul>
+                                    </li>
+                                }
+                                <!-- /page kits -->
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /main navigation -->
+                </div>
+            </div>
+            <!-- /main sidebar -->
+            <!-- Main content -->
+            <div class="content-wrapper">
+
+
+                <!-- Content area -->
+                <div class="content" id="content">
+                    <div id="dvLoading"></div>
+                    @{ Html.RenderPartial("_Alerts"); }
+                    @RenderBody()
+                    <!-- Footer -->
+                    <div class="footer text-muted">
+                        &copy; @DateTime.Now.Year <a href="#">Dhali Procurement</a> by <a href="#" target="_blank">Convince Computer Ltd.</a>
+                    </div>
+
+
+                    <!-- /footer -->
+                </div>
+                <!-- /content area -->
+            </div>
+            <!-- /main content -->
+        </div>
+        <!-- /page content -->
+    </div>
+    <!-- /page container -->
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/limitless")
+
+
+    <script type="text/javascript">
+        $(function () { // will trigger when the document is ready
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                todayHighlight: true,
+                todayBtn: true,
+                autoclose: true
+            });
+            // jquery validator bug fix using moment
+            $.validator.methods.date = function (value, element) {
+                return this.optional(element) || moment(value, "DD/MM/YYYY", true).isValid();
+            }
+        });
+    </script>
+
+
+    <script>
+
+        //$(document).ready(function () {
+
+        //    setTimeout(function () {
+        //        $(".alert").hide();
+        //    }, 10000);
+
+
+        //});
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+
+        // Button with spinner
+        Ladda.bind('.btn-ladda-spinner', {
+            dataSpinnerSize: 16,
+            timeout: 2000
+        });
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

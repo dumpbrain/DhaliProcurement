@@ -1,0 +1,96 @@
+﻿@model IEnumerable<DhaliProcurement.Models.Unit>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-flat">
+    <div class="panel-heading">
+        <h5 class="panel-title"><i class="icon-files-empty position-left"></i>Item List</h5><hr/>
+        <div class="heading-elements">
+            <ul class="icons-list">
+                <li><a data-action="collapse"></a></li>
+                <li><a data-action="reload"></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body">
+        <p>
+            @Html.ActionLink("Create New Item", "Create", null, new { @class = "btn btn-success btn-xs", @style = "background-color: grey;border: none;" })
+            @*@Html.ActionLink("Create New Item", "Create", null, new { @class = "btn btn-primary btn-xs"})*@
+        </p>
+        <div class="table-responsive">
+
+            <table class="table table-xs table-bordered">
+                <tr class="bg-grey">
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+
+
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td class="col-lg-7">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+
+                        <td class="col-lg-5">
+                            @Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "btn btn-xs text-info icon-pencil4", @title = "Edit" })
+                            @*@Html.ActionLink(" ", "Details", new { id = item.Id }, new { @class = "btn btn-xs text-info  icon-file-text2", @title = "Details" })*@
+                            @*@Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "btn btn-xs text-danger icon-cross2", @title = "Delete" })*@
+                            @if (User.IsInRole("Management"))
+                            {
+                                <a class="btn btn-xs text-danger icon-cross2" title="Delete" href="javascript:deleteFunction( @item.Id)"></a>
+                            }
+
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function deleteFunction(UnitId) {
+        var Con = confirm("are you sure want to delete this ?");
+        if (Con == true) {
+            $.ajax({
+                url: "/Units/DeleteUnit",
+                type: "post",
+                data: {
+                    UnitId: UnitId
+                },
+                dataType: "json",
+
+                success: function (flag) {
+                    console.log(flag);
+
+                    if (flag.flag == true) {
+                        alert("Successfully deleted !");
+                        window.location = "/Units/Index";
+                    } else {
+                        alert(flag.message);
+                    }
+                },
+
+                error: function (xhr) {
+                    alert('error');
+
+                }
+
+
+            });
+        }
+
+    }
+</script>
+
+

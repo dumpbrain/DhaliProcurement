@@ -1,0 +1,513 @@
+﻿@model DhaliProcurement.ViewModel.VMProjectSite
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var optionsStaff = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        OnSuccess = "OnSuccessStaff",
+        OnComplete = "OnCompleteStaff",
+        OnFailure = "OnFailureStaff"
+    };
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Project Details</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+
+                    <table class="table table-responsive">
+                        <tr>
+                            <td class="col-lg-2">Project Name</td>
+                            <td>
+                                <input type="text" value="@ViewBag.ProjectName" id="ProjectName" class="form-control" disabled="disabled" />
+
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Project Manager</td>
+                            <td>
+                                @Html.DropDownList("ProjectManager", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @data_required = "required", disabled = "disabled" })
+
+
+                                @*<button type="button" id="addProjectManager" class="btn btn-primary" data-toggle="modal" data-target="#resourceProjectManagerModal">Add</button>*@
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>Project Start Date</td>
+                            <td>
+                                <input type="text" value="@ViewBag.StartDate" id="StartDate" class="form-control datepicker" disabled="disabled" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Project End Date</td>
+                            <td>
+                                <input type="text" value="@ViewBag.EndDate" id="EndDate" class="form-control datepicker" disabled="disabled" />
+                            </td>
+                        </tr>
+                        @*<tr>
+
+
+                            <td>Client</td>
+                            <td>
+                                @Html.DropDownList("ClientId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @required = "required" })
+                                @Html.ValidationMessageFor(model => model.ClientId, "", new { @class = "text-danger" })
+
+                               <button type="button" id="addClient" class="btn btn-primary" data-toggle="modal" data-target="#resourceClientModal">Add</button>
+
+                            </td>
+
+                                 </tr>*@
+
+                        <tr>
+                            <td>Remarks</td>
+                            <td>
+                                <input type="text" value="@ViewBag.ProjectRemarks" id="ProjectRemarks" class="form-control" disabled="disabled" />
+
+                            </td>
+                        </tr>
+
+
+                    </table>
+                    <hr />
+
+
+                    @*<div class="form-group">
+                            <div class="col-md-offset-5 col-md-10">
+                                <button type="button" id="SaveProject" class="btn btn-primary"><i class="icon-add position-left"></i> Save</button>
+                            </div>
+                        </div>*@
+
+
+                }
+
+
+                <div class="details well" style=" border 1px solid black;">
+
+
+                    <table class="Resource-list table table-bordered" id="Item-list">
+                        <tr class="bg-grey">
+                            <th>Site Name</th>
+                            <th>Location</th>
+                            <th>Site Engineer</th>
+
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-5 col-md-10">
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info", @style = "background-color: grey;border: none;" })
+                @*<button type="button" id="UpdateProject" class="btn btn-primary"><i class="icon-add position-left"></i>  Update</button>*@
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="resourceProjectManagerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staffModalTitle">Add Staff</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    @using (Ajax.BeginForm("ResourceCreate", "CompanyResources", null, optionsStaff, new { @id = "staffCreateForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+
+                            <div class="form-group">
+                                <input type="hidden" id="ProjectId" value="" />
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="col-md-10">
+                                    @Html.TextBox("Name", null, new { @class = "form-control", @id = "NameStaff" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Position", htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="col-md-10">
+                                    @Html.TextBox("Position", null, new { @class = "form-control" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("ToDOJ", "DOJ", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBox("DOJ", null, new { @class = "form-control datepicker" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("ToDOB", "DOB", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBox("DOB", null, new { @class = "form-control datepicker" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Phone", htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="col-md-10">
+                                    @Html.TextBox("Phone", null, new { @class = "form-control" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Email", htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="col-md-10">
+                                    @Html.TextBox("Email", null, new { @class = "form-control" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Address", htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="col-md-10">
+                                    @Html.TextBox("Address", null, new { @class = "form-control" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Status", htmlAttributes: new { @class = "control-label col-md-2", @required = "required" })
+                                <div class="col-md-10">
+                                    <select class="form-control" id="Status" name="Status">
+                                        <option value="A">Active</option>
+                                        <option value="I">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@*<style>
+        .form-group .select2-container {
+            width: 300px !important;
+        }
+    </style>*@
+
+@*<p><button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='@Url.Action("Index")';"><i class="icon-circle-left2 position-left"></i> Go back</button></p>*@
+
+
+
+
+
+<script>
+    $(document).ready(function (){
+        $('#SiteName_Error').hide();
+        $('#SiteLocation_Error').hide();
+        $('#SiteEngineer_Error').hide();
+
+        var ProjectUnderSiteId= @ViewBag.PId;
+        //var SiteName = document.getElementsByName("SiteName");
+        //alert('sname'+SiteName);
+        //var SiteLocation = document.getElementsByName("SiteLocation");
+        //var SiteEngineerId = document.getElementsByName("SiteEngineerId");
+
+
+        ResourceDetails = JSON.stringify({
+           ProjectId: ProjectUnderSiteId
+     });
+
+      //var SiteEngineerId = $('#SiteEngineerId option:selected').text();
+
+
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/Projects/getProjectSites/',
+            traditional: true,
+            data: ResourceDetails,
+            success: function (data) {
+               // console.log(data);
+         for (var i = 0; i < data.length; i++) {
+
+
+             var newRow = jQuery('<tr><td><input class="form-control" value="' + data[i].ProjectSiteId + '" type="hidden" name="ProjectSiteId"/> <label>'+data[i].SiteName+'</label><input type="hidden" class="form-control" value="' + data[i].SiteName + '" type="text" name="SiteName"/></td>'
+                + '<td><label>'+data[i].SiteLocation+'</label><input type="hidden" class="form-control" value="' + data[i].SiteLocation + '" type="text" name="SiteLocation"/></td>'
+                + '<td><input value="' + data[i].SiteEngineerId + '" type="hidden" name="SiteEngineerId"/><label>'+data[i].SiteEngineer+'</label><input type="hidden" class="form-control" value="' + data[i].SiteEngineer + '"  type="text" name="SiteEngineer"/></td></tr>');
+                    jQuery('table.Resource-list').append(newRow);
+                }
+            },
+            error: function (data) {
+                alert('Error: ');
+            }
+        });
+    });
+
+    //new on 10 Jan 18
+     var counter = 0; //counter for the serial
+
+    //add new row
+    $('#addNewRow').click(function (event) {
+       // debugger;
+        event.preventDefault();
+        counter++;
+
+
+        var SiteName = $('#SiteName').val();
+        //alert('SiteName' + SiteName);
+
+        var SiteLocation = $('#SiteLocation').val();
+        //alert('SiteLocation' + SiteLocation);
+
+        var SiteEngineer = $('#SiteRName option:selected').text();
+       // alert('SiteEngineer' + SiteEngineer);
+
+        var SiteEngineerId = $('#SiteRName option:selected').val();
+       // alert('SiteEngineerId' + SiteEngineerId);
+
+        //new
+        var isValidSite = true;
+
+        if ($('#SiteName').val().trim() == '') {
+
+            isValidSite = false;
+            $('#SiteName_Error').show();
+        }
+        else {
+            $('#SiteName_Error').hide();
+        }
+
+        if ($('#SiteLocation').val().trim() == '') {
+
+            isValidSite = false;
+            $('#SiteLocation_Error').show();
+        }
+        else {
+            $('#SiteLocation_Error').hide();
+        }
+
+        if (SiteEngineer === '' || SiteEngineer==="--Select--") {
+
+            isValidSite = false;
+            $('#SiteEngineer_Error').show();
+        }
+        else {
+            $('#SiteEngineer_Error').hide();
+        }
+
+        //Add site to list if valid
+        if (isValidSite)
+        {
+            var newRow = jQuery('<tr><td><input class="form-control" value="' + SiteName + '" type="text" name="SiteName"/></td>'
+                + '<td><input class="form-control" value="' + SiteLocation + '" type="text" name="SiteLocation"/></td>'
+                + '<td><input value="' + SiteEngineerId + '" type="hidden" name="SiteEngineerId"/><input class="form-control" value="' + SiteEngineer + '"  type="text" name="SiteEngineer"/></td><td> <input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();" /></td></tr>');
+
+            jQuery('table.Resource-list').append(newRow);
+        }
+        //end
+    });
+    //end
+</script>
+
+
+
+<script>
+
+    var counter = 0;
+    var cnTaskRow = 0;
+
+    //Adding Company Resources
+    function OnBeginStaff() {}
+    function OnCompleteStaff() {}
+    function OnSuccessStaff() {
+        $('#NameStaff').val("");
+        $('#Position').val("");
+        $('#ToDOJ').val("");
+        $('#ToDOB').val("");
+        $('#Phone').val("");
+        $('#Mobile').val("");
+        $('#Email').val("");
+        $('#Address').val("");
+        //$('#Status').val("");
+        $('#resourceStaffModal').modal('hide');
+        $.get("@Url.Action("GetStaff", "CompanyResources")", function(resp) {
+            if (resp.Flag) {
+                $("#RName").empty().html("<option value>--Select--</option>");
+                $("#VRName").empty().html("<option value>--Select--</option>");
+                $.each(resp.CompanyResources, function (key, item) {
+                    $("<option>").attr("value", item.Value).html(item.Text).appendTo($("#RName"));
+                    $("<option>").attr("value", item.Value).html(item.Text).appendTo($("#VRName"));
+                });
+            }
+        });
+    }
+
+    function OnFailureStaff() { }
+
+
+
+    $('#UpdateProject').click(function () {
+            UpdateProject();
+    });
+
+
+    function UpdateProject() {
+
+        var PId=@ViewBag.Proj;
+       // alert('Id '+PId);
+
+        var ProjectName = $('#ProjectName').val();
+        //alert('ProjectName '+ ProjectName);
+        var StartDate = $('#StartDate').val();
+       // alert(StartDate);
+        var EndDate = $('#EndDate').val();
+        //alert(EndDate);
+        var Remarks = $('#ProjectRemarks').val();
+        //alert('remarks '+Remarks);
+        var RName = $('#ProjectManager').val();
+       // alert('ProjectManager '+RName);
+
+        //var SiteId = document.getElementsByName("SiteId");
+        //for (var i = 0; i < SiteId.length; i++) {
+        //    alert('SiteId ' + SiteId[i].value);
+        //}
+
+
+        var ProjectSiteId = document.getElementsByName("ProjectSiteId");
+      //  alert('siteId '+ProjectSiteId);
+        var SiteName = document.getElementsByName("SiteName");
+       // alert('sname: '+SiteName);
+        var SiteLocation = document.getElementsByName("SiteLocation");
+       // alert('SiteLocation: '+SiteLocation);
+
+        var SiteEngineerId = document.getElementsByName("SiteEngineerId");
+
+        var SiteEngineer = document.getElementsByName("SiteEngineer");
+
+       // alert('SiteEngineerId: '+SiteEngineerId);
+
+        var Length = $('.Resource-list tr').length;
+      //  alert('L '+Length);
+        //alert('length '+Length);
+        var SiteDetails = [];
+
+       // alert('test');
+        for (var i = 0; i < Length-1; i++) {
+
+            SiteDetails.push({ ProjectSiteId:ProjectSiteId[i].value, SiteName: SiteName[i].value, SiteLocation: SiteLocation[i].value, SiteEngineerId: SiteEngineerId[i].value, SiteEngineer:SiteEngineer[i].value});
+            //alert(SiteEngineer[i].value);
+            //alert(ProjectSiteId[i].value);
+            //alert('pid '+PId);
+
+
+        }
+       // debugger;
+
+        SiteResourceDetails = JSON.stringify({
+            SiteResourceDetails: SiteDetails,
+            PId:PId,
+            ProjectName: ProjectName,
+            StartDate: StartDate,
+            EndDate: EndDate,
+            Remarks: Remarks,
+            RName: RName
+        });
+
+
+     //   debugger;
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/Projects/ProjectUpdate',
+            traditional: true,
+            data: SiteResourceDetails,
+            success: function (result) {
+                //alert('Successful');
+                if (result.flag) {
+                    alert("Record save successfully!");
+                    window.location = "/Projects/Edit";
+                }
+                else {
+                    alert(result.message);
+                }
+            },
+            failure: function (response) {
+                alert('Error');
+            }
+        });
+    };
+
+
+
+</script>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Plugins/select2/select2.min.js"></script>
+
+
+    <script>
+      $(".select2").select2();
+    </script>
+
+}
+
+<style>
+    span.error {
+        display: block;
+        /*visibility: hidden;*/
+        color: red;
+        font-size: 90%;
+    }
+</style>

@@ -1,0 +1,226 @@
+﻿@*@model PagedList.IPagedList<DhaliProcurement.Models.Project>
+    @using PagedList.Mvc;*@
+@using DhaliProcurement.Helper
+@model IEnumerable<DhaliProcurement.Models.Project>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="panel panel-flat">
+    <div class="panel-heading">
+        <h5 class="panel-title"><i class="icon-stack3 position-left"></i>Project List</h5><hr />
+        <div class="heading-elements">
+            <ul class="icons-list">
+                <li><a data-action="collapse"></a></li>
+                <li><a data-action="reload"></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body">
+        @*<div class="col-md-2">
+            @Html.ActionLink("Create Requisition", "Create", null, new { @class = "btn btn-info", @style = "background-color: grey;border: none;" })
+        </div>
+
+            <div  class="col-md-5 col-lg-offset-2">
+                @using (@Html.BeginForm("Index", "Projects", FormMethod.Post))
+                {
+                    <div class="form-horizontal">
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                        <div class="form-group">
+                            @Html.Label("Project", htmlAttributes: new { @class = "control-label col-md-3" })
+
+                            <div class="col-md-9">
+
+                                @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @Id = "ProjectId" })
+                            </div>
+                            <input value="Search" class="btn btn-primary" type="submit" style="background-color: grey;border: none;" />
+                        </div>
+                       
+                    </div>
+
+                }
+
+            </div>*@
+
+        <div class="col-md-2">
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-info", @style = "background-color: grey;border: none;" })
+        </div>
+
+
+    @using (@Html.BeginForm("Index", "Projects", FormMethod.Post))
+            {
+        <div class="col-md-5 col-lg-offset-2">
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.Label("Project", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    <div class="col-md-9">
+
+                        @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @Id = "ProjectId" })
+
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+        <input value="Search" class="btn btn-primary" type="submit" style="background-color: grey;border: none;" />
+    }
+
+     
+
+            <!--End-->
+
+        <div class="row">
+
+            <table class="table table-responsive table-bordered">
+                <tr class="bg-grey">
+                    <th class="col-xs-1">
+                        SL. No.
+                    </th>
+
+                    <th class="col-lg-3">
+                        Project Name
+                    </th>
+                    <th class="col-lg-1">
+                        Start Date
+                    </th>
+                    <th class="col-lg-1">
+                        End Date
+                    </th>
+                    <th class="col-lg-1">Status</th>
+                    <th class="col-md-3">&nbsp;</th>
+                </tr>
+
+
+                @{
+                    //int counter = ViewBag.Row;
+                    int counter = 0;
+                }
+
+
+                @foreach (var item in Model)
+            {
+                counter++;
+                    <tr>
+                        <td style="text-align:center;">
+
+                            <label>@counter</label>
+                        </td>
+
+
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.Name)*@
+
+                            @Html.ActionLink(item.Name, "Edit", new { id = item.Id })
+                        </td>
+                        <td>
+                            @NullHelper.DateToString(item.StartDate)
+                        </td>
+                        <td>
+                            @NullHelper.DateToString(item.EndDate)
+                        </td>
+                        <td>
+                        @if (item.Status.ToString() == "Complete")
+                        {
+                            <span class="badge badge-success">@item.Status</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-info">@item.Status</span>
+                        }
+                        @*@Html.DisplayFor(model => item.Status)</td>*@
+                        <td>
+                            @Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "btn btn-xs text-info icon-pencil4", @title = "Edit" })
+                            @Html.ActionLink(" ", "Details", new { id = item.Id }, new { @class = "btn btn-xs text-info  icon-file-text2", @title = "Details" })
+                            @*@Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "btn btn-xs text-danger icon-cross2", @title = "Delete" })*@
+                            <a class="btn btn-xs text-danger icon-cross2" title="Delete" href="javascript:deleteFunction(@item.Id)"></a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+
+    @*<p>
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </p>
+
+
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))*@
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+
+           function deleteFunction(ProjectId) {
+            var Con = confirm("Are you sure want to delete this?");
+            if (Con === true) {
+                $.ajax({
+                    url: "/Projects/DeleteProjects",
+                    type: "post",
+                    data: {
+                        id: ProjectId
+                    },
+                    dataType: "json",
+                    success: function (flag) {
+                        console.log(flag);
+
+                        if (flag.flag === true) {
+                            alert("Successfully deleted !");
+                            window.location = "/Projects/Index";
+                        } else {
+                            alert(flag.message);
+                        }
+                    },
+
+                    error: function (xhr) {
+                        alert('error');
+
+                    }
+
+
+                });
+            }
+
+        }
+</script>
+
+
+@section scripts
+{
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script src="~/Plugins/select2/select2.min.js"></script>
+    <script>
+     $(".select2").select2();
+    </script>
+
+
+
+
+
+
+}
+

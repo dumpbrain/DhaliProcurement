@@ -1,0 +1,576 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Materials Requisition</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+
+                    <table class="table">
+                        <tr>
+                            <td>Project Name</td>
+                            <td>
+
+                                @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @id = "ProjectId", @class = "form-control select2", @style = "width: 500px !important" })
+                                @Html.ValidationMessage("ProjectId", "", new { @class = "text-danger" })
+
+                            </td>
+                            <td>Req. No.</td>
+                            <td>
+                                @Html.TextBox("ReqNo", "", new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Site Name</td>
+                            <td>
+                                @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @id = "SiteId", @class = "form-control select2", @style = "width: 500px !important" })
+                                @Html.ValidationMessage("SiteId", "", new { @class = "text-danger" })
+                            </td>
+                            <td>Requisition Date</td>
+                            <td>
+                                @Html.TextBox("RequisitionDate", "", new { @class = "form-control datepicker" })
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Site Engineer</td>
+                            <td>
+                                @Html.TextBox("SiteEngineer", null, new { @class = "form-control", disabled = "true" })
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>Project Manager</td>
+                            <td>
+                                @Html.TextBox("ProjectManager", null, new { @class = "form-control", disabled = "true" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Remarks</td>
+                            <td>
+                                @Html.TextBox("ProjectRemarks", "", new { @class = "form-control" })
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <hr />
+                    <div class="details well" style=" border 1px solid black;">
+                        <h4>Requisition Items</h4>
+                        <table style="width: 100%;">
+                            <tr>
+                                @*<td style="font-size: 15px; font-weight: bold;">Sl. No.</td>*@
+                                <th style="font-size: 15px; font-weight: bold;">Required Materials</th>
+                                <th style="font-size: 15px; font-weight: bold;">Unit</th>
+                                <th style="font-size: 15px; font-weight: bold;">Total Required</th>
+                                <th style="font-size: 15px; font-weight: bold;">Total Received</th>
+                                <th style="font-size: 15px; font-weight: bold;">Remaining Balance</th>
+                                <th style="font-size: 15px; font-weight: bold;">Current Stock</th>
+                                <th style="font-size: 15px; font-weight: bold;">Req. Qty</th>
+                                <th style="font-size: 15px; font-weight: bold;">Brand/Quantity</th>
+                                <th style="font-size: 15px; font-weight: bold;">Size</th>
+                                <th style="font-size: 15px; font-weight: bold;">Required Date</th>
+                                <th style="font-size: 15px; font-weight: bold;">Remarks</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            <tr>
+                                <td>
+
+                                    @Html.DropDownList("ItemName", null, "Select item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ItemName", @style = "width: 150px;" })
+                                </td>
+                                @*<td>
+                                        <input type="text" id="Qty" class="form-control" />
+                                    </td>*@
+                                <td>
+                                    @*@Html.DropDownList("Unit", null, "Select unit", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @style = "width: 150px;" })*@
+                                    @Html.TextBox("Unit", "", new { @disabled = "disabled", @class = "form-control", @id = "UnitName" })
+                                    <input type="hidden" value="" id="UnitId" />
+                                </td>
+                                <td>
+                                    <input type="text" id="TotalRequired" class="form-control"  disabled="disabled" />
+                                </td>
+                                <td>
+                                    <input type="text" id="TotalReceived" class="form-control" disabled="disabled"/>
+                                </td>
+                                <td>
+                                    <input type="text" id="RemainingBalance" class="form-control"  disabled="disabled"/>
+                                </td>
+                                <td>
+                                    <input type="text" id="CurrentStock" class="form-control"/>
+                                </td>
+                                <td>
+                                    <input type="text" id="ReqQty" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="text" id="Brand" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="text" id="Size" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="text" id="RequiredDate" class="form-control datepicker" />
+                                </td>
+                                <td>
+                                    <input type="text" id="ItemRemarks" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="button" id="addNewRow" value="+" class="btn btn-primary" style ="background-color: grey;border: none;"/>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><span class="error" id="ItemName_Error">Item name required</span></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                @*<td><span class="error" id="CurrentStock_Error">Current Stock required</span></td>*@
+                                <td><span class="error" id="ReqQty_Error">Req Qty must be a number</span></td>
+                                @*<td><span class="error" id="Brand_Error">brand required</span></td>
+                                    <td><span class="error" id="Size_Error">Size required</span></td>
+                                    <td><span class="error" id="RequiredDate_Error">Date required</span></td>*@
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <br />
+                        <div class="table-responsive scrolling">
+                            <table class="Resource-list table table-bordered" id="RequisitionDetails">
+                                <tr class="bg-grey">
+                                    @*<th>Sl. No.</th>*@
+                                    <th>Required Materials</th>
+                                    <th>Unit</th>
+                                    <th>Total Required</th>
+                                    <th>Total Received</th>
+                                    <th>Remaining Balance</th>
+                                    <th>Current Stock</th>
+                                    <th>Req. Qty</th>
+                                    <th>Brand/Quantity</th>
+                                    <th>Size</th>
+                                    <th>Required Date</th>
+                                    <th>Remarks</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+
+                }
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info" ,@style = "background-color: grey;border: none;" })
+            <button type="button" id="SaveItem" class="btn btn-success" style ="background-color: grey;border: none;"><i class="icon-floppy-disk position-left"  ></i>Create</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var counter = 0; //counter for the serial
+
+    $(document).ready(function () {
+        //$(".datepicker").datepicker({ dateFormat: 'dd/mm/yyyy', changeYear: true });
+        $(".select2").select2();
+        RebindDatePicker();
+        $('#SiteId').attr("disabled", "true");
+        $("#ItemName").attr("disabled", "true");
+
+
+        $('#ItemName_Error').hide();
+        $('#ReqQty_Error').hide();
+        //RebindDatePicker();
+    });
+
+
+    $('#ProjectId').change(function () {
+        var id = $('#ProjectId option:selected').val();
+
+        $.ajax({
+            url: "/MaterialRequisition/GetSites",
+            type: "post",
+            data: {
+                ProjectId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#SiteId').removeAttr("disabled");
+                $('#ProjectManager').val(data.manager);
+                var listOfSites = data.Sites.length;
+
+                var sites = "<select id='sites'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#SiteId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
+
+
+    $("#SiteId").change(function () {
+        var SiteId = $('#SiteId').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        //alert(ProjectId);
+
+        $.ajax({
+            type: "post",
+            url: "/MaterialRequisition/GetSiteEngineer",
+            data: { SiteId, ProjectId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#SiteEngineer').val(data.siteEngineer);
+                $('#ItemName').removeAttr("disabled");
+               
+                var listOfitems = data.Items.length;
+                var items = "<select id='ItemName'>";
+                items = items + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfitems; i++) {
+                    items = items + '<option value=' + data.Items[i].Value + '>' + data.Items[i].Text + '</option>';
+                }
+                items = items + '</select>';
+                $('#ItemName').html(items);
+
+            }
+
+        });
+    });
+
+    $("#ItemName").change(function () {
+        var ItemId = $('#ItemName option:selected').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        var SiteId = $('#SiteId option:selected').val();
+
+        if (ProjectId == "" && SiteId == "") {
+            alert('Please Select Project Id and Site Id');
+        }
+
+        //alert(ProjectId);
+        //alert(SiteId);
+
+        $.ajax({
+            type: "post",
+            url: "/MaterialRequisition/GetUnit",
+            data: { ItemId, ProjectId, SiteId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#UnitId').val(data.UnitId);
+                $('#UnitName').val(data.UnitName);
+                $('#TotalRequired').val(data.TotalRequired);
+                //$('#TotalReceived').val(data.TotalReceived);
+                $('#TotalReceived').val(0);
+                var TotalRequired = $('#TotalRequired').val();
+                var TotalReceived = $('#TotalReceived').val();
+                var RemainingBalance = TotalRequired - TotalReceived;
+
+                $('#RemainingBalance').val(RemainingBalance);              
+            }
+
+        });
+    });
+
+    //add new row
+    $('#addNewRow').click(function (event) {
+        event.preventDefault();
+        counter++;
+        var isAllValid = true;
+        var ItemId = $('#ItemName option:selected').val();
+        //alert(ItemId);
+        var ItemName = $('#ItemName option:selected').text();
+        //alert(ItemName);
+        //var Qty = $('#Qty').val();
+        var Unit = $('#UnitName').val();
+        //var Unit = $('#Unit option:selected').text();
+
+        var UnitId = $('#UnitId').val();
+        //alert(Unit);
+        //var UnitId = $('#Unit option:selected').val();
+        //alert(UnitId);
+        var TotalRequired = $('#TotalRequired').val();
+        var TotalReceived = $('#TotalReceived').val();
+        var RemainingBalance = $('#RemainingBalance').val();
+        var CurrentStock = $('#CurrentStock').val();
+        var ReqQty = $('#ReqQty').val();
+        //alert(ReqQty);
+        var Brand = $('#Brand').val();
+        var Size = $('#Size').val();
+        var requiredDate = $('#RequiredDate').val();
+        var ItemRemarks = $('#ItemRemarks').val();
+        var Status = "N";
+
+        if (ItemName == "" || ItemName == "Select item") {
+            $('#ItemName_Error').show();
+            isAllValid = false;
+        }
+        else {
+            //$('#ItemName_Error').css('visibility', 'hidden');
+            $('#ItemName_Error').hide();
+        }
+
+        if (ReqQty =="" || isNaN(ReqQty)) {
+            $('#ReqQty_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ReqQty_Error').hide();
+        }
+
+        if (isAllValid) {
+            var newRow = jQuery('<tr>'
+                + '<td><input value="' + ItemId + '" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" type="hidden" name="ItemName' + counter + '"/><label>' + ItemName + '<label></td>'
+                //+ '<td><input type="hidden" value="' + UnitId + '" type="text" name="UnitId"/></td>'
+                + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>' + Unit + '</label></td>'
+                + '<td><input class="form-control" value="' + TotalRequired + '"  type="hidden" name="TotalRequired"/><label>' + TotalRequired + '</label></td>'
+                + '<td><input class="form-control" value="' + TotalReceived + '"  type="text" name="TotalReceived"/></td>'
+                + '<td><input class="form-control" value="' + RemainingBalance + '"  type="text" name="RemainingBalance"/></td>'
+                + '<td><input class="form-control" value="' + CurrentStock + '"  type="text" name="CurrentStock" style="width:80px;"/></td>'
+                + '<td><input class="form-control" value="' + ReqQty + '"  type="text" name="ReqQty" style="width:80px;"/></td>'
+                + '<td><input class="form-control" value="' + Brand + '"  type="text" name="Brand" style="width:80px;"/></td>'
+                + '<td><input class="form-control" value="' + Size + '"  type="text" name="Size"style="width:80px;"/></td>'
+                + '<td><input class="form-control datepicker" style="width:90px;" value="' + requiredDate + '" type="text" name="RequiredDate"/></td>'
+                + '<td><input class="form-control" style="width:90px;"  value="' + ItemRemarks + '" type="text" name="ItemRemarks"/></td>'
+                + '<td><input value="' + Status + '" type="hidden" name="Status"/> <button class="btn  text-warning-600 btn-flat btn-icon btn-rounded"  onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
+
+
+            jQuery('table.Resource-list').append(newRow);
+
+            $('#ItemName').val("");
+            $('#UnitName').val("");
+            $('#TotalRequired').val("");
+            $('#TotalReceived').val("");
+            $('#RemainingBalance').val("");
+            $('#CurrentStock').val("");
+            $('#ReqQty').val("");
+            $('#Brand').val("");
+            $('#Size').val("");
+            $('#RequiredDate').val("");
+            $('#ItemRemarks').val("");
+
+
+            RebindDatePicker();
+        }
+
+
+
+        //var newRow = jQuery('<tr><td class="index"><label name="TaskId">' + counter + '</label></td>'
+        //    + '<td><input value="' + ItemId + '" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" type="hidden" name="ItemName' + counter + '"/><label>' + ItemName + '<label></td>'
+        //    //+ '<td><input type="hidden" value="' + UnitId + '" type="text" name="UnitId"/></td>'
+        //    + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>' + Unit + '</label></td>'
+        //    + '<td><input class="form-control" value="' + TotalRequired + '"  type="text" name="TotalRequired"/></td>'
+        //    + '<td><input class="form-control" value="' + TotalReceived + '"  type="text" name="TotalReceived"/></td>'
+        //    + '<td><input class="form-control" value="' + RemainingBalance + '"  type="text" name="RemainingBalance"/></td>'
+        //    + '<td><input class="form-control" value="' + CurrentStock + '"  type="text" name="CurrentStock"/></td>'
+        //    + '<td><input class="form-control" value="' + ReqQty + '"  type="text" name="ReqQty" style="width:80px;"/></td>'
+        //    + '<td><input class="form-control" value="' + Brand + '"  type="text" name="Brand" style="width:80px;"/></td>'
+        //    + '<td><input class="form-control" value="' + Size + '"  type="text" name="Size"style="width:80px;"/></td>'
+        //    + '<td><input class="form-control" value="' + ItemRemarks + '" type="text" name="ItemRemarks"/>'
+        //    + '</td> <td> <input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();" /></td></tr>');
+
+
+    });
+
+
+
+
+
+    $('#SaveItem').click(function (e) {
+        //alert('Length:' + $('.Resource-list tr').length)
+        
+        if ($('#ProjectId option:selected').text() === "--Select--") {
+            alert('Please select project');
+            $('#ProjectId option:selected').focus();
+        }
+        else if ($('#SiteId option:selected').text() === "--Select--") {
+            alert('Please select site');
+            $('#SiteId option:selected').focus();
+        }
+        else if ($.trim($('#RequisitionDate').val()) === "") {
+            alert('Requisition date required');
+            $('#RequisitionDate').focus();
+        }
+        else if ($.trim($('#ReqNo').val()) === "") {
+            alert('Please insert Requisition No.');
+            $('#ReqNo').focus();
+        }
+        else if ($('.Resource-list tr').length <2) {
+            alert('Please Add Item to this requisition');          
+        }
+        else {
+            CreateSitePlanTask();
+        }
+    });
+
+    function CreateSitePlanTask() {
+        //==========Master Form==========
+
+        //var ProjectId = document.getElementById("ProjectId");
+        var ProjectId = $("#ProjectId  option:selected").val();
+        //alert('project Id: ' + ProjectId);
+        var SiteId = $("#SiteId  option:selected").val();
+        //alert('Site Id: ' + SiteId);
+        var RequisitionDate = $("#RequisitionDate").val();
+        //alert('RequisitionDate: ' + RequisitionDate);
+        var ReqNo = $("#ReqNo").val();
+        //alert('ReqNo: ' + ReqNo);
+        var SiteEngineer = $("#SiteEngineer").val();
+        //alert('SiteEngineer: ' + SiteEngineer);
+        var Projectmanager = $("#ProjectManager").val();
+        //alert('Projectmanager: ' + Projectmanager);
+        var remarks = $("#ProjectRemarks").val();
+        //alert('remarks: ' + remarks);
+        //var Status = "N";
+
+        //===========Detail Form===========
+        var ItemId = document.getElementsByName("ItemId");
+        var TotalRequired = document.getElementsByName("TotalRequired");
+        var TotalReceived = document.getElementsByName("TotalReceived");
+        var RemainingBalance = document.getElementsByName("RemainingBalance");
+        var CurrentStock = document.getElementsByName("CurrentStock");
+        var ReqQty = document.getElementsByName("ReqQty");
+        var Brand = document.getElementsByName("Brand");
+        var Size = document.getElementsByName("Size");
+        var RequiredDate = document.getElementsByName("RequiredDate");
+        var ItemRemarks = document.getElementsByName("ItemRemarks");
+
+        var RequisitionItems = [];
+        //alert($('#RequisitionDetails tr').length - 1)
+
+        var tableCounter = $('#RequisitionDetails tr').length - 1;
+        //alert('Length: ' + tableCounter);
+
+        for (var i = 0; i < tableCounter; i++) {
+            RequisitionItems.push({
+                ItemId: ItemId[i].value,
+                ReqQty: ReqQty[i].value,
+                CStockQty: CurrentStock[i].value,
+                Brand: Brand[i].value,
+                Size: Size[i].value,
+                RequiredDate: RequiredDate[i].value,
+                ItemRemarks: ItemRemarks[i].value
+            });
+            console.log('---------->');
+            console.log('ItemId: ' + RequisitionItems[i].ItemId);
+            console.log('CurrentStock: ' + RequisitionItems[i].CurrentStock);
+            console.log('ReqQty: ' + RequisitionItems[i].ReqQty);
+            console.log('Brand: ' + RequisitionItems[i].Brand);
+            console.log('Size: ' + RequisitionItems[i].Size);
+            console.log('Required Date: ' + RequisitionItems[i].RequiredDate);
+            console.log('ItemRemarks: ' + RequisitionItems[i].ItemRemarks);
+            console.log('---------->');
+
+        }
+
+        TaskDetails = JSON.stringify({
+            RequisitionItems: RequisitionItems,
+            ProjectId: ProjectId,
+            SiteId: SiteId,
+            RequisitionDate: RequisitionDate,
+            ReqNo: ReqNo,
+            remarks: remarks
+        });
+
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/MaterialRequisition/CreateRequisition',
+            data: TaskDetails,
+            success: function (result) {
+                console.log(result);
+                if (result.flag === true) {
+                    alert("Record save successfully!");
+
+                    $('#ProjectId').val("");
+                    $('#SiteId').val("");
+                    $('#RequisitionDate').val("");
+                    $('#ReqNo').val("");
+                    $('#SiteEngineer').val("");
+                    $('#ProjectManager').val("");
+                    $('#ProjectRemarks').val("");
+
+                    window.location.replace("/MaterialRequisition/Index");
+
+
+                }
+                else {
+                    alert(result.message);
+                }
+
+
+            },
+            failure: function (response) {
+                alert('error');
+            }
+        });
+
+    }
+
+    function RebindDatePicker() {
+        $('.datepicker').datepicker("destroy");
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            todayBtn: true,
+        });
+        // jquery validator bug fix using moment
+        //$.validator.methods.date = function (value, element) {
+        //    return this.optional(element) || moment(value, "DD/MM/YYYY", true).isValid();
+        //}
+
+    }
+
+</script>
+
+
+<style>
+    /*.scrolling {
+        width: 100%;
+        height: 350px;
+        /*border: 13px solid #bed5cd;
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }*/
+    span.error {
+        display: block;
+        /*visibility: hidden;*/
+        color: red;
+        font-size: 90%;
+    }
+</style>

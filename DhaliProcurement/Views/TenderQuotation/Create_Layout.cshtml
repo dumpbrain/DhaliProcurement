@@ -1,0 +1,187 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Materials Tender Quotation</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+
+                    <table class="table">
+                        <tr>
+                            <td>Tender No.</td>
+                            <td>
+                                @Html.TextBox("TNo", "", new { @class = "form-control" })
+                                @*@Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @id = "ProjectId", @class = "form-control select2", @style = "width: 500px !important" })*@
+                                @Html.ValidationMessage("ProjectId", "", new { @class = "text-danger" })
+
+                            </td>
+                            @*<td>Req. No.</td>
+                            <td>
+                                @Html.TextBox("ReqNo", "", new { @class = "form-control" })
+                            </td>*@
+                            <td>Tender Date</td>
+                            <td>
+                                @Html.TextBox("TDate", "", new { @class = "form-control datepicker" })
+                            </td>
+                        </tr>
+                        @*<tr>
+                           *<td>Site Name</td>
+                            <td>
+                                @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @id = "SiteId", @class = "form-control select2", @style = "width: 500px !important" })
+
+                            </td>
+
+                        </tr>*@
+                        <tr>
+                            <td>Specification</td>
+                            <td>
+                                @Html.TextBox("Specs", null, new { @class = "form-control"})
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Remarks</td>
+                            <td>
+                                @Html.TextBox("TenderRemarks", "", new { @class = "form-control" })
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <hr />
+                    <div class="details well" style=" border 1px solid black;">
+                        <h4>Tender Items</h4>
+                        <table style="width: 100%;">
+                            <tr>
+                                @*<td style="font-size: 15px; font-weight: bold;">Sl. No.</td>*@
+                                <th style="font-size: 15px; font-weight: bold;">Project Name</th>
+                                <th style="font-size: 15px; font-weight: bold;">Site</th>
+                                <th style="font-size: 15px; font-weight: bold;">Req. No.</th>
+                                <th style="font-size: 15px; font-weight: bold;">Item Name</th>
+                                <th style="font-size: 15px; font-weight: bold;">Qty</th>
+                                <th style="font-size: 15px; font-weight: bold;">Unit</th>
+                                <th style="font-size: 15px; font-weight: bold;">Vendor Name</th>
+                                <th style="font-size: 15px; font-weight: bold;">Qtn. No.</th>
+                                <th style="font-size: 15px; font-weight: bold;">Qtn. Date</th>
+                                <th style="font-size: 15px; font-weight: bold;">Unit Price</th>
+                                <th style="font-size: 15px; font-weight: bold;">Total Price</th>
+                                @*<th style="font-size: 15px; font-weight: bold;">Remarks</th>
+                                <th>&nbsp;</th>*@
+                                @*<th>&nbsp;</th>*@
+                            </tr>
+                            <tr>
+                                <td>
+
+                                    @*@Html.DropDownList("ProjectId", null, "Select Project", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ProjectId"@*, @style = "width: 150px;"*@ })*@                                  
+                                </td>
+                                <td>
+                                    @*@Html.DropDownList("SiteId", null, "Select Site", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "SiteId"@*, @style = "width: 150px;"*@ })*@
+                                    @*<input type="hidden" value="" id="UnitId" />*@
+                                </td>
+                                <td>
+                                    @*@Html.DropDownList("RCode", null, "Select Requisition", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "RCode"@*, @style = "width: 150px;"*@ })*@
+                                    @*<input type="hidden" value="" id="UnitId" />*@
+                                </td>
+                                <td>
+                                   @*@Html.DropDownList("ItemName", null, "Select Item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ItemName"@*, @style = "width: 150px;"*@ })*@
+                                </td>
+                                <td>
+                                    <input type="text" id="Qty" class="form-control" disabled="disabled" />
+                                </td>
+                                <td>
+                                    <input type="text" id="Unit" class="form-control"  disabled="disabled"/>
+                                </td>
+                                <td>
+                                   @*@Html.DropDownList("VendorId", null, "Select Vendor", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "VendorId"@*, @style = "width: 150px;"*@ })*@
+                                </td>
+                                <td>
+                                    <input type="text" id="TQNo" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="text" id="TQDate" class="form-control datepicker" />
+                                </td>
+                                <td>
+                                    <input type="text" id="TQPrice" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="text" id="TotalPrice" class="form-control" disabled="disabled" />
+                                </td>
+                                <td>
+                                    <input type="button" id="addNewRow" value="+" class="btn btn-primary" />
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><span class="error" id="ItemName_Error">Item name required</span></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                @*<td><span class="error" id="CurrentStock_Error">Current Stock required</span></td>*@
+                                <td>@*<span class="error" id="ReqQty_Error">Req Qty must be a number</span>*@</td>
+                                @*<td><span class="error" id="Brand_Error">brand required</span></td>
+                                    <td><span class="error" id="Size_Error">Size required</span></td>
+                                    <td><span class="error" id="RequiredDate_Error">Date required</span></td>*@
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <br />
+                        <div class="table-responsive scrolling">
+                            <table class="Resource-list table table-bordered" id="RequisitionDetails">
+                                <tr class="bg-grey">
+                                    @*<th>Sl. No.</th>*@
+                                    <th>Project Name</th>
+                                    <th>Site</th>
+                                    <th>Req. No.</th>
+                                    <th>Item Name</th>
+                                    <th>Qty</th>
+                                    <th>Unit</th>
+                                    <th>Vendor Name</th>
+                                    <th>Qtn. No.</th>
+                                    <th>Qtn. Date</th>
+                                    <th>Unit Price</th>
+                                    <th>Total Price</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+
+                }
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info" })
+            <button type="button" id="SaveItem" class="btn btn-success"><i class="icon-floppy-disk position-left"></i>Create</button>
+        </div>
+    </div>
+</div>

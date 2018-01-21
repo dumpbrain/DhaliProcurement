@@ -1,0 +1,569 @@
+﻿@model DhaliProcurement.ViewModel.VendorPaymentMasterDetail
+@using DhaliProcurement.Helper
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Vendor Payment</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <table class="table">
+                    <tr>
+                        <td>Party Name</td>
+                        <td>
+                            @Html.DropDownList("VendorId", null, "--Select--", htmlAttributes: new { @id = "VendorId", @class = "form-control select2", disabled = "disabled" })
+                            <input type="hidden" value="@ViewBag.vPayId" id="VendorMasId" />
+                        </td>
+                        <td>Payment Date</td>
+                        <td>
+                            @Html.TextBox("PayDate", NullHelper.DateToString(Model.proc_vPaymentMas.VPDate), new { @class = "form-control datepicker", disabled = "disabled" })
+                        </td>
+
+                    </tr>
+
+                </table>
+
+                <hr />
+                <br />
+                <div class="details well" style=" border 1px solid black;">
+                    <h4>Details</h4>
+                  
+                    <br />
+                    <div class="table-responsive scrolling">
+                        <table class="Resource-list table table-bordered" id="PaymentDetails">
+                            <tr class="bg-grey">
+                                @*<th>Sl. No.</th>*@
+                                <th>Project Name</th>
+                                <th>Site</th>
+                                <th>Req. No.</th>
+                                <th>PO No.</th>
+                                <th>Item Name</th>
+                                <th>Req. Qty Material</th>
+                                <th>Unit</th>
+                                <th>Challan No</th>
+                                <th>Bill No.</th>
+                                <th>Total Amount(tk)</th>
+                                <th>Payment</th>
+                                <th>Remarks</th>
+                                <th>&nbsp;</th>
+
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info",@style = "background-color: grey;border: none;" })
+         
+        </div>
+    </div>
+</div>
+
+<script>
+    var counter = 0;
+    $(document).ready(function () {
+
+        $('#SiteId').attr("disabled", "true");
+        //$("#ItemName").attr("disabled", "true");
+        $("#ReqNo").attr("disabled", "true");
+        $("#PONo").attr("disabled", "true");
+        $("#ItemName").attr("disabled", "true");
+        $("#ChallanNo").attr("disabled", "true");
+        //$('#ItemName_Error').hide();
+        //$('#ReqQty_Error').hide();
+
+        var vPayId = @ViewBag.vPayId;
+        //alert('vPayId '+vPayId);
+        var ProcProjId = @ViewBag.ProcProjId;
+        var ProcProjSiteId = @ViewBag.ProcProjSiteId;
+
+        debugger;
+
+        ResourceDetails = JSON.stringify({
+            vPayId: vPayId,
+           // ProcProjId: ProcProjId,
+          //  ProcProjSiteId: ProcProjSiteId
+
+        });
+
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/VendorPayments/getEditPaymentItems/',
+            traditional: true,
+            data: ResourceDetails,
+            success: function (data) {
+                //alert('test');
+
+                for (var i = 0; i < data.List.length; i++) {
+                    //console.log('ProjectId '+data.List[i].ProjectId);
+                    //console.log(".SiteId "+data.List[i].SiteId);
+                    //console.log("ReqNo "+data.List[i].ReqNo);
+                    //console.log("ItemId "+data.List[i].ItemId);
+                    //console.log("Qty "+data.List[i].Qty);
+                    //console.log("UnitId "+data.List[i].UnitId);
+                    //console.log("ChallanNo "+data.List[i].ChallanNo);
+                    //console.log("BillNo "+data.List[i].BillNo);
+                    //console.log("Payment "+data.List[i].Payment);
+                    //console.log("Remarks "+ data.List[i].Remarks);
+                    data.List[i].Proc_VendorPaymentDetId
+                    console.log("VP "+data.List[i].Proc_VendorPaymentDetId);
+
+                    var newRow = jQuery('<tr>'
+                          + '<td><input value="' + data.List[i].ProjectId + '" type="hidden" name="ProjectId" class="form-control" style="width:50px;"/><label>' + data.List[i].ProjectName + '</label></td>'
+                          + '<td><input value="' + data.List[i].SiteId + '" type="hidden" name="SiteId" class="form-control" style="width:50px;"/><label>' + data.List[i].SiteName + '</label></td>'
+                          + '<td><input value="' + data.List[i].ReqNo + '" type="hidden" name="ReqNo" class="form-control" style="width:50px;"/><label>' + data.List[i].ReqNo + '</label><input value="' + data.List[i].Proc_VendorPaymentDetId + '" type="hidden" name="Proc_VendorPaymentDetId"/></td>'
+                          + '<td><input value="' + data.List[i].PONo + '" type="hidden" name="PONo" class="form-control" style="width:50px;"/><label>' + data.List[i].PONo + '</label></td>'
+                          + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId" class="form-control" style="width:50px;"/><label>' + data.List[i].ItemName + '</label></td>'
+                          + '<td><input value="' + data.List[i].Qty + '" type="hidden" name="ReqQty" class="form-control" style="width:50px;"/><label>' + data.List[i].Qty + '</label></td>'
+                          + '<td><input value="' + data.List[i].UnitId + '" type="hidden" name="UnitId"/><label>' + data.List[i].UnitName + '</label></td>'
+                          + '<td><input value="' + data.List[i].ChallanNo + '" type="hidden" name="ChallanNo" class="form-control" style="width:50px;"/><label>' + data.List[i].ChallanNo + '</label></td>'
+                          + '<td><input value="' + data.List[i].BillNo + '" type="hidden" name="BillNo" class="form-control" style="width:50px;"/><label>' + data.List[i].BillNo + '</label></td>'
+                          + '<td><input value="' + data.List[i].Qty + '" type="hidden" name="TotalAmount" class="form-control" style="width:50px;"/><label>' + data.List[i].Qty + '</label></td>'
+                          + '<td><input value="' + data.List[i].Payment + '" type="hidden" name="Payment" class="form-control" style="width:50px;"/><label>' + data.List[i].Payment + '</label></td>'
+                          + '<td><input value="' + data.List[i].Remarks + '" type="hidden" name="Remarks" class="form-control" style="width:50px;"/><label>' + data.List[i].Remarks + '</label></td></tr>');
+                    jQuery('table.Resource-list').append(newRow);
+                }
+
+              //  alert('vp2');
+
+                //totalItemCost();
+
+            },
+            error: function (data) {
+                alert('Error: ');
+            }
+        });
+
+
+
+
+
+    });
+
+    $('#ProjectId').change(function () {
+        var id = $('#ProjectId option:selected').val();
+
+        $.ajax({
+            url: "/VendorPayments/GetSites",
+            type: "post",
+            data: {
+                ProjectId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#SiteId').removeAttr("disabled");
+
+                var listOfSites = data.Sites.length;
+
+                var sites = "<select id='sites'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#SiteId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
+
+    $("#SiteId").change(function () {
+        var SiteId = $('#SiteId  option:selected').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        //alert(ProjectId);
+
+        $.ajax({
+            type: "post",
+            url: "/VendorPayments/ReqNo",
+            data: { SiteId, ProjectId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#ReqNo').removeAttr("disabled");
+
+                var listOfitems = data.ReqItems.length;
+                var items = "<select id='ReqNo'>";
+                items = items + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfitems; i++) {
+                    items = items + '<option value=' + data.ReqItems[i].Value + '>' + data.ReqItems[i].Text + '</option>';
+                }
+                items = items + '</select>';
+                $('#ReqNo').html(items);
+
+            }
+
+        });
+    });
+
+
+    $("#ReqNo").change(function () {
+        //  var SiteId = $('#SiteId  option:selected').val();
+        //  var ProjectId = $('#ProjectId option:selected').val();
+        var ReqNo = $('#ReqNo option:selected').val();
+        //alert('ReqNo ' + ReqNo);
+        //alert(ProjectId);
+
+        $.ajax({
+            type: "post",
+            url: "/VendorPayments/GetPONo",
+            data: { ReqNo: ReqNo },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#PONo').removeAttr("disabled");
+
+                var listOfitems = data.POItems.length;
+                var items = "<select id='PONo'>";
+                items = items + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfitems; i++) {
+                    items = items + '<option value=' + data.POItems[i].Value + '>' + data.POItems[i].Text + '</option>';
+                }
+                items = items + '</select>';
+                $('#PONo').html(items);
+
+            }
+
+        });
+    });
+
+
+
+
+    $("#PONo").change(function () {
+        var PONo = $('#PONo option:selected').val();
+        alert('PONo ' + PONo);
+
+        $.ajax({
+            type: "post",
+            url: "/VendorPayments/GetItems",
+            data: { PONo: PONo },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#ItemName').removeAttr("disabled");
+
+                var listOfitems = data.POItems.length;
+                var items = "<select id='ItemName'>";
+                items = items + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfitems; i++) {
+                    items = items + '<option value=' + data.POItems[i].Value + '>' + data.POItems[i].Text + '</option>';
+                }
+                items = items + '</select>';
+                $('#ItemName').html(items);
+
+            }
+
+        });
+    });
+
+    $("#ItemName").change(function () {
+        var ItemId = $('#ItemName option:selected').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        var SiteId = $('#SiteId option:selected').val();
+
+        //if (ProjectId == "" && SiteId == "") {
+        //    alert('Please Select Project Id and Site Id');
+        //}
+        //debugger;
+        $.ajax({
+            type: "post",
+            url: "/VendorPayments/GetVendorPayDetData",
+            data: { ItemId, ProjectId, SiteId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#ChallanNo').removeAttr("disabled");
+                $('#UnitId').val(data.UnitId);
+                $('#UnitName').val(data.UnitName);
+                $('#ReqQty').val(data.RemQty);
+                $('#Proc_MaterialEntryDetId').val(data.Proc_MaterialEntryDetId);
+
+
+                var listOfitems = data.ChallanNo.length;
+                var items = "<select id='ChallanNo'>";
+                items = items + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfitems; i++) {
+                    items = items + '<option value=' + data.ChallanNo[i].Value + '>' + data.ChallanNo[i].Text + '</option>';
+                }
+                items = items + '</select>';
+                $('#ChallanNo').html(items);
+
+
+            }
+
+        });
+    });
+
+    //$("#ReqNo").change(function () {
+    //    var ItemId = $('#ItemName option:selected').val();
+    //    var ProjectId = $('#ProjectId option:selected').val();
+    //    var SiteId = $('#SiteId option:selected').val();
+    //    var ReqNo = $('#ReqNo option:selected').val();
+
+    //    if (ProjectId == "" && SiteId == "") {
+    //        alert('Please Select Project Id and Site Id');
+    //    }
+
+    //    $.ajax({
+    //        type: "post",
+    //        url: "/MaterialsEntry/GetVendor",
+    //        data: { ItemId, ProjectId, SiteId, ReqNo },
+    //        datatype: "json",
+    //        traditional: true,
+    //        success: function (data) {
+    //            $('#VendorName').val(data.vendorName);
+    //            $('#VendorId').val(data.VendorId);
+    //            $('#TotalMaterial').val(data.TotalMaterial);
+    //            $('#RemainingQty').val(data.RemainingQty);
+    //            $('#UnitPrice').val(data.UnitPrice);
+    //            var previousRemaining = data.TotalMaterial - data.RemainingQty;
+    //            $('#PreviousQty').val(previousRemaining);
+    //        }
+
+    //    });
+    //});
+
+    //$(document).on({
+    //    'change': function () {
+    //        var entry = $(this).val();
+    //        alert('Material Entry :' + entry);
+    //        var unitprice = $('#UnitPrice').val();
+    //        var totalPrice = entry * unitprice;
+    //        $('#Cost').val(totalPrice);
+    //    }
+    //}, 'input[name=ItemEntry]');
+
+
+    //add new row
+
+    $('#addNewRow').click(function (event) {
+        event.preventDefault();
+        counter++;
+
+        var isAllValid = true;
+        var ProjectId = $('#ProjectId option:selected').val();
+        var ProjectName = $('#ProjectId option:selected').text();
+
+        alert('ProjectID: ' + ProjectId);
+
+
+        var SiteId = $('#SiteId option:selected').val();
+        var SiteName = $('#SiteId option:selected').text();
+
+        alert('SiteId: ' + SiteId);
+
+        var ReqNo = $('#ReqNo option:selected').val();
+        var ReqNoName = $('#ReqNo option:selected').text();
+
+        alert('ReqNo: ' + ReqNo);
+
+        var PONo = $('#PONo option:selected').val();
+        var PONoName = $('#PONo option:selected').text();
+
+        alert('PONo: ' + PONo);
+
+        var ItemId = $('#ItemName option:selected').val();
+        var ItemName = $('#ItemName option:selected').text();
+
+        var ReqQty = $('#ReqQty').val();
+        var UnitName = $('#UnitName').val();
+        var UnitId = $('#UnitId').val();
+        alert('UnitId '+UnitId);
+        alert('UnitName '+UnitName);
+        var ChallanNo = $('#ChallanNo option:selected').val();
+        var ChallanNoName = $('#ChallanNo option:selected').text();
+
+        var BillNo = $('#BillNo').val();
+        var TotalAmount = $('#TotalAmount').val();
+        var Payment = $('#Payment').val();
+        var Remarks = $('#Remarks').val();
+
+
+
+        if (isAllValid) {
+            var newRow = jQuery('<tr>'
+                + '<td><input value="' + ProjectId + '" type="hidden" name="ProjectId" class="form-control" style="width:50px;"/><label>' + ProjectName + '</label></td>'
+                + '<td><input value="' + SiteId + '" type="hidden" name="SiteId" class="form-control" style="width:50px;"/><label>' + SiteName + '</label></td>'
+                + '<td><input value="' + ReqNo + '" type="hidden" name="ReqNo" class="form-control" style="width:50px;"/><label>' + ReqNoName + '</label></td>'
+                + '<td><input value="' + PONo + '" type="hidden" name="PONo" class="form-control" style="width:50px;"/><label>' + PONoName + '</label></td>'
+                + '<td><input value="' + ItemId + '" type="hidden" name="ItemId" class="form-control" style="width:50px;"/><label>' + ItemName + '</label></td>'
+                + '<td><input value="' + ReqQty + '" type="hidden" name="ReqQty" class="form-control" style="width:50px;"/><label>' + ReqQty + '</label></td>'
+                + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>' + UnitName + '</label></td>'
+                + '<td><input value="' + ChallanNo + '" type="hidden" name="ChallanNo" class="form-control" style="width:50px;"/><label>' + ChallanNoName + '</label></td>'
+                + '<td><input value="' + BillNo + '" type="hidden" name="BillNo" class="form-control" style="width:50px;"/><label>' + BillNo + '</label></td>'
+                + '<td><input value="' + TotalAmount + '" type="hidden" name="TotalAmount" class="form-control" style="width:50px;"/><label>' + TotalAmount + '</label></td>'
+                + '<td><input value="' + Payment + '" type="hidden" name="Payment" class="form-control" style="width:50px;"/><label>' + Payment + '</label></td>'
+                + '<td><input value="' + Remarks + '" type="hidden" name="Remarks" class="form-control" style="width:50px;"/><label>' + Remarks + '</label></td>'
+                + '<td> <input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();" /></td></tr>');
+
+            jQuery('table.Resource-list').append(newRow);
+
+
+            $('#ReqQty').val("");
+            $('#UnitId').val("");
+            $('#BillNo').val("");
+            $('#TotalAmount').val("");
+            $('#Payment').val("");
+            $('#Remarks').val("");
+
+            //$('#ReqNo').attr("disabled", true);
+            ////$('#ItemName').attr("disabled", true);
+        }
+
+    });
+
+
+
+    $('#SaveItem').click(function (e) {
+        //alert('Length:' + $('.Resource-list tr').length)
+
+        if ($('#ProjectId option:selected').text() === "--Select--") {
+            alert('Please select project');
+            $('#ProjectId option:selected').focus();
+        }
+        else if ($('#SiteId option:selected').text() === "--Select--") {
+            alert('Please select site');
+            $('#SiteId option:selected').focus();
+        }
+        else if ($.trim($('#PayDate').val()) === "") {
+            alert('Pay date required');
+            $('#PayDate').focus();
+        }
+        else if ($('.Resource-list tr').length < 2) {
+            alert('Please Add Item to this Entry Form!');
+        }
+        else {
+            UpdateVendorPayment();
+        }
+    });
+
+    function UpdateVendorPayment() {
+        //==========Master Form==========
+        var VendorMasId = $('#VendorMasId').val();
+        var VendorId= $('#VendorId').val();
+        var PayDate = $('#PayDate').val();
+
+        //===========Detail Form===========
+
+        var Proc_MaterialEntryDetId = $('#Proc_MaterialEntryDetId').val();
+
+        var ProjectId = document.getElementsByName("ProjectId");
+        var SiteId = document.getElementsByName("SiteId");
+        var ReqNo = document.getElementsByName("ReqNo");
+        var PONo = document.getElementsByName("PONo");
+        var ItemId = document.getElementsByName("ItemId");
+        var ReqQty = document.getElementsByName("ReqQty");
+        var UnitId = document.getElementsByName("UnitId");
+        var ChallanNo = document.getElementsByName("ChallanNo");
+        var BillNo = document.getElementsByName("BillNo");
+        var Payment = document.getElementsByName("Payment");
+        var Remarks = document.getElementsByName("Remarks");
+
+        var Proc_VendorPaymentDetId=document.getElementsByName("Proc_VendorPaymentDetId");
+        var PaymentItems = [];
+        //alert($('#RequisitionDetails tr').length - 1)
+
+        var tableCounter = $('#PaymentDetails tr').length - 1;
+        //alert('Length: ' + tableCounter);
+        debugger;
+        for (var i = 0; i < tableCounter; i++) {
+            PaymentItems.push({
+             //   ProjectId: ProjectId[i].value,
+             //   SiteId: SiteId[i].value,
+              //  ReqNo: ReqNo[i].value,
+              //  PONo: PONo[i].value,
+             //   ItemId: ItemId[i].value,
+             //   ReqQty: ReqQty[i].value,
+            //    UnitId: UnitId[i].value,
+           //     ChallanNo: ChallanNo[i].value,
+                BillNo: BillNo[i].value,
+                Payment: Payment[i].value,
+                Remarks: Remarks[i].value,
+               // Proc_MaterialEntryDetId: Proc_MaterialEntryDetId,
+                Proc_VendorPaymentDetId: Proc_VendorPaymentDetId.value
+            });
+            //console.log('---------->');
+            //console.log('ProjectId: ' + PaymentItems[i].ProjectId);
+            //console.log('SiteId: ' + PaymentItems[i].SiteId);
+            //console.log('ReqNo: ' + PaymentItems[i].ReqNo);
+            //console.log('PONo: ' + PaymentItems[i].PONo);
+            //console.log('ItemId: ' + PaymentItems[i].ItemId);
+            //console.log('ReqQty: ' + PaymentItems[i].ReqQty);
+            //console.log('UnitId: ' + PaymentItems[i].UnitId);
+            //console.log('ChallanNo: ' + PaymentItems[i].ChallanNo);
+            //console.log('BillNo: ' + PaymentItems[i].BillNo);
+            //console.log('Payment: ' + PaymentItems[i].Payment);
+            //console.log('Remarks: ' + PaymentItems[i].Remarks);
+            console.log('Proc_VendorPaymentDetId: ' + PaymentItems[i].Proc_VendorPaymentDetId);
+
+            //console.log('---------->');
+
+        }
+
+        PaymentDetails = JSON.stringify({
+            PaymentItems: PaymentItems,
+            VendorMasId: VendorMasId,
+            VendorId: VendorId,
+            PayDate: PayDate
+        });
+
+        //alert('Success!!!');
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/VendorPayments/VendorPaymentUpdate',
+            data: PaymentDetails,
+            success: function (result) {
+                console.log(result);
+                if (result.flag === true) {
+                    alert("Record save successfully!");
+
+                    //$('#ProjectId').val("");
+                    //$('#SiteId').val("");
+                    //$('#RequisitionDate').val("");
+                    //$('#ReqNo').val("");
+                    //$('#SiteEngineer').val("");
+                    //$('#ProjectManager').val("");
+                    //$('#ProjectRemarks').val("");
+
+                    window.location.replace("/VendorPayments/Index");
+
+
+                }
+                else {
+                    alert(result.message);
+                }
+
+
+            },
+            failure: function (response) {
+                alert('error');
+            }
+        });
+    }
+
+
+</script>
+

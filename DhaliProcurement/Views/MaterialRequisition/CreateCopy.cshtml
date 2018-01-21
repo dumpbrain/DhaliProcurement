@@ -1,0 +1,221 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Materials Requisition</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+
+                    <table class="table">
+                        <tr>
+                            <td>Project Name</td>
+                            <td>
+
+                                @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @id = "ProjectId", @class = "form-control select2", @style = "width: 500px !important" })
+                                @Html.ValidationMessage("ProjectId", "", new { @class = "text-danger" })
+
+                            </td>
+                            <td>Req. No.</td>
+                            <td>
+                                @Html.TextBox("ReqNo", "", new { @class = "form-control"})
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Site Name</td>
+                            <td>
+                                @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @id = "SiteId", @class = "form-control select2", @style = "width: 500px !important" })
+                                @Html.ValidationMessage("SiteId", "", new { @class = "text-danger" })
+                            </td>
+                            <td>Requisition Date</td>
+                            <td>
+                                @Html.TextBox("RequisitionDate", "", new { @class = "form-control datepicker"})
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Site Engineer</td>
+                            <td>
+                                @Html.TextBox("SiteEngineer", null, new { @class = "form-control", disabled = "true" })
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>Project Manager</td>
+                            <td>
+                                @Html.TextBox("ProjectManager", null, new { @class = "form-control", disabled = "true" })
+                            </td>
+                        </tr>
+
+
+                        @*<tr>
+                            <td>BOQ Date</td>
+                            <td>
+                                @Html.TextBox("BOQDate", null, new { @class = "form-control datepicker" })
+                            </td>
+
+                            <td>BOQ No</td>
+                            <td>
+                                @Html.TextBox("BOQNo", null, new { @class = "form-control" })
+                            </td>
+                        </tr>*@
+
+
+                        @*<tr>
+                            <td>NOA Date</td>
+                            <td>
+                                @Html.TextBox("NOADate", null, new { @class = "form-control datepicker" })
+                            </td>
+
+                            <td>NOA No</td>
+                            <td>
+                                @Html.TextBox("NOANo", null, new { @class = "form-control" })
+                            </td>
+
+                        </tr>*@
+                        @*<tr>
+                            <td>Project Type</td>
+                            <td>
+                                @Html.DropDownList("ProjectType", null, "Select", new { @class = "form-control select2" })
+                            </td>
+                            <td>Status</td>
+                            <td>
+                                @Html.TextBox("ProjectStatus", null, new { @class = "form-control" })
+                            </td>
+                        </tr>*@
+
+                        <tr>
+                            <td>Remarks</td>
+                            <td>
+                                @Html.TextBox("ProjectRemarks", "", new { @class = "form-control" })
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <hr />
+
+                }
+
+
+                <div class="details well" style=" border 1px solid black;">
+                    <h4>Requisition Items</h4>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="font-size: 15px; font-weight: bold;">Sl. No.</td>
+                            <td style="font-size: 15px; font-weight: bold;">Required Materials</td>
+                            <td style="font-size: 15px; font-weight: bold;">Unit</td>
+                            <td style="font-size: 15px; font-weight: bold;">Total Required</td>
+                            <td style="font-size: 15px; font-weight: bold;">Total Received</td>
+                            <td style="font-size: 15px; font-weight: bold;">Remaining Balance</td>
+                            <td style="font-size: 15px; font-weight: bold;">Current Stock</td>
+                            <td style="font-size: 15px; font-weight: bold;">Req. Qty</td>
+                            <td style="font-size: 15px; font-weight: bold;">Brand/Quantity</td>
+                            <td style="font-size: 15px; font-weight: bold;">Size</td>
+                            <td style="font-size: 15px; font-weight: bold;">Remarks</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+
+
+
+                            <td>
+                                
+                                @*@Html.DropDownList("ItemName", null, "Select item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ItemName", @style = "width: 150px;" })*@
+                                @*<span class="error">Item name required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="Qty" class="form-control" />
+                                @*<span class="error">Valid quantity required</span>*@
+                            </td>
+                            <td>
+                                @*@Html.DropDownList("Unit", null, "Select unit", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @style = "width: 150px;" })*@
+                                @*<span class="error">Unit required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="Cost" class="form-control" />
+                                @*<span class="error">Valid rate required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="ItemRemarks" class="form-control" />
+                                @*<span class="error">Item remarks required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="ItemRemarks" class="form-control" />
+                                @*<span class="error">Item remarks required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="ItemRemarks" class="form-control" />
+                                @*<span class="error">Item remarks required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="ItemRemarks" class="form-control" />
+                                @*<span class="error">Item remarks required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="ItemRemarks" class="form-control" />
+                                @*<span class="error">Item remarks required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="ItemRemarks" class="form-control" />
+                                @*<span class="error">Item remarks required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="ItemRemarks" class="form-control" />
+                                @*<span class="error">Item remarks required</span>*@
+                            </td>
+                            <td>
+                                <input type="button" id="addNewRow" value="+" class="btn btn-primary" />
+                                @*<span class="error">required</span>*@
+                            </td>
+
+                        </tr>
+                    </table>
+                    <br />
+                    <table class="Resource-list table table-bordered">
+                        <tr class="bg-grey-300">
+                            <th>Sl. No.</th>
+                            <th>Required Materials</th>
+                            <th>Unit</th>
+                            <th>Total Required</th>
+                            <th>Total Received</th>
+                            <th>Remaining Balance</th>
+                            <th>Current Stock</th>
+                            <th>Req. Qty</th>
+                            <th>Brand/Quantity</th>
+                            <th>Size</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            <button type="button" id="SaveItem" class="btn btn-success"><i class="icon-floppy-disk position-left"></i>  Save</button>
+        </div>
+    </div>
+</div>

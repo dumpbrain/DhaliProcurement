@@ -1,0 +1,61 @@
+﻿@model DhaliProcurement.Models.Item
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-10">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class=" icon-files-empty position-left"></i>Item Details</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                <h4>Item List Details</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Size)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Size)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.HSCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.HSCode)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ItemDesc)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ItemDesc)
+                    </dd>
+
+                </dl>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div>
+    <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='@Url.Action("Index")';"><i class="icon-circle-left2 position-left"></i> Go back</button>
+</div>

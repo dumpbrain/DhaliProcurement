@@ -1,0 +1,162 @@
+﻿@model IEnumerable<DhaliProcurement.Models.Proc_PurchaseOrderMas>
+@using DhaliProcurement.Helper
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DhaliProcurement.Models.DCPSContext db = new DhaliProcurement.Models.DCPSContext();
+    var counter = 0;
+}
+<div class="panel panel-flat">
+    <div class="panel-heading">
+        <h5 class="panel-title "><i class="icon-task position-left"></i>Purchase Order List</h5><hr />
+        <div class="heading-elements">
+            <ul class="icons-list">
+                <li><a data-action="collapse"></a></li>
+                <li><a data-action="reload"></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="col-lg-2">
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-info", @style = "background-color: grey;border: none;" })
+        </div>
+        <div class="col-lg-10">
+
+            @using (@Html.BeginForm("Index", "PurchaseOrders", FormMethod.Post))
+            {
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+
+                    <div class="col-lg-4 form-group">
+                        <div class="col-lg-4">
+                            @Html.Label("PO No.", htmlAttributes: new { @class = "control-label col-md-3" })
+                        </div>
+                        <div class="col-lg-8">
+                            @Html.DropDownList("PurchaseNo", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @Id = "PurchaseNo" })
+                        </div>
+
+                    </div>
+
+                    <input value="Search" class="btn btn-primary" type="submit" style="background-color: grey;border: none;" />
+                </div>
+
+
+            }
+
+        </div>
+
+        <table class="table table-responsive table-xs  table-bordered">
+            <tr class="bg-grey">
+                <th>SL. No.</th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.PONo)*@
+                    <label>PO No.</label>
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => model.PODate)*@
+                    <label>PO Date</label>
+                </th>
+
+                <th>
+                    @*@Html.DisplayNameFor(model => model.Proc_TenderMasId)*@
+                    <label>Tender No.</label>
+                </th>
+
+                <th>
+                    @*@Html.DisplayNameFor(model => model.POTotalAmt)*@
+                    <label>Total Amount</label>
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                counter++;
+                <tr  style="text-align:center">
+                    <td>@counter</td>
+                    <td>
+                        @Html.ActionLink(item.PONo, "Edit", new { purchaseOrderId = item.Id, tenderMasId =item.Proc_TenderMasId })
+                        @*@Html.DisplayFor(modelItem => item.PONo)*@
+                    </td>
+                    <td>
+
+                        <label>@NullHelper.DateToString(item.PODate)</label>
+                    </td>
+
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.Proc_TenderMasId)*@
+                        @{
+                            var TenderNo = db.Proc_TenderMas.FirstOrDefault(x=>x.Id == item.Proc_TenderMasId).TNo;
+                         }
+                        <label>@TenderNo</label>
+                    </td>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.POTotalAmt)
+                    </td>
+                    <td>
+                        @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+
+                        @Html.ActionLink(" ", "Edit", new { purchaseOrderId = item.Id, tenderMasId = item.Proc_TenderMasId }, new { @class = "btn btn-xs text-info  icon-pencil4", @title = "Edit Purchase Order" })
+                        @Html.ActionLink(" ", "Details", new { purchaseOrderId = item.Id, tenderMasId = item.Proc_TenderMasId }, new { @class = "btn btn-xs text-info  icon-file-text2" })
+                        <a class="btn btn-xs text-danger icon-cross2" title="Delete" href="javascript:deleteFunction(@item.Id)"></a>
+                        @*@if (User.IsInRole("Management"))
+                            {
+                                <a class="btn btn-xs text-danger icon-cross2" title="Delete" href="javascript:deleteFunction(@item.Id)"></a>
+                            }*@
+
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+
+</div>
+<script>
+
+    $(document).ready(function () {
+        $('.select2').select2();
+    });
+
+
+    function deleteFunction(PurchaseOrderId) {
+        var Con = confirm("are you sure want to delete this ?");
+        if (Con == true) {
+            $.ajax({
+                url: "/PurchaseOrders/DeletePurchaseOrders",
+                type: "post",
+                data: {
+                    PurchaseOrderId: PurchaseOrderId
+                },
+                dataType: "json",
+
+                success: function (flag) {
+                    console.log(flag);
+
+                    if (flag.flag == true) {
+                        window.location = "/PurchaseOrders/Index";
+                        alert("Successfully deleted !");
+                    } else {
+                        alert(flag.message);
+                    }
+                },
+
+                error: function (xhr) {
+                    alert('error');
+
+                }
+
+
+            });
+        }
+
+    }
+</script>

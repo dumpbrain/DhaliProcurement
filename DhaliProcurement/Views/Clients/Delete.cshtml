@@ -1,0 +1,89 @@
+﻿@model DhaliProcurement.Models.Client
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.Exists == true)
+{
+    <div class="alert alert-warning">
+        <strong>Project client exists!</strong> @ViewBag.Count project(s) under this client. If you want to delete this client, you have to delete from Project first.
+    </div>
+}
+<div class="row">
+    <div class="col-md-10">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="  icon-user-minus position-left"></i>Are you sure you want to delete this?</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="well well-lg">
+                    <dl class="dl-horizontal" style="font-size:16px;">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Name):
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Name)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Address):
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Address)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Phone):
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Phone)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ContactPerson):
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.ContactPerson)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Note):
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Note)
+                        </dd>
+
+                    </dl>
+
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-actions pull-right no-color">
+                            <button type="submit" class="btn btn-xs btn-danger"><i class=" icon-cross2 position-left"></i>  Delete</button>
+                            <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='@Url.Action("Index")';"><i class="icon-circle-left2 position-left"></i> Go back</button>
+                        </div>
+                    }
+
+                    <br />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

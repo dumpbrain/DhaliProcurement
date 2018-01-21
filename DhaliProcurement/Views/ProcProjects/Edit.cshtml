@@ -1,0 +1,626 @@
+﻿@model DhaliProcurement.ViewModel.VMProjectItem
+@using DhaliProcurement.HtmlHelpers
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    DhaliProcurement.Models.DCPSContext db = new DhaliProcurement.Models.DCPSContext();
+    //var ProjectItems = db.ProcProjectItem.Where(x => x.ProjectId == Model.ProjectId && x.ProjectSiteId == Model.ProjectSiteId).ToList();
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Create New Project Information Costing</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+                    <table class="table">
+                        <tr>
+                            <td>Project Name</td>
+                            <td>
+                                @*@Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @id = "ProjectId", @class = "form-control select2", @style = "width: 500px !important", disabled = "true" })
+                                    @Html.ValidationMessage("ProjectId", "", new { @class = "text-danger" })*@
+
+                                <input type="text" value="@ViewBag.ProcProjectIdEditForm" class="form-control" disabled="disabled" />
+                            </td>
+                            <td>Project Start Date</td>
+                            <td>
+                                @*@Html.TextBox("projStartDate", "", new { @class = "form-control", disabled = "true" })*@
+
+                                @*@Html.TextBox("projStartDate", ViewBag.StartDate)*@
+                                <input type="text" value="@ViewBag.StartDate" class="form-control" disabled="disabled" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Site Name</td>
+                            <td>
+                                @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @id = "SiteId", @class = "form-control select2", @style = "width: 500px !important", disabled = "true" })
+                                @Html.ValidationMessage("SiteId", "", new { @class = "text-danger" })
+                            </td>
+                            <td>Project End Date</td>
+                            <td>
+                                <input type="text" value="@ViewBag.EndDate" class="form-control" disabled="disabled" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Site Engineer</td>
+                            <td>
+                                <input type="text" value="@ViewBag.StEng" class="form-control" disabled="disabled" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Project Manager</td>
+                            <td>
+                                <input type="text" value="@ViewBag.PrMan" class="form-control" disabled="disabled" />
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>BOQ Date</td>
+                            <td>
+                                @*@Html.TextBox("BOQDate", null, new { @class = "form-control datepicker" })*@
+                                <input type="text" value="@ViewBag.BOQDate" id="BOQDate" class="form-control datepicker" />
+                            </td>
+
+                            <td>BOQ No</td>
+                            <td>
+                                @*@Html.TextBox("BOQNo", null, new { @class = "form-control" })*@
+                                <input type="text" value="@ViewBag.BOQNo" id="BOQNo" class="form-control" />
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>NOA Date</td>
+                            <td>
+                                @*@Html.TextBox("NOADate", null, new { @class = "form-control datepicker" })*@
+                                <input type="text" value="@ViewBag.NOADate" id="NOADate" class="form-control datepicker" />
+                            </td>
+
+                            <td>NOA No</td>
+                            <td>
+                                @*@Html.TextBox("NOANo", null, new { @class = "form-control" })*@
+                                <input type="text" value="@ViewBag.NOANo" id="NOANo" class="form-control" />
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Project Type</td>
+                            <td>
+                                @Html.DropDownList("ProjectType", null, "Select", new { @class = "form-control select2" })
+                                @*@Html.DropDownList("PType", null, "--Select--", htmlAttributes: new { @id = "ProjectType", @class = "form-control select2"})*@
+
+
+                            </td>
+
+                            <td>Status</td>
+                            <td>
+                                @*@Html.TextBox("ProjectStatus", null, new { @class = "form-control" })*@
+                                <input type="text" value="@ViewBag.PStatus" id="ProjectStatus" class="form-control" />
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Remarks</td>
+                            <td>
+                                @*@Html.TextBox("ProjectRemarks", "", new { @class = "form-control" })*@
+                                <input type="text" value="@ViewBag.PRemarks" id="ProjectRemarks" class="form-control" />
+
+                            </td>
+                        </tr>
+
+                    </table>
+                    <hr />
+
+                }
+
+                @*<p>
+                        <button type="button" class="btn btn-primary btn-xs add-newRow"><i class="icon-add position-left"></i> Add</button>
+                    </p>*@
+
+                @*<div class="table-responsive">
+                        <table class="table table-xxs table-bordered Task-list" id="TaskTable">
+                            <thead>
+                                <tr class="bg-blue">
+
+                                    <th class="col-lg-1">SL No</th>
+                                    <th class="col-lg-3">Item Name</th>
+                                    <th class="col-lg-2">Quantity</th>
+                                    <th class="col-lg-2">Unit</th>
+                                    <th class="col-lg-1">Costing</th>
+                                    <th class="col-lg-1">Remarks</th>
+                                    <th class="col-lg-2">&nbsp;</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>*@
+
+                <div class="details well" style=" border 1px solid black;">
+                    <h4>Project Procurement Items</h4>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="font-size: 15px; font-weight: bold;">Item Name</td>
+                            <td style="font-size: 15px; font-weight: bold;">Qty</td>
+                            <td style="font-size: 15px; font-weight: bold;">Unit</td>
+                            <td style="font-size: 15px; font-weight: bold;">Costing</td>
+                            <td style="font-size: 15px; font-weight: bold;">Remarks</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.DropDownList("ItemName", null, "Select item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ItemName", @style = "width: 150px;" })
+                                @*<span class="error">Item name required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="Qty" class="form-control" />
+                                @*<span class="error">Valid quantity required</span>*@
+                            </td>
+                            <td>
+                                @Html.DropDownList("Unit", null, "Select unit", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @style = "width: 150px;" })
+                                @*<span class="error">Unit required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="Cost" class="form-control" />
+                                @*<span class="error">Valid rate required</span>*@
+                            </td>
+                            <td>
+                                <input type="text" id="ItemRemarks" class="form-control" />
+                                @*<span class="error">Item remarks required</span>*@
+                            </td>
+                            <td>
+                                <input type="button" id="addNewRow" value="+" class="btn btn-primary" style ="background-color: grey;border: none;" />
+                                @*<span class="error">required</span>*@
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><span class="error" id="ItemName_Error">Item name required</span></td>
+                            <td><span class="error" id="Quantity_Error">Quantity required</span></td>
+                            <td><span class="error" id="UnitName_Error">Unit required</span></td>
+                            <td><span class="error" id="Costing_Error">Costing required</span></td>
+                            <td></td>
+                        </tr>
+
+                    </table>
+                    <br />
+                    <table class="Resource-list table table-bordered" id="Item-list">
+                        <tr class="bg-grey-300">
+                            <th class="col-lg-3">Item Name</th>
+                            <th class="col-lg-2">Qty</th>
+                            <th class="col-lg-1">Unit</th>
+                            <th class="col-lg-2">Costing</th>
+                            <th class="col-lg-3">Remarks</th>
+                            <th class="col-lg-1"></th>
+                        </tr>
+
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>Total Costing</td>
+                                <td><input type="text" value="" id="totalCost" class="form-control" disabled="disabled" /></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            <button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='@Url.Action("Index")';" style ="background-color: grey;border: none;"><i class="icon-circle-left2 position-left"></i> Go back</button>
+            <button type="button" id="UpdateItem" class="btn btn-success" style ="background-color: grey;border: none;"><i class="icon-floppy-disk position-left"></i>Update</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var counter = 0; //counter for the serial
+
+    $(document).ready(function (){
+
+        $('#ItemName_Error').hide();
+        $('#Quantity_Error').hide();
+        $('#UnitName_Error').hide();
+        $('#Costing_Error').hide();
+
+
+        var Projectid = @ViewBag.PId;
+        var ProjectSiteId = @ViewBag.SId;
+        //debugger;
+
+        ResourceDetails = JSON.stringify({
+
+            ProjectId: Projectid,
+            ProjectSiteId: ProjectSiteId
+
+        });
+
+        var Unit = $('#Unit option:selected').text();
+
+
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/ProcProjects/getProjectItems/',
+            traditional: true,
+            data: ResourceDetails,
+            success: function (data) {
+                console.log(data);
+                for (var i = 0; i < data.length; i++) {
+                    //if(data[i].Remarks == "null"){
+                    //    data[i].Remarks = "";
+                    //}
+                    var newRow = jQuery('<tr><td> <input value="' + data[i].ItemISLNO + '" type="hidden" name="ItemId"/>  <label>'+data[i].ItemName+'</label> <input type="hidden" class="form-control" value="' + data[i].ItemName + '" readonly="true" type="text" name="ItemName' +
+                    counter + '"/></td><td><input class="form-control" value="' + data[i].PQuantity + '" type="text" name="Quantity' +
+                    '"/></td><td><input value="' + data[i].UnitUSLNO + '" type="hidden" name="UnitId"/> <label>'+data[i].UnitName+'</label><input type="hidden" class="form-control" value="' + data[i].UnitName + '" " readonly="true" type="text" name="ItemUnit' +
+                    '"/></td><td><input class="form-control" value="' + data[i].PCost + '"  type="text" name="ItemCost' +
+                    '"/></td><td><input class="form-control" value="' + data[i].Remarks + '" type="text" name="ItemRemarks' +
+                    '"/></td><td><button  onclick="RemoveTask(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td> </tr>');
+
+                    jQuery('table.Resource-list').append(newRow);
+                }
+
+                totalItemCost();
+
+            },
+            error: function (data) {
+                alert('Error: ');
+            }
+        });
+
+    });
+
+
+
+    var ProcProjectId = @ViewBag.ProcProjectId;
+
+
+    function RemoveTask(e)
+    {
+        debugger;
+
+        var currRowIndex = 0;
+
+        currRowIndex = $(e).closest('tr').index() + 1;
+
+      //  alert('procId '+ProcProjectId);
+
+        if (confirm('Do you really want to delete?')==false)
+        {
+            return;
+        }
+
+        var currRowPlanTaskId = $('#Item-list tr').eq(currRowIndex-1).find("td input[name=ItemId]").val();
+        // alert('ItemId: '+ItemId);
+      //  alert($('#Item-list tr').eq(currRowIndex-1).find("td input[name=ItemId]").val());
+       // alert('currIndex: '+currRowPlanTaskId);
+        if (currRowPlanTaskId >0 )
+        {
+            $.ajax({
+                type: "POST",
+                url: "/ProcProjects/DeleteProjectItem",
+                data: { id: currRowPlanTaskId, ProcProjectId: ProcProjectId },
+                success: function (data) {
+
+                    if (data.flag)
+                    {
+                        alert("Data deleted successfully !");
+
+                        $(e).parent().parent().remove();
+                        UpdateTableRowIndex();
+                        totalItemCost();
+                        counter--;
+                    }
+                    else
+                    {
+                        alert(data.message);
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error: ' + textStatus + ' - ' + errorThrown);
+                },
+                dataType: "json",
+                traditional: true
+            });
+        }
+        else
+        {
+            $(e).parent().parent().remove();
+            UpdateTableRowIndex();
+            counter--;
+        }
+
+
+    }
+
+
+    function UpdateTableRowIndex()
+    {
+        $('td.index').each(function(idx, elem){
+            $(elem).text(idx+1);
+        });
+    };
+
+
+
+    $('#Item-list').on({
+        'change': function () {
+            var ItemTotalCost = 0;
+            for (var cn = 1; cn < $('#Item-list tr').length - 1; cn++) {
+                //  var quantity = $('#Item-list tr').eq(cn).find("td input[name=Quantity]").val();
+                // console.log('Quantity: ' + quantity);
+                var cost = $('#Item-list tr').eq(cn).find("td input[name=ItemCost]").val();
+                // console.log('Cost: ' + cost);
+                //alert(cost);
+                var result = 0;
+                if (isNaN(cost) || cost=="") {
+                    
+                    result = parseFloat(0);
+                }
+                else {
+                    result = parseFloat(cost);
+                }
+                
+                ItemTotalCost = parseFloat(ItemTotalCost + result);
+            }
+
+            $('#totalCost').val(ItemTotalCost);
+
+        }
+    });
+
+
+
+    function totalItemCost() {
+
+        var ItemTotalCost = 0;
+        for (var cn = 1; cn < $('#Item-list tr').length - 1; cn++) {
+            //  var quantity = $('#Item-list tr').eq(cn).find("td input[name=Quantity]").val();
+            //  console.log('Quantity: ' + quantity);
+            var cost = $('#Item-list tr').eq(cn).find("td input[name=ItemCost]").val();
+            //  console.log('Cost: ' + cost);
+            var result =  parseFloat(cost);
+            ItemTotalCost = parseFloat(ItemTotalCost + result);
+        }
+
+        $('#totalCost').val(ItemTotalCost);
+
+    }
+
+    //add new row
+    $('#addNewRow').click(function (event) {
+
+        event.preventDefault();
+        counter++;
+        var ItemId = $('#ItemName option:selected').val();
+        var ItemName = $('#ItemName option:selected').text();
+        var Qty = $('#Qty').val();
+        var Unit = $('#Unit option:selected').text();
+        var UnitId = $('#Unit option:selected').val();
+        var Cost = $('#Cost').val();
+        var ItemRemarks = $('#ItemRemarks').val();
+
+        var isValidItem = true;
+
+        if ($('#ItemName').val().trim() == '') {
+            isValidItem = false;
+            $('#ItemName_Error').show();
+            //$('#ItemName').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#ItemName_Error').hide();
+           // $('#ItemName').siblings('span.error').css('visibility', 'hidden');
+        }
+
+        if (!($('#Qty').val().trim() != '' && !isNaN($('#Qty').val().trim()))) {
+            isValidItem = false;
+            $('#Quantity_Error').show();
+            // $('#Qty').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#Quantity_Error').hide();
+           // $('#Qty').siblings('span.error').css('visibility', 'hidden');
+
+        }
+
+        if ($('#Unit').val().trim() == '') {
+            isValidItem = false;
+            $('#UnitName_Error').show();
+           // $('Unit').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#UnitName_Error').hide();
+           // $('#Unit').siblings('span.error').css('visibility', 'hidden');
+
+        }
+
+        if (!($('#Cost').val().trim() != '' && !isNaN($('#Cost').val().trim()))) {
+            isValidItem = false;
+            $('#Costing_Error').show();
+           // $('#Cost').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#Costing_Error').hide();
+          //  $('#Cost').siblings('span.error').css('visibility', 'hidden');
+
+        }
+
+        //Add item to list if valid
+        if (isValidItem) {
+
+            var newRow = jQuery('<tr><td> <input value="' + ItemId + '" type="hidden" name="ItemId"/> <label>'+ItemName+'</label><input type="hidden" class="form-control" value="' + ItemName + '" readonly="true" type="text" name="ItemName' +
+                  counter + '"/></td><td><input class="form-control" value="' + Qty + '" type="text" name="Quantity' +
+                   '"/></td><td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>'+Unit+'</label><input type="hidden" class="form-control" value="' + Unit + '" " readonly="true" type="text" name="ItemUnit' +
+                   '"/></td><td><input class="form-control" value="' + Cost + '"  type="text" name="ItemCost' +
+                   '"/></td><td><input class="form-control" value="' + ItemRemarks + '" type="text" name="ItemRemarks' +
+                   '"/></td> <td> <button type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded"  onclick="$(this).parent().parent().remove();" ><i class="icon-cross"></i></button></td></tr>');
+
+            jQuery('table.Resource-list').append(newRow);
+            totalItemCost();
+
+        }
+    });
+
+    $('#UpdateItem').click(function (e) {
+
+        UpdateProcProjectItem();
+
+    });
+
+
+
+
+
+    function UpdateProcProjectItem() {
+
+        var ProcProjectId=  @ViewBag.ProcProjectId;
+       // var Projectid = $('#ProjectId option:selected').val();
+        //alert('pid' + ProjectId);
+        var ProjectSiteId = $('#SiteId option:selected').val();
+       // alert('sid' + ProjectSiteId);
+        var BOQDate = $('#BOQDate').val();
+        //  alert('bqdate'+BOQDate);
+        var BOQNo = $('#BOQNo').val();
+        //alert('bqno' + BOQNo);
+        var NOADate = $('#NOADate').val();
+        //alert('noadate' + NOADate);
+        var NOANo = $('#NOANo').val();
+        //alert('noano' + NOANo);
+        var ProjectType = $('#ProjectType').val();
+        //alert('ptype' + ProjectType);
+        var ProjectStatus = $('#ProjectStatus').val();
+        //alert('pstat' + ProjectStatus);
+        var ProjectRemarks = $('#ProjectRemarks ').val();
+        //alert('premarks' + ProjectRemarks);
+
+
+        var ItemId = document.getElementsByName("ItemId");
+        var UnitId = document.getElementsByName("UnitId");
+        var Qty = document.getElementsByName("Quantity");
+        var Unit = document.getElementsByName("ItemUnit");
+        var Cost = document.getElementsByName("ItemCost");
+        var ItemRemarks = document.getElementsByName("ItemRemarks");
+        var Length = $('.Resource-list tr').length;
+        //console.log(Length);
+        var ItemDetails = [];
+
+        for (var i = 0; i < Length - 2; i++) {
+
+            ItemDetails.push({ ItemISLNO: ItemId[i].value, PQuantity: Qty[i].value, UnitUSLNO: UnitId[i].value, PCost: Cost[i].value, Remarks: ItemRemarks[i].value, ProjectSiteId: ProjectSiteId, ProcProjectId: ProcProjectId });
+            console.log('<----->');
+        }
+
+        for (var i = 0; i < Length - 2; i++) {
+            console.log('Item:' + ItemDetails[i].ItemISLNO);
+            console.log('Qty:' + ItemDetails[i].PQuantity);
+            console.log('Unit:' + ItemDetails[i].UnitUSLNO);
+            console.log('Cost:' + ItemDetails[i].PCost);
+            console.log('Qty:' + ItemDetails[i].Remarks);
+            console.log('PId:' + ItemDetails[i].ProjectId);
+            console.log('SId:' + ItemDetails[i].ProjectSiteId);
+
+            console.log('<----->');
+        }
+
+        //ResourceDetails = JSON.stringify({ 'ItemDetails': ItemDetails, 'ProjectId': Projectid.value });
+
+        ResourceDetails = JSON.stringify({
+            ResourceDetails: ItemDetails,
+            //ProjectId: Projectid,
+            ProjectSiteId: ProjectSiteId,
+            ProcProjectId: ProcProjectId,
+            BOQDate: BOQDate,
+            BOQNo: BOQNo,
+            NOADate:NOADate,
+            NOANo: NOANo,
+            ProjectType: ProjectType,
+            ProjectStatus: ProjectStatus,
+            ProjectRemarks:ProjectRemarks
+        });
+        //data: '{"ResourceDetails":"' + ItemDetails + '"}',
+        //{ 'ItemDetails': ItemDetails, 'ProjectId': Projectid.value },
+        //debugger
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/ProcProjects/UpdateProcProject',
+            traditional: true,
+            data: ResourceDetails,
+            success: function (result) {
+                //alert('Successful');
+                if (result.flag) {
+                    alert("Record updated successfully!");
+                    window.location = "/ProcProjects/Index";
+                }
+                else {
+                    alert(result.message);
+                }
+            },
+            failure: function (response) {
+                alert('Error');
+            }
+        });
+    };
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Plugins/select2/select2.min.js"></script>
+    <script>
+        $(".select2").select2();
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            todayBtn: true,
+            autoclose: true
+        });
+    </script>
+
+}
+
+<style>
+    /*.scrolling {
+        width: 100%;
+        height: 350px;
+        /*border: 13px solid #bed5cd;
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }*/
+    span.error {
+        display: block;
+        /*visibility: hidden;*/
+        color: red;
+        font-size: 90%;
+    }
+</style>

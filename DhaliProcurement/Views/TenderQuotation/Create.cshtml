@@ -1,0 +1,628 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Materials Tender Quotation</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+
+                    <table class="table">
+                        <tr>
+                            <td>Tender No.</td>
+                            <td>
+                                @Html.TextBox("TNo", "", new { @class = "form-control " })
+                                @*@Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @id = "ProjectId", @class = "form-control select2", @style = "width: 500px !important" })*@
+                                @*@Html.ValidationMessage("ProjectId", "", new { @class = "text-danger" })*@
+
+                            </td>
+                            @*<td>Req. No.</td>
+                                <td>
+                                    @Html.TextBox("ReqNo", "", new { @class = "form-control" })
+                                </td>*@
+                            <td>Tender Date</td>
+                            <td>
+                                @Html.TextBox("TDate", "", new { @class = "form-control datepicker" })
+                            </td>
+                        </tr>
+                        @*<tr>
+                               *<td>Site Name</td>
+                                <td>
+                                    @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @id = "SiteId", @class = "form-control select2", @style = "width: 500px !important" })
+
+                                </td>
+
+                            </tr>*@
+                        <tr>
+                            <td>Specification</td>
+                            <td>
+                                @Html.TextBox("Specs", null, new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Remarks</td>
+                            <td>
+                                @Html.TextBox("TenderRemarks", "", new { @class = "form-control" })
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <hr />
+                    <div class="details well" style=" border 1px solid black;">
+                        <h4>Tender Items</h4>
+                        <table style="width: 100%;">
+                            <tr>
+                                @*<td style="font-size: 15px; font-weight: bold;">Sl. No.</td>*@
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Project Name</th>
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Site</th>
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Req. No.</th>
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Item Name</th>
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Qty</th>
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Unit</th>
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Vendor Name</th>
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Qtn. No.</th>
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Qtn. Date</th>
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Unit Price</th>
+                                <th style="font-size: 15px; font-weight: bold;" class="col-md-1">Total Price</th>
+                                @*<th style="font-size: 15px; font-weight: bold;">Remarks</th>
+                                    <th>&nbsp;</th>*@
+                                @*<th>&nbsp;</th>*@
+                            </tr>
+                            <tr>
+                                <td>
+
+                                    @Html.DropDownList("ProjectId", null, "Select Project", htmlAttributes: new{ @class = "form-control select2",@data_required = "required", @id = "ProjectId"@*, @style = "width: 150px;"*@ })
+                                </td>
+                                <td>
+                                    @Html.DropDownList("SiteId", null, "Select Site", htmlAttributes: new{ @class = "form-control select2",@data_required = "required", @id = "SiteId"@*, @style = "width: 150px;"*@ })
+                                    @*<input type="hidden" value="" id="UnitId" />*@
+                                </td>
+                                <td>
+                                    @Html.DropDownList("RCode", null, "Select Requisition", htmlAttributes: new{ @class = "form-control select2",@data_required = "required",@id = "RCode"@*, @style = "width: 150px;"*@ })
+                                    @*<input type="hidden"  id="ProcRequisitionDetId" />*@                                
+                                    <input type="hidden" id="Proc_RequisitionDetId" />
+                                </td>
+                                <td>
+                                    @Html.DropDownList("ItemName", null, "Select Item", htmlAttributes: new{ @class = "form-control select2", @data_required = "required", @id = "ItemName"@*, @style = "width: 150px;"*@ })
+                                </td>
+                                <td>
+                                    <input type="text" id="Qty" class="form-control" disabled="disabled" />
+                                </td>
+                                <td>
+                                    <input type="text" id="UnitName" class="form-control" disabled="disabled" />
+                                    <input type="hidden" id="UnitId" value="" />
+                                </td>
+                                <td>
+                                    @Html.DropDownList("VendorId", null, "Select Vendor", htmlAttributes: new{ @class = "form-control select2",@data_required = "required", @id = "VendorId"@*, @style = "width: 150px;"*@ })
+                                </td>
+                                <td>
+                                    <input type="text" id="TQNo" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="text" id="TQDate" class="form-control datepicker" />
+                                </td>
+                                <td>
+                                    <input type="text" id="TQPrice" class="form-control" name="unitPrice" />
+                                </td>
+                                <td>
+                                    <input type="text" id="TotalPrice" class="form-control" disabled="disabled" />
+                                </td>
+                                <td>
+                                    <input type="button" id="addNewRow" value="+" class="btn btn-primary" style ="background-color: grey;border: none;"/>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><span class="error" id="ProjectName_Error">Project required</span></td>
+                                <td><span class="error" id="SiteName_Error">Site required</span></td>
+                                <td><span class="error" id="ReqNo_Error">Req No. required</span></td>
+                                <td><span class="error" id="ItemName_Error">Item name required</span></td>
+                                <td></td>
+                                <td></td>
+                                <td><span class="error" id="VendorName_Error">Vendor name required</span></td>
+                                <td><span class="error" id="QtnNo_Error">Qtn No. required</span></td>
+                                <td></td>
+                                <td><span class="error" id="UnitPrice_Error">Unit Price required</span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <br />
+                        <div class="table-responsive scrolling">
+                            <table class="Resource-list table table-bordered" id="RequisitionDetails">
+                                <tr class="bg-grey">
+                                    @*<th>Sl. No.</th>*@
+                                    <th>Project Name</th>
+                                    <th>Site</th>
+                                    <th>Req. No.</th>
+                                    <th>Item Name</th>
+                                    <th>Qty</th>
+                                    <th>Unit</th>
+                                    <th>Vendor Name</th>
+                                    <th>Qtn. No.</th>
+                                    <th>Qtn. Date</th>
+                                    <th>Unit Price</th>
+                                    <th>Total Price</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+
+                }
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info" , @style = "background-color: grey;border: none;" })
+            <button type="button" id="SaveItem" class="btn btn-success" style = "background-color: grey;border: none;" ><i class="icon-floppy-disk position-left"></i>Create</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var counter = 0; //counter for the serial
+
+    $(document).ready(function () {
+        RebindDatePicker();
+        //$('.select2').select2();
+        //$(".datepicker").datepicker({ dateFormat: 'dd/mm/yy', changeYear: true });
+        $('#SiteId').attr("disabled", "true");
+        $("#RCode").attr("disabled", "true");
+        $("#ItemName").attr("disabled", "true");
+
+
+        $('#ProjectName_Error').hide();
+        $('#SiteName_Error').hide();
+        $('#ReqNo_Error').hide();
+        $('#ItemName_Error').hide();
+        $('#VendorName_Error').hide();
+        $('#QtnNo_Error').hide();
+        $('#UnitPrice_Error').hide();
+
+        $("input[name=TQDate]").datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            todayBtn: true,
+            autoclose: true
+        });
+
+    });
+
+    $('#ProjectId').change(function () {
+        var id = $('#ProjectId option:selected').val();
+
+        $.ajax({
+            url: "/TenderQuotation/GetSites",
+            type: "post",
+            data: {
+                ProjectId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#SiteId').removeAttr("disabled");
+                var listOfSites = data.Sites.length;
+
+                var sites = "<select id='sites'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#SiteId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
+
+
+    $("#SiteId").change(function () {
+        var SiteId = $('#SiteId').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        //alert(ProjectId);
+
+        $.ajax({
+            type: "post",
+            url: "/TenderQuotation/GetReqNo",
+            data: { SiteId, ProjectId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                //$('#SiteEngineer').val(data.siteEngineer);
+                $('#RCode').removeAttr("disabled");
+
+                var listOfitems = data.Items.length;
+                var items = "<select id='RCode'>";
+                items = items + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfitems; i++) {
+                    items = items + '<option value=' + data.Items[i].Value + '>' + data.Items[i].Text + '</option>';
+                }
+                items = items + '</select>';
+                $('#RCode').html(items);
+
+            }
+
+        });
+    });
+
+    $("#RCode").change(function () {
+        var Rcode = $('#RCode  option:selected').val();
+        var SiteId = $('#SiteId  option:selected').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        //alert(ProjectId);
+
+        $.ajax({
+            type: "post",
+            url: "/TenderQuotation/GetReqitem",
+            data: { Rcode },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                //$('#SiteEngineer').val(data.siteEngineer);
+                $('#ItemName').removeAttr("disabled");
+                $('#Proc_RequisitionDetId').val(data.Proc_RequisitionDetId);
+                //alert('Requisition ID' + data.Proc_RequisitionDetId);
+                //alert($('#Proc_RequisitionDetId').val());
+                var listOfitems = data.Items.length;
+                //alert('List: ' + listOfitems);
+                var items = "<select id='ItemName'>";
+                items = items + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfitems; i++) {
+                    items = items + '<option value=' + data.Items[i].Value + '>' + data.Items[i].Text + '</option>';
+                }
+                items = items + '</select>';
+                $('#ItemName').html(items);
+
+            }
+
+        });
+    });
+
+    $("#ItemName").change(function () {
+        var ItemId = $('#ItemName option:selected').val();
+        var Rcode = $('#RCode  option:selected').val();
+        $.ajax({
+            type: "post",
+            url: "/TenderQuotation/GetUnit",
+            data: { ItemId, Rcode },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#UnitId').val(data.UnitId);
+                $('#UnitName').val(data.UnitName);
+                $('#Qty').val(data.Qty);
+            }
+
+        });
+    });
+
+
+    $(document).on({
+        'change': function () {
+            var price = $(this).val();
+            //alert('Unit Price :' + price);
+            var quantity = $('#Qty').val();
+            var totalPrice = price * quantity;
+            if (isNaN(totalPrice)) {
+                alert('Unit Price must be a numeric value!!')
+                $('#TQPrice').val("");
+                $('#TotalPrice').val("");
+            }
+            else {
+                $('#TotalPrice').val(totalPrice);
+            }
+
+          
+        }
+    }, 'input[name=unitPrice]');
+
+
+    $(document).on({
+        'change': function () {
+            var price = $(this).closest('tr').find("td:eq(9) input.TQPrice").val();
+            //var row = $(this).closest('tr');
+            
+            //alert('Unit Price :' + price);
+            var quantity = $(this).closest('tr').find("td:eq(4) input.Qty").val();
+            //alert('quantity :' + quantity);
+            var totalPrice = price * quantity;
+
+            if (isNaN(totalPrice)) {
+                alert('Unit Price must be a numeric value!!')
+                //$('#TQPrice').val("");
+                //$('#TotalPrice').val("");
+            }
+            else {
+                $(this).closest('tr').find("td:eq(10) input.TotalPrice").val(totalPrice);
+            }
+
+
+        }
+    }, 'input[name=TQPrice]');
+
+
+
+    //add new row
+    $('#addNewRow').click(function (event) {
+        event.preventDefault();
+        counter++;
+        var isAllValid = true;
+        var ProjectId = $('#ProjectId option:selected').val();
+        var ProjectName = $('#ProjectId option:selected').text();
+        //alert(ProjectName);
+        var SiteId = $('#SiteId option:selected').val();
+        var SiteName = $('#SiteId option:selected').text();
+        //alert(SiteId);
+        //var Qty = $('#Qty').val();
+        var RCode = $('#RCode option:selected').val();
+
+        var ItemId = $('#ItemName option:selected').val();
+        var ItemName = $('#ItemName option:selected').text();
+        var Proc_RequisitionDetId = $('#Proc_RequisitionDetId').val();
+        //alert('ProcRequisitionDetId: ' + Proc_RequisitionDetId);
+
+        var Qty = $('#Qty').val();
+
+        var UnitId = $('#UnitId').val();
+        var UnitName = $('#UnitName').val();
+        //alert(Unit);
+        //alert(UnitId);
+        var VendorId = $('#VendorId option:selected').val();
+        //alert('Vendor Id: ' + VendorId);
+        var VendorName = $('#VendorId option:selected').text();
+
+        var TQNo = $('#TQNo').val();
+        var TQDate = $('#TQDate').val();
+        var TQPrice = $('#TQPrice').val();
+        //alert(ReqQty);
+        var TotalPrice = $('#TotalPrice').val();
+        //alert('TotalPrice: ' + TotalPrice);
+        var Status = 'N';
+
+        if (ProjectName.trim() == "" || ProjectName.trim() == "Select Project") {
+            $('#ProjectName_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ProjectName_Error').hide();
+        }
+        if (SiteName.trim() == "" || SiteName.trim() == "Select Site") {
+            $('#SiteName_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#SiteName_Error').hide();
+        }
+        if (RCode.trim() == "" || RCode.trim() == "Select Requisition") {
+            $('#ReqNo_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ReqNo_Error').hide();
+        }
+        if (ItemName.trim() == "" || ItemName.trim() == "Select Item") {
+            $('#ItemName_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ItemName_Error').hide();
+        }
+        if (VendorName.trim() == "" || VendorName.trim() == "Select Vendor") {
+            $('#VendorName_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#VendorName_Error').hide();
+        }
+        if (TQPrice.trim() == "") {
+            $('#UnitPrice_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#UnitPrice_Error').hide();
+        }
+
+        if (isAllValid) {
+            var newRow = jQuery('<tr>'
+                + '<td><input value="' + ProjectId + '" type="hidden" name="ProjectId"/><label>' + ProjectName + '<label></td>'
+                + '<td><input value="' + SiteId + '" type="hidden" name="SiteId"/><label>' + SiteName + '<label></td>'
+                + '<td><input value="' + RCode + '" type="hidden" name="RCode" class="form-control" style="width:90px;"/><label>' + RCode + '</label><input value="' + Proc_RequisitionDetId + '" type="hidden" name="Proc_RequisitionDetId"/></td>'
+                + '<td><input value="' + ItemId + '" type="hidden" name="ItemId"/><label>' + ItemName + '<label>'
+                + '<td><input value="' + Qty + '" type="text" name="Qty" class="form-control Qty" style="width:90px;"/></td>'
+                + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>' + UnitName + '</label></td>'
+                + '<td><input value="' + VendorId + '" type="hidden" name="Vendor"/><label>' + VendorName + '</label></td>'
+                + '<td><input value="' + TQNo + '" type="text" name="TQNo" class="form-control" style="width:90px;"/></td>'
+                + '<td><input value="' + TQDate + '" type="text" name="TQDate" class="form-control datepicker" style="width:90px;"/></td>'
+                + '<td><input value="' + TQPrice + '" type="text" name="TQPrice" class="form-control TQPrice" style="width:90px;"/></td>'
+                + '<td><input value="' + TotalPrice + '" type="text" name="TotalPrice" class="form-control TotalPrice" style="width:90px;" disabled="disabled"/></td>'
+                + '<td><input value="' + Status + '" type="hidden" name="Status"/> <button class="btn  text-warning-600 btn-flat btn-icon btn-rounded"  onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
+
+
+            jQuery('table.Resource-list').append(newRow);
+
+            $('#ProjectId').val("");
+            $('#SiteId').val("");
+            $('#RCode').val("");
+            $('#ItemName').val("");
+            $('#Qty').val("");
+            $('#UnitName').val("");
+            $('#VendorId').val("");
+            $('#TQNo').val("");
+            $('#TQDate').val("");
+            $('#TQPrice').val("");
+            $('#TotalPrice').val("");
+
+            $('#SiteId').attr("disabled", true);
+            $('#RCode').attr("disabled", true);
+            $('#ItemName').attr("disabled", true);
+
+            RebindDatePicker();
+        }
+
+    });
+
+
+
+    $('#SaveItem').click(function (e) {
+        //alert('Length:' + $('.Resource-list tr').length)
+
+        //if ($('#ProjectId option:selected').text() === "--Select--") {
+        //    alert('Please select project');
+        //    $('#ProjectId option:selected').focus();
+        //}
+        if ($.trim($('#TNo').val()) === "") {
+            alert('Tender No. required!');
+            $('#TNo').focus();
+        }
+        else if ($.trim($('#TDate').val()) === "") {
+            alert('Tender Date required!');
+            $('#TDate').focus();
+        }
+        else if ($('.Resource-list tr').length < 2) {
+            alert('Please Add Item to this Tender');
+        }
+        else {
+            //alert('All Validation Donne...');
+            CreateSitePlanTask();
+        }
+    });
+
+
+    function CreateSitePlanTask() {
+        //==========Master Form==========
+        var TNo = $("#TNo").val();
+        //alert('TNo: ' + TNo);
+        var TDate = $("#TDate").val();
+        //alert('TDate: ' + TDate);
+        var Specs = $("#Specs").val();
+        //alert('Specs: ' + Specs);
+        var Remarks = $("#TenderRemarks").val();
+        //alert('remarks: ' + Remarks);
+
+
+        //===========Detail Form===========
+        var Proc_RequisitionDetId = document.getElementsByName("Proc_RequisitionDetId");
+        var VendorId = document.getElementsByName("Vendor");
+        var TQDate = document.getElementsByName("TQDate");
+        var TQNo = document.getElementsByName("TQNo");
+        var TQPrice = document.getElementsByName("TQPrice");
+        var Status = document.getElementsByName("Status");
+       
+        var TenderItems = [];
+        //alert($('#RequisitionDetails tr').length - 1)
+
+        var tableCounter = $('#RequisitionDetails tr').length - 1;
+        //alert('Length: ' + tableCounter);
+        for (var i = 0; i < tableCounter; i++) {
+            console.log(TQDate[i].value);
+        }
+
+        for (var i = 0; i < tableCounter; i++) {
+            TenderItems.push({
+                Proc_RequisitionDetId: Proc_RequisitionDetId[i].value,
+                VendorId: VendorId[i].value,
+                TQDate: TQDate[i].value,
+                TQNo: TQNo[i].value,
+                TQPrice: TQPrice[i].value,
+                Status: Status[i].value
+            });
+            console.log('---------->');
+            console.log('Proc_RequisitionDetId: ' + TenderItems[i].Proc_RequisitionDetId);
+            console.log('VendorId: ' + TenderItems[i].VendorId);
+            console.log('TQDate: ' + TenderItems[i].TQDate);
+            console.log('TQNo: ' + TenderItems[i].TQNo);
+            console.log('TQPrice: ' + TenderItems[i].TQPrice);
+            console.log('Status: ' + TenderItems[i].Status);
+            console.log('---------->');
+
+        }
+
+        TaskDetails = JSON.stringify({
+            TenderItems: TenderItems,
+            TNo: TNo,
+            TDate: TDate,
+            Specs: Specs,
+            Remarks: Remarks
+        });
+
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/TenderQuotation/CreateTenderQuotation',
+            data: TaskDetails,
+            success: function (result) {
+                console.log(result);
+                if (result.flag === true) {
+                    alert("Record save successfully!");
+
+                    //$('#ProjectId').val("");
+                    //$('#SiteId').val("");
+                    //$('#RequisitionDate').val("");
+                    //$('#ReqNo').val("");
+
+                    window.location.replace("/TenderQuotation/Index");
+
+                }
+                else {
+                    alert(result.message);
+                }
+            },
+            failure: function (response) {
+                alert('error');
+            }
+        });
+    }
+
+    function RebindDatePicker() {
+        $('.datepicker').datepicker("destroy");
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            todayBtn: true,
+        });
+        // jquery validator bug fix using moment
+        //$.validator.methods.date = function (value, element) {
+        //    return this.optional(element) || moment(value, "DD/MM/YYYY", true).isValid();
+        //}
+
+    }
+</script>
+
+
+<style>
+    span.error {
+        display: block;
+        /*visibility: hidden;*/
+        color: red;
+        font-size: 90%;
+    }
+</style>

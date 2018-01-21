@@ -1,0 +1,162 @@
+﻿
+
+@*@model IEnumerable<DhaliProcurement.ViewModel.VMPendingTender>*@
+@model IEnumerable<DhaliProcurement.Models.Proc_TenderMas>
+
+@{
+    ViewBag.Title = "PendingTender";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //AuditReport.Models.EPARSDbContext db = new AuditReport.Models.EPARSDbContext();
+}
+
+
+@*@{var data = Model.Select(x => new { x.SiteStatusDate, x.ProjectId, x.PlanCode, x.ProjectSiteId, x.SitePlanDate }).FirstOrDefault();}*@
+
+@if (Model.Count() != 0)
+{
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h5 class="panel-title "><i class="icon-task position-left"></i>Pending Tender (Approval)</h5> <hr />
+            <div class="heading-elements">
+                <ul class="icons-list">
+                    <li><a data-action="collapse"></a></li>
+                    <li><a data-action="reload"></a></li>
+                </ul>
+            </div>
+        </div>
+        @*<button type="button" id="btnAuthorize" class="btn btn-success btn-ladda btn-ladda-spinner" data-spinner-color="#333" data-style="zoom-in"><span class="ladda-label">Authorize</span></button>*@
+        <div class="table-responsive">
+
+            <table class="table table-xxs table-bordered">
+                <tr class="bg-grey">
+                    <th>
+                        <input type="checkbox" id="myCheckAll">
+                    </th>
+                    <th>Tender No.</th>
+                    <th>Status Date</th>
+                    @*<th>Input By</th>*@
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @*<input type="checkbox" class="cbCheck" name="TaskId" id="TaskId" value="@item.PlanId" />*@
+                            @*<input type="hidden" name="PlanId" value="@item.PlanId" />*@
+                            <input type="hidden" name="StatDate" value="@DhaliProcurement.Helper.NullHelper.DateToString(item.TDate)" />
+                        </td>
+                        <td>@Html.ActionLink(item.TNo,"Edit",new { TenderId  = item.Id}) @*@item.TNo*@</td>
+                        @*<td>@item.SiteName</td>*@
+                        <td>@DhaliProcurement.Helper.NullHelper.DateToString(item.TDate)</td>
+                        @*<td>@item.InputBy</td>*@
+                        <td><span class="label label-danger">Pending</span></td>
+                        @*<td>@Html.ActionLink("View Status", "ProjectSitePlanTaskInfoExisting", "ProjectSitePlanTasks", new { PId = item.PlanId, SiteStatusDate = item.StatusDate.ToString("MM/dd/yyyy") }, new { @class = "label label-info" })</td>*@
+                        <td>
+                            <button type="button" onclick="AuthorizeStatus(@item.Id,'@DhaliProcurement.Helper.NullHelper.DateToString(item.TDate)')" class="btn btn-success btn-ladda btn-ladda-spinner btn-xs" data-spinner-color="#333" data-style="zoom-in"><span class="ladda-label">Approve</span></button>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+}
+
+
+
+
+
+@*<p><button type="button" class="btn btn-warning btn-sm" onclick="window.location.href='@Url.Action("Index")';"><i class="icon-circle-left2 position-left"></i> Go back</button></p>*@
+
+
+<script>
+    function AuthorizeStatus(PId, SiteStatusDate) {
+        //var Con = confirm("are you sure want to delete this ?");
+        //if (Con == true) {
+            $.ajax({
+                url: "/ProjectSitePlanTasks/AuthorizeStatus",
+                type: "post",
+                data: {
+                    PId: PId, SiteStatusDate: SiteStatusDate
+                },
+                dataType: "json",
+
+                success: function (flag) {
+                    console.log(flag);
+
+                    if (flag.flag == true) {
+
+                        alert("Successfully Authorized !");
+                        location.reload(true);
+                    }
+                    else
+                    {
+                        alert(flag.message);
+                    }
+
+                },
+
+                error: function (xhr) {
+                    console.log(xhr)
+                    alert('error');
+
+                }
+
+
+            });
+        //}
+
+    }
+
+
+    $("#myCheckAll").click(function () {
+        $(".cbCheck").prop('checked', $(this).prop('checked'));
+    });
+    $(".cbCheck").change(function () {
+        if (!$(this).prop("checked")) {
+            $("#myCheckAll").prop("checked", false);
+        }
+    });
+
+
+
+    $('#btnAuthorize').click(function (e) {
+        var flagError = false;
+        var flagRefresh = false;
+        $(':checkbox:checked').each(function (i) {
+            //console.log($(this).closest('tr').find("input[name=PlanId]").val());
+            //alert($(this).closest('tr').find("input[name=PlanId]").val());
+
+            var PId = $(this).closest('tr').find("input[name=PlanId]").val();
+            var StatusDate = $(this).closest('tr').find("input[name=StatDate]").val();
+
+            flagRefresh = true;
+
+            var postData = { PId: PId, SiteStatusDate: StatusDate };
+            //alert(JSON.stringify(postData));
+            //console.log(postData);
+            $.ajax({
+                type: "POST",
+                url: "/ProjectSitePlanTasks/AuthorizeStatus",
+                data: postData,
+                success: function (data) {
+                    //alert("Data updated successfully !");
+                },
+                dataType: "json",
+                traditional: true
+            });
+
+        });
+
+        if (flagRefresh == true)
+        {
+            location.reload(true);
+        }
+
+
+    });
+
+</script>
+

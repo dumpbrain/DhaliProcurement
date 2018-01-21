@@ -1,0 +1,706 @@
+﻿@model DhaliProcurement.ViewModel.VMPurchaseOrder
+@{
+    ViewBag.Title = "Purchase Order";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Create New Purchase Order</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+
+                    <table class="table">
+
+                        <tr>
+                            <td>PO No</td>
+                            <td>
+                                @Html.TextBox("PONo", "", new { @class = "form-control" })
+                            </td>
+                            <td>PO Date</td>
+                            <td>
+                                @Html.TextBox("PODate", "", new { @class = "form-control datepicker" })
+                            </td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td>Project</td>
+                            <td>
+
+                                @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @id = "ProjectId", @class = "form-control select2" })
+                                @Html.ValidationMessage("ProjectId", "", new { @class = "text-danger" })
+
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>Site Name</td>
+                            <td>
+                                @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @id = "SiteId", @class = "form-control select2" })
+                                @Html.ValidationMessage("SiteId", "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td>Address</td>
+                            <td>
+                                @Html.TextBox("PurchaseAddress", "", new { @class = "form-control" })
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>Tender No</td>
+                            <td>
+                                @Html.DropDownList("TenderId", null, "--Select--", htmlAttributes: new { @id = "TenderId", @class = "form-control select2" })
+                                @Html.ValidationMessage("TenderId", "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>Vendor</td>
+                            <td>
+                                @Html.DropDownList("VendorId", null, "--Select--", htmlAttributes: new { @id = "VendorId", @class = "form-control select2" })
+                                @Html.ValidationMessage("VendorId", "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+
+
+
+
+                        <tr>
+                            <td>Attention</td>
+                            <td>
+                                @Html.TextBox("VContactPerson", null, new { @class = "form-control" })
+                                @*<input id="VContactPerson" type="text" class="form-control"/>*@
+                            </td>
+
+                            <td>To</td>
+                            <td>
+                                @Html.TextBox("ProjectManager", null, new { @class = "form-control" })
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>Cell</td>
+                            <td>
+                                @Html.TextBox("Cell", null, new { @id = "AttnCell", @class = "form-control" })
+                            </td>
+
+                            <td>Email</td>
+                            <td>
+                                @Html.TextBox("Email", null, new { @class = "form-control" })
+                            </td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td>Subject</td>
+                            <td>
+                                @Html.TextBox("Subject", null, new { @class = "form-control" })
+                            </td>
+
+                            <td>Lead Time</td>
+                            <td>
+                                @Html.TextBox("LeadTime", null, new { @class = "form-control" })
+                            </td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td>Content</td>
+                            <td>
+                                @Html.TextBox("Content", null, new { @class = "form-control" })
+                            </td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td>Receive Concern Person</td>
+                            <td>
+                                @Html.TextBox("RcvConcenPerson", null, new { @class = "form-control" })
+                            </td>
+
+                            <td>Cell</td>
+                            <td>
+                                @Html.TextBox("Cell", null, new { @id = "RcvPersonCell", @class = "form-control" })
+                            </td>
+                        </tr>
+
+                    </table>
+                    <hr />
+
+                }
+
+
+                <div class="details well" style=" border 1px solid black;">
+                    <h4>Purchase Order Items</h4>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="font-size: 15px; font-weight: bold;">Item Name</td>
+                            <td style="font-size: 15px; font-weight: bold;">Unit</td>
+                            <td style="font-size: 15px; font-weight: bold;">Size</td>
+                            <td style="font-size: 15px; font-weight: bold;">Unit Price</td>
+                            <td style="font-size: 15px; font-weight: bold;">PO Quantity</td>
+                            <td style="font-size: 15px; font-weight: bold;">Total Price</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                @Html.DropDownList("ItemName", null, "Select item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ItemName", @style = "width: 150px;" })
+                            </td>
+
+                            <td>
+                                <input type="text" id="UnitName" class="form-control" disabled="disabled" />
+                                <input type="hidden" id="UnitId" value="" />
+                            </td>
+
+                            <td>
+                                <input type="text" id="Size" class="form-control" disabled="disabled" />
+
+                            </td>
+
+                            <td>
+                                <input type="text" id="UnitPrice" class="form-control" disabled="disabled" />
+
+                            </td>
+                            <td>
+                                <input type="text" id="POQuantity" name="POQuantity" class="form-control" />
+
+                            </td>
+                            <td>
+                                <input type="text" id="TotalPrice" class="form-control" disabled="disabled" />
+
+                            </td>
+                            <td>
+                                <input type="button" id="addNewRow" value="+" class="btn btn-primary" style="background-color: grey;border: none;" />
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><span class="error" id="ItemName_Error">Item name required</span></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="error" id="POQuantity_Error">PO Quantity required</span></td>
+                            <td></td>
+
+                        </tr>
+
+                    </table>
+                    <br />
+                    <table class="Resource-list table table-bordered" id="Item-list">
+                        <tr class="bg-grey">
+                            <th>Item Name</th>
+                            <th>Unit</th>
+                            <th>Size</th>
+                            <th>Unit Price</th>
+                            <th>PO Quantity</th>
+                            <th>Total Price</th>
+                            <th></th>
+                        </tr>
+
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>Total Costing</td>
+                                <td><input type="text" value="" id="totalCost" class="form-control" disabled="disabled" /></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            <button type="button" id="SaveItem" class="btn btn-success" style="background-color: grey;border: none;"><i class="icon-floppy-disk position-left"></i> Create</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var counter = 0; //counter for the serial
+
+    $(document).on({
+        'change': function () {
+            var price = $('#UnitPrice').val();
+            //alert('Unit Price :' + price);
+            var quantity = $('#POQuantity').val();
+            var totalPrice = price * quantity;
+            //alert('ttl'+totalPrice);
+            $('#TotalPrice').val(totalPrice);
+        }
+    }, 'input[name=POQuantity]');
+
+
+    $(document).on({
+        'change': function () {
+            var price = $(this).closest('tr').find("td:eq(3) input.UnitPriceNew").val();
+            //var row = $(this).closest('tr');
+
+            //alert('Unit Price :' + price);
+            var quantity = $(this).closest('tr').find("td:eq(4) input.POQuantityNew").val();
+            //alert('quantity :' + quantity);
+            var totalPrice = price * quantity;
+
+            if (isNaN(totalPrice)) {
+                alert('Unit Price must be a numeric value!!')
+                //$('#TQPrice').val("");
+                //$('#TotalPrice').val("");
+            }
+            else {
+                $(this).closest('tr').find("td:eq(5) input.TotalPriceNew").val(totalPrice);
+            }
+        }
+    }, 'input[name=POQuantity]');
+
+
+
+    //add new row
+    $('#addNewRow').click(function (event) {
+        event.preventDefault();
+        counter++;
+        var ItemId = $('#ItemName option:selected').val();
+        //alert('Item ' + ItemId);
+
+        var ItemName = $('#ItemName option:selected').text();
+        //alert('Item ' + ItemName);
+        var UnitName = $('#UnitName').val();
+        //alert('nameee ' + UnitName);
+
+        var UnitId = $('#UnitId').val();
+        //alert('uiddddddd ' + UnitId);
+        var Size = $('#Size').val();
+        //alert('size ' + Size);
+
+        var UnitPrice = $('#UnitPrice').val();
+        //alert('UnitPrice ' + UnitPrice);
+        var POQuantity = $('#POQuantity').val();
+        //alert('POQuantity ' + POQuantity);
+        var TotalPrice = $('#TotalPrice').val();
+        //alert('TotalPrice ' + TotalPrice);
+        //new
+        var isValidItem = true;
+
+        if ($('#ItemName').val().trim() == '') {
+            $('#ItemName_Error').show();
+            isValidItem = false;
+            //$('#ItemName').siblings('span.error').css('visibility', 'visible');
+        }
+        else {
+            $('#ItemName_Error').hide();
+        }
+
+        if (!($('#POQuantity').val().trim() != '' && !isNaN($('#POQuantity').val().trim()))) {
+            isValidItem = false;
+            $('#POQuantity_Error').show();
+        }
+        else {
+            $('#POQuantity_Error').hide();
+        }
+
+        //Add item to list if valid
+        if (isValidItem) {
+
+            var newRow = jQuery('<tr>'
+              + '<td> <input value="' + ItemId + '" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" readonly="true" type="text" name="ItemName"' + counter + '"/></td>'
+              + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><input class="form-control" value="' + UnitName + '" readonly="true" type="text" name="UnitName"/></td>'
+              + '<td><input class="form-control" value="' + Size + '" type="text" name="Size"/></td>'
+              + '<td><input class="form-control UnitPriceNew" value="' + UnitPrice + '"  type="text" name="UnitPrice"/></td>'
+              + '<td><input class="form-control POQuantityNew" value="' + POQuantity + '" type="text" name="POQuantity"/></td>'
+              + '<td><input class="form-control TotalPriceNew" value="' + TotalPrice + '" type="text" readonly="true" name="TotalPrice"/></td>'
+              + '<td><input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();"/></td></tr>');
+
+            jQuery('table.Resource-list').append(newRow);
+            totalItemCost();
+
+            //$('#POQuantity').val("");
+            //$('#TotalPrice').val("");
+        }
+        //end
+    });
+
+    $('#Item-list').on({
+        'change': function () {
+            var ItemTotalCost = 0;
+            for (var cn = 1; cn < $('#Item-list tr').length - 1; cn++) {
+                var quantity = $('#Item-list tr').eq(cn).find("td input[name=POQuantity]").val();
+               // console.log('Quantity: ' + quantity);
+                var cost = $('#Item-list tr').eq(cn).find("td input[name=UnitPrice]").val();
+               // console.log('Cost: ' + cost);
+                var result = parseFloat(quantity) * parseFloat(cost);
+                ItemTotalCost = parseFloat(ItemTotalCost + result);
+            }
+            $('#totalCost').val(ItemTotalCost);
+        }
+    });
+
+    function totalItemCost() {
+        var ItemTotalCost = 0;
+        for (var cn = 1; cn < $('#Item-list tr').length - 1; cn++) {
+            var quantity = $('#Item-list tr').eq(cn).find("td input[name=POQuantity]").val();
+            console.log('POQuantity: ' + quantity);
+            var cost = $('#Item-list tr').eq(cn).find("td input[name=UnitPrice]").val();
+            console.log('UnitPrice: ' + cost);
+            var result = parseFloat(quantity) * parseFloat(cost);
+            ItemTotalCost = parseFloat(ItemTotalCost + result);
+        }
+        $('#totalCost').val(ItemTotalCost);
+    }
+
+    $(document).ready(function () {
+        $('#SiteId').attr("disabled", "true");
+        $('#TenderId').attr("disabled", "true");
+        $('#VendorId').attr("disabled", "true");
+
+        $('#ItemName_Error').hide();
+        $('#POQuantity_Error').hide();
+
+
+
+    });
+
+    $('#SaveItem').click(function (e) {
+        //alert('Length:' + $('.Resource-list tr').length)
+        //if ($('#ProjectId option:selected').text() === "--Select--") {
+        //    alert('Please select project');
+        //    $('#ProjectId option:selected').focus();
+        //}
+        if ($.trim($('#PONo').val()) === "") {
+            alert('PO No. required!');
+            $('#PONo').focus();
+        }
+        else if ($.trim($('#PODate').val()) === "") {
+            alert('PO Date required!');
+            $('#PODate').focus();
+        }
+        //else if ($('.Resource-list tr').length < 2) {
+        //    alert('Please Add Item to this order');
+        //}
+        else {
+            //alert('All Validation Donne...');
+            CreatePurchaseOrder();
+        }
+    });
+
+
+    function CreatePurchaseOrder() {
+        //==========Master Form==========
+        debugger;
+        var PONo = $("#PONo").val();
+        //alert('PONo: ' + PONo);
+        var PODate = $("#PODate").val();
+        //alert('PODate: ' + PODate);
+        var ProjectId = $("#ProjectId").val();
+        //alert('ProjectId: ' + ProjectId);
+        var SiteId = $("#SiteId").val();
+        //alert('SiteId: ' + SiteId);
+        var PurchaseAddress = $("#PurchaseAddress").val();
+        //alert('PurchaseAddress: ' + PurchaseAddress);
+        var VendorId = $("#VendorId option:selected").val();
+        //alert('VendorId: ' + VendorId);
+        var TenderId = $("#TenderId option:selected").val();
+        //alert('TenderId: ' + TenderId);
+        var VContactPerson = $("#VContactPerson").val();
+        //alert('VContactPerson: ' + VContactPerson);
+        var ProjectManager = $("#ProjectManager").val();
+        //alert('ProjectManager: ' + ProjectManager);
+        var AttnCell = $("#AttnCell").val();
+        //alert('AttnCell: ' + AttnCell);
+        var Email = $("#Email").val();
+        //alert('Email: ' + Email);
+        var Subject = $("#Subject").val();
+        //alert('Subject: ' + Subject);
+        var LeadTime = $("#LeadTime").val();
+        //alert('LeadTime: ' + LeadTime);
+        var Content = $("#Content").val();
+        //alert('Content: ' + Content);
+        var RcvConcenPerson = $("#RcvConcenPerson").val();
+        //alert('RcvConcenPerson: ' + RcvConcenPerson);
+        var RcvPersonCell = $("#RcvPersonCell").val();
+        //alert('RcvPersonCell: ' + RcvPersonCell);
+        var POTotalAmt = $("#totalCost").val();
+
+        debugger;
+        //===========Detail Form===========
+        var ItemId = document.getElementsByName("ItemId");
+        var ItemName = document.getElementsByName("ItemName");
+
+        //for (var i = 0; i < ItemId.length; i++) {
+        //    alert('ItemId '+ItemId[i].value);
+        //}
+
+        //alert('ItemId ' + ItemId);
+        //var ItemName = document.getElementsByName("ItemName");
+        var UnitId = document.getElementsByName("UnitId");
+
+
+        var UnitName = document.getElementsByName("UnitName");
+        //alert('UnitName ' + UnitName);
+        var Size = document.getElementsByName("Size");
+        //alert('Size ' + Size);
+
+        var UnitPrice = document.getElementsByName("UnitPrice");
+        //alert('UnitPrice ' + UnitPrice);
+
+        var POQuantity = document.getElementsByName("POQuantity");
+        //alert('POQuantity ' + POQuantity);
+
+        var TotalPrice = document.getElementsByName("TotalPrice");
+        //alert('TotalPrice ' + TotalPrice);
+
+        var AddedDetItems = [];
+
+        var tableCounter = $('#Item-list tr').length - 1;
+        //alert('Length: ' + tableCounter);
+      //  debugger;
+        for (var i = 0; i < tableCounter-1; i++) {
+            AddedDetItems.push({
+                ItemId: ItemId[i].value,
+                ItemName: ItemName[i].value,
+                UnitId: UnitId[i].value,
+                UnitName: UnitName[i].value,
+                Size: Size[i].value,
+                UnitPrice: UnitPrice[i].value,
+                POQuantity: POQuantity[i].value,
+                TotalPrice: TotalPrice[i].value
+            });
+
+            console.log('---------->');
+            console.log('ItemId: ' + AddedDetItems[i].ItemId);
+            console.log('ItemName: ' + AddedDetItems[i].ItemName);
+            console.log('UnitId: ' + AddedDetItems[i].UnitId);
+            console.log('UnitName: ' + AddedDetItems[i].UnitName);
+            console.log('Size: ' + AddedDetItems[i].Size);
+            console.log('UnitPrice: ' + AddedDetItems[i].UnitPrice);
+            console.log('POQuantity: ' + AddedDetItems[i].POQuantity);
+            console.log('TotalPrice: ' + AddedDetItems[i].TotalPrice);
+            console.log('---------->');
+
+        }
+
+        ResourceDetails = JSON.stringify({
+            AddedDetItems: AddedDetItems,
+            PONo : PONo,
+            PODate: PODate,
+            //ProjectId :ProjectId,
+            //SiteId : SiteId,
+            //PurchaseAddress : PurchaseAddress,
+            VendorId : VendorId,
+            TenderId : TenderId,
+            VContactPerson :VContactPerson,
+            ProjectManager : ProjectManager,
+            AttnCell : AttnCell,
+            Email : Email,
+            Subject : Subject,
+            LeadTime : LeadTime,
+            Content : Content,
+            RcvConcenPerson : RcvConcenPerson,
+            RcvPersonCell: RcvPersonCell,
+            POTotalAmt: POTotalAmt
+        });
+      //  debugger;
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/PurchaseOrders/PurchaseCreateOrder',
+            data: ResourceDetails,
+            success: function (result) {
+                console.log(result);
+                if (result.flag === true) {
+                    alert("Record save successfully!");
+                    window.location.replace("/PurchaseOrders/Index");
+                }
+                else {
+                    alert(result.message);
+                }
+            },
+            failure: function (response) {
+                alert('error');
+            }
+        });
+    }
+
+
+
+    $('#ProjectId').change(function () {
+
+        var id = $('#ProjectId option:selected').val();
+
+        $.ajax({
+            url: "/PurchaseOrders/GetPId",
+            type: "post",
+            data: {
+                ProjectId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#SiteId').removeAttr("disabled");
+                $('#ProjectManager').val(data.manager);
+                var listOfSites = data.Sites.length;
+
+                var sites = "<select id='sites'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#SiteId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
+
+
+    $("#SiteId").change(function () {
+        var SiteId = $('#SiteId').val();
+        $.ajax({
+            type: "post",
+            url: "/PurchaseOrders/GetSiteLocation",
+            data: { SiteId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#TenderId').removeAttr("disabled");
+                $('#PurchaseAddress').val(data.sitesLoc);
+                $('#RcvConcenPerson').val(data.siteEngineer);
+            }
+        });
+    });
+
+    $("#VendorId").change(function () {
+        var VendorId = $('#VendorId').val();
+        $.ajax({
+            type: "post",
+            url: "/PurchaseOrders/GetVendorContactPerson",
+            data: { VendorId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#VContactPerson').val(data.vContactPerson);
+            }
+        });
+    });
+
+
+    //debugger;
+    $("#ItemName").change(function () {
+        var ItemId = $('#ItemName option:selected').val();
+        //alert('itemid ' + ItemId);
+        $.ajax({
+            type: "post",
+            url: "/PurchaseOrders/GetSelectedItemInfo",
+            data: { ItemId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#UnitId').val(data.UnitId);
+                $('#UnitName').val(data.Unit);
+                $('#Size').val(data.Size);
+                $('#UnitPrice').val(data.UnitPrice);
+            }
+        });
+    });
+
+
+
+    $('#TenderId').change(function () {
+
+        var id = $('#TenderId option:selected').val();
+
+        $.ajax({
+            url: "/PurchaseOrders/GetVendorId",
+            type: "post",
+            data: {
+                TenderId: id
+            },
+            dataType: "json",
+            success: function (data) {
+               $('#VendorId').removeAttr("disabled");
+
+                var listOfSites = data.Vendors.length;
+
+                var sites = "<select id='sites'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.Vendors[i].Value + '>' + data.Vendors[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#VendorId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
+
+
+
+</script>
+
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Plugins/select2/select2.min.js"></script>
+    <script>
+      $(".select2").select2();
+      //$(".datepicker").datepicker();
+      $('.datepicker').datepicker({
+          format: 'dd/mm/yyyy',
+          todayHighlight: true,
+          todayBtn: true,
+          autoclose: true
+      });
+
+    </script>
+}
+
+<style>
+    /*.scrolling {
+        width: 100%;
+        height: 350px;
+        /*border: 13px solid #bed5cd;
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }*/
+    span.error {
+        display: block;
+        /*visibility: hidden;*/
+        color: red;
+        font-size: 90%;
+    }
+</style>

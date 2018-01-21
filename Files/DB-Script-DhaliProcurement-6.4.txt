@@ -1,0 +1,352 @@
+-- Dhali Construction -Dhali Procuement System Ltd
+-----------------------------------------
+-- Table Structure
+-- Prepared By : Abdullah Al Masud
+-- Date: 10-December-2017
+-- Modify Date: 28-December-2017
+-------------------------
+
+--CREATE DATABASE  [Proc_DCPS]
+
+
+USE [Proc_DCPS]
+
+
+
+CREATE TABLE     CompanyInformations(
+ Id          	int IDENTITY(1,1) NOT NULL,
+ Name			nvarchar(100)  Not Null,
+ Address   		nvarchar(150),
+ Phone          nvarchar(50), 
+ Web            nvarchar(50),  								--//Not Present in Energypac
+ Email         	nvarchar(100), 								--//Not Present in Energypac
+ ContactPerson	nvarchar(100),
+ CONSTRAINT PK_CompanyInformations PRIMARY KEY (Id)
+)
+
+GO
+
+CREATE TABLE Clients(
+ Id 			int IDENTITY(1,1) NOT NULL,
+ Name        	nvarchar(50)  Not Null,
+ Address     	nvarchar(100),
+ Phone          nvarchar(50),
+ ConactPerson	nvarchar(100),
+ Note           nvarchar(100),
+ CONSTRAINT PK_Clients PRIMARY KEY (Id)
+)
+
+GO
+
+CREATE TABLE CompanyResources(
+ Id			int IDENTITY(1,1) NOT NULL,
+ Name 		nvarchar(100) NOT NULL,
+ Position	nvarchar(100) NULL,
+ DOJ		Datetime,
+ DOB  		Datetime,
+ Phone		nvarchar(50),
+ Address 	nvarchar(100),
+ Status		nvarchar(1) NOT NULL,
+ CONSTRAINT PK_CompanyResources PRIMARY KEY (Id)
+)
+
+GO
+
+
+CREATE TABLE Proc_Vendors(
+ Id					int IDENTITY(1,1) NOT NULL,
+ Name  		    	nvarchar(100) NOT NULL,
+ Address 			nvarchar(150),
+ Phone       		nvarchar(50),
+ Web              	nvarchar(50),
+ Email           	nvarchar(100),
+ ContactPerson    	nvarchar(100),
+ CONSTRAINT PK_Proc_Vendors PRIMARY KEY (Id),
+ CONSTRAINT UK_Proc_Vendors UNIQUE (Name)
+)
+
+GO
+
+CREATE TABLE Units(
+ Id			int IDENTITY(1,1) NOT NULL,
+ Name		nvarchar(100) NOT NULL,
+ CONSTRAINT PK_Units PRIMARY KEY (Id),
+ CONSTRAINT UK_Units UNIQUE (Name)
+)
+
+GO
+
+--- new table
+CREATE TABLE ItemCategory(
+ Id         	int IDENTITY(1,1) NOT NULL,
+ Name        	nvarchar(100) NOT NULL,
+ CONSTRAINT PK_ItemCategory PRIMARY KEY (Id),
+ CONSTRAINT UK_ItemCategory UNIQUE (Name)
+)
+
+CREATE TABLE Items(
+ Id         		int IDENTITY(1,1) NOT NULL,
+ Name        		nvarchar(100) NOT NULL,
+ Size         		nvarchar(50),
+ HSCode      		nvarchar(100),
+ ItemDesc    		nvarchar(100),
+ ItemCategoryId		int, -- new field
+ CONSTRAINT PK_Items PRIMARY KEY (Id),
+ CONSTRAINT FK1_Items FOREIGN KEY (ItemCategoryId) REFERENCES ItemCategory(Id),
+)
+
+
+GO
+
+CREATE TABLE ProjectGroups(
+
+ Id 	int IDENTITY(1,1) Not Null,
+ Name	nvarchar(50) Not Null,    				--//Name nvarchar(100)
+ CONSTRAINT PK_ProjectGroups PRIMARY KEY (Id)
+)
+
+GO
+
+CREATE TABLE Project(
+  Id			int IDENTITY(1,1) NOT NULL,
+  Name			nvarchar(256) NOT NULL,
+  ClientId			int,
+  ProjectGroupId	int,
+  StartDate		Datetime,
+  EndDate		Datetime,
+  Status   		int NOT NULL,------ Complete,Suspended,Closed
+  Remarks   		nvarchar(200),
+  CONSTRAINT PK_Projects PRIMARY KEY (Id),
+  CONSTRAINT FK1_Projects FOREIGN KEY (ClientID) REFERENCES Client(Id),
+  CONSTRAINT FK2_Projects FOREIGN KEY (ProjectGroupId) REFERENCES ProjectGroup(Id)
+)
+	
+GO
+
+CREATE TABLE ProjectResources(
+ ProjectId 				int NOT NULL,
+ CompanyResourceId		int NOT NULL,
+ CONSTRAINT PK_ProjectResources PRIMARY KEY (ProjectId,CompanyResourceId),
+ CONSTRAINT FK1_ProjectResources FOREIGN KEY (ProjectId) REFERENCES Projects(Id),
+ CONSTRAINT FK2_ProjectResources FOREIGN KEY (CompanyResourceId) REFERENCES CompanyResources(Id)
+)
+
+GO
+
+CREATE TABLE ProjectSites(
+ Id				int IDENTITY(1,1) NOT NULL,
+ ProjectId		int NOT NULL,
+ Name       	nvarchar(100) NOT NULL,								   --//nvarchar(256) (both projects change field Size)
+ Location		nvarchar(50),                   					   --//Location		nvarchar(100),  
+ SiteStatus        	int NOT NULL,------ Complete,Suspended,Closed,Running 
+ Remarks     	nvarchar(100),	
+ --TotalCompleted				
+ CONSTRAINT PK_ProjectSites PRIMARY KEY (Id),
+ CONSTRAINT FK_ProjectSites FOREIGN KEY (ProjectId) REFERENCES Projects(Id),
+ CONSTRAINT UK_ProjectSites UNIQUE (ProjectId,Id)
+)
+
+GO
+
+
+CREATE TABLE ProjectSiteResources(
+  ProjectSiteId   		int NOT NULL,
+  CompanyResourceId     	int NOT NULL,
+  CONSTRAINT PK_ProjectResources PRIMARY KEY (ProjectSiteId,CompanyResourceId),
+  CONSTRAINT FK1_ProjectResources FOREIGN KEY (ProjectSiteId) REFERENCES ProjectSites(Id)
+  CONSTRAINT FK2_ProjectResources FOREIGN KEY (CompanyResourceId) REFERENCES CompanyResources(Id)
+)
+
+	
+GO
+
+
+
+CREATE TABLE Proc_Projects(
+ Id      		int IDENTITY(1,1)  Not Null,
+ ProjectSiteId	int,
+ BOQDate         Datetime,
+ BOQNo           nvarchar(100),
+ NOADate         Datetime,
+ NOANo           nvarchar(100), 
+ ProjectType     nvarchar(50),
+ Status          nvarchar(50),
+ Remarks         nvarchar(100),
+ CONSTRAINT PK_Proc_Projects PRIMARY KEY (Id),
+ CONSTRAINT FK_Proc_Projects FOREIGN KEY (ProjectSiteId) REFERENCES ProjectSites(Id)
+
+)
+
+GO
+
+CREATE TABLE Proc_ProjectItems(
+ Id 			int IDENTITY(1,1) NOT NULL,
+ ProcProjectId	int NOT NULL,
+ ItemId   		int NOT NULL,
+ UnitId			int,
+ PQuantity   	decimal(18,2) NOT NULL,
+ PCost        	decimal(18,2),
+ Remarks   		nvarchar(50),
+ CONSTRAINT PK_Proc_ProjectItems PRIMARY KEY (Id),
+ CONSTRAINT FK_Proc_ProjectItem1 FOREIGN KEY (ProcProjectId) REFERENCES Proc_Projects(Id),
+ CONSTRAINT FK_Proc_ProjectItem2 FOREIGN KEY (ItemId) REFERENCES Items(Id),
+ CONSTRAINT FK_Proc_ProjectItem3 FOREIGN KEY (UnitId) REFERENCES Unit(Id),
+ CONSTRAINT UK_Proc_ProjectItem UNIQUE (ProcProjectId,ItemId)
+)
+
+GO
+
+
+CREATE TABLE Proc_RequisitionMas(
+ Id 				int IDENTITY(1,1) NOT NULL,
+ ProcProjectId		int NOT NULL,
+ RCode            	nvarchar(20) Not Null,
+ ReqDate          	Datetime,
+ Remarks          	nvarchar(50),
+ Status           	nvarchar(1),-- A:Approved,C:Cancel,P:Pending
+ IsCompleted		bit NOT NULL, --0:Not complete, 1:Complete  -- New field
+ CONSTRAINT PK_Proc_RequisitionMas PRIMARY KEY (Id),
+ CONSTRAINT FK_Proc_RequisitionMas FOREIGN KEY (ProcProjectId) REFERENCES Proc_Project(Id),
+ CONSTRAINT UK_Proc_RequisitionM UNIQUE (RCode)
+)
+
+GO
+
+CREATE TABLE Proc_RequisitionDet(
+  Id					int IDENTITY(1,1) NOT NULL,
+  ProcRequisitionMasId	int Not Null,
+  ItemId            	int Not Null,
+  ReqQty           		decimal(18,2) Not Null,
+  CStockQty        		decimal(18,2) Not Null,
+  Brand            		nvarchar(50),
+  Size             		nvarchar(50),
+  Remarks          		nvarchar(50),
+  RequiredDate			datetime, -- New field
+  CONSTRAINT PK_Proc_RequisitionDet PRIMARY KEY (Id),
+  CONSTRAINT FK_Proc_RequisitionDet1 FOREIGN KEY (ProcRequisitionMasId) REFERENCES Proc_RequisitionMas(Id),
+  CONSTRAINT FK_Proc_RequisitionDet2 FOREIGN KEY (ItemId) REFERENCES Item(Id),
+  CONSTRAINT UK_Proc_RequisitionDet UNIQUE (ProcRequisitionMasId,ItemId)
+)
+
+GO
+
+CREATE TABLE Proc_TenderMas(
+ Id				  int IDENTITY(1,1) NOT NULL,
+ TNo			  nvarchar(50) NOT NULL,
+ TDate            Datetime,
+ Specs            nvarchar(100),
+ Remarks          nvarchar(100),
+ CONSTRAINT PK_Proc_TenderMas PRIMARY KEY (Id)
+)
+
+GO
+
+CREATE TABLE Proc_TenderDet(
+ Id             		int IDENTITY(1,1) NOT NULL,
+ ProcTenderMasId		int  Not Null, 
+ ProcRequisitionDetId int NOT NULL, -- new field 
+ VendorId  				int  Not Null,
+ TQDate 				Datetime,
+ TQNo					nvarchar(50),
+ TQPrice 				decimal(18,2) Not Null,
+ Status 				nvarchar(1),   --bit,-- S:Selected,N:Not Selected
+ CONSTRAINT PK_Proc_TenderDet PRIMARY KEY (Id), --
+ CONSTRAINT FK_Proc_TenderDet1 FOREIGN KEY (VendorId) REFERENCES Proc_Vendors(Id),
+ CONSTRAINT FK_Proc_TenderDet2 FOREIGN KEY (ProcRequisitionDetId) REFERENCES Proc_RequisitionDet(Id)
+ CONSTRAINT FK_Proc_TenderDet3 FOREIGN KEY (ProcTenderMasId) REFERENCES Proc_TenderMas(Id), 
+ --CONSTRAINT UK_Proc_TenderDet UNIQUE (ProcRequisitionMasId,ItemId)
+ )
+
+GO
+
+
+
+CREATE TABLE Proc_PurchaseOrderMas(
+ Id     				int  NOT NULL,
+ PONo             		nvarchar(100)  Not Null,
+ PODate           		Datetime      Not Null,
+ VendorId           	int NOT NULL,
+ ProcTenderMasId		int NOT NULL,
+ LeadTime         		int,
+ OrderTo				nvarchar(50),
+ Attention				nvarchar(50),
+ AttnCell				nvarchar(50),
+ AttnEmail				nvarchar(50),
+ Subject          		nvarchar(100),
+ Content          		nvarchar(800),
+ RecvConcernPerson		nvarchar(50),
+ RecvConcernPersonCell	nvarchar(50),
+ POTotalAmt       		decimal(18,2),
+ CONSTRAINT PK_Proc_PurchaseOrderMas PRIMARY KEY (Id), 
+ CONSTRAINT FK_Proc_PurchaseOrderMas FOREIGN KEY (VendorId) REFERENCES Proc_Vendors(Id),
+ CONSTRAINT FK_Proc_PurchaseOrderMas FOREIGN KEY (ProcTenderMasId) REFERENCES Proc_TenderMas(Id)
+)
+
+GO
+
+CREATE TABLE Proc_PurchaseOrderDet(
+ Id           				int  Not Null,
+ ProcPurchaseOrderMasId		int  Not Null,
+ ItemId						int  Not Null,
+ POQty            			decimal(18,2) Not Null,
+ POAmt            			decimal(18,2),
+ CONSTRAINT PK_Proc_PurchaseOrderDet PRIMARY KEY (Id),
+ CONSTRAINT FK_Proc_PurchaseOrderDet1 FOREIGN KEY (ItemId) REFERENCES Proc_Items(Id),
+ CONSTRAINT FK_Proc_PurchaseOrderDet2 FOREIGN KEY (ProcPurchaseOrderMasId) REFERENCES Proc_PurchaseOrderMas(Id)
+ CONSTRAINT UK_Proc_PurchaseOrderDet UNIQUE  (ProcPurchaseOrderMasId,ItemId)
+)
+
+GO
+
+
+
+CREATE TABLE Proc_MaterialEntryMas(
+ Id               int   IDENTITY(1,1) NOT NULL,
+ EDate            Datetime,
+ ProcProjectId		int NOT NULL,
+ CONSTRAINT PK_Proc_MaterialEntryMas PRIMARY KEY  (Id),
+ CONSTRAINT FK_Proc_MaterialEntryMas FOREIGN KEY (ProcProjectId) REFERENCES Proc_Projects(Id)
+)
+
+GO
+
+CREATE TABLE Proc_MaterialEntryDet(
+ Id							int IDENTITY(1,1) NOT NULL,
+ ProcMaterialEntryMasId		int NOT NULL,
+ ProcPurchaseOrderDetId		int NOT NULL,
+ ChallanNo        			nvarchar(50)   Not Null,
+ ChallanDate      			Datetime,
+ EntryQty         			decimal(18,2) Not Null,
+ Status           			bit,-- 1:Receive Complete Receive, 0: Receive Not Complete
+ CONSTRAINT PK_Proc_MaterialEntry PRIMARY KEY (Id),
+ CONSTRAINT FK_Proc_MaterialEntry1 FOREIGN KEY (ProcMaterialEntryMasId) REFERENCES Proc_MaterialEntryMas(Id),
+ CONSTRAINT FK_Proc_MaterialEntry1 FOREIGN KEY (ProcPurchaseOrderDetId) REFERENCES Proc_PurchaseOrderDet(Id),
+)
+
+GO
+
+
+CREATE TABLE Proc_VendorPaymentMas(
+ Id				int IDENTITY(1,1) NOT NULL,
+ VPDate     	Datetime,
+ VendorId      	int  Not Null,
+ Remarks      	nvarchar(50),
+ CONSTRAINT Proc_VendorPaymentMas PRIMARY KEY (Id),
+ CONSTRAINT FK_Proc_VendorPaymentMas FOREIGN KEY (VendorId) REFERENCES Proc_Vendors(Id)
+)
+
+GO
+
+CREATE TABLE Proc_VendorPaymentDet(
+ Id 						int IDENTITY(1,1) NOT NULL,
+ ProcVendorPaymentMasId 	int NOT NULL,
+ ProcMaterialEntryDetId		int NOT NULL,
+ BillNo           			nvarchar(50), 
+ PayAmt           			decimal(18,2) Not Null,
+ Remarks          			nvarchar(50),
+ CONSTRAINT PK_Proc_VendorPaymentDet  PRIMARY KEY (Id),
+ CONSTRAINT FK_Proc_VendorPaymentDet1 FOREIGN KEY (ProcVendorPaymentMasId) REFERENCES Proc_VendorPaymentMas(Id),
+ CONSTRAINT FK_Proc_VendorPaymentDet2 FOREIGN KEY (ProcMaterialEntryDetId) REFERENCES Proc_MaterialEntryDet(Id)
+)
+
+GO

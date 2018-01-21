@@ -1,0 +1,491 @@
+﻿@model DhaliProcurement.ViewModel.DemoVM
+@{
+    ViewBag.Title = "DemoCreate";
+}
+
+<h2>DemoCreate</h2>
+
+
+<div class="row">
+    <div class="col-md-10">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Create New Project Information Costing</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+
+                    <table class="table">
+                        <tr>
+                            <td>Project Name</td>
+                            <td>
+
+                                @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @id = "ProjectId", @class = "form-control select2", @style = "width: 500px !important" })
+                                @Html.ValidationMessage("ProjectId", "", new { @class = "text-danger" })
+
+                            </td>
+                            <td>Project Start Date</td>
+                            <td>
+                                @Html.TextBox("projStartDate", "", new { @class = "form-control", disabled = "true" })
+                                @*@Html.ValidationMessageFor(model => model.Project.StartDate, "", new { @class = "text-danger" })*@
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Site Name</td>
+                            <td>
+
+                                @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @id = "SiteId", @class = "form-control select2", @style = "width: 500px !important" })
+                                @Html.ValidationMessage("SiteId", "", new { @class = "text-danger" })
+
+
+
+
+                            </td>
+                            <td>Project End Date</td>
+                            <td>
+                                @Html.TextBox("projEndDate", "", new { @class = "form-control", disabled = "true" })
+                                @*@Html.ValidationMessageFor(model => model.Project.EndDate, "", new { @class = "text-danger" })*@
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Site Engineer</td>
+                            <td>
+                                @Html.TextBox("SiteEngineer", null, new { @class = "form-control", disabled = "true" })
+                            </td>
+
+
+                        </tr>
+
+                        <tr>
+                            <td>Project Manager</td>
+                            <td>
+
+                                @Html.TextBox("ProjectManager", null, new { @class = "form-control", disabled = "true" })
+
+
+
+                            </td>
+
+                        </tr>
+
+
+
+
+
+                        <tr>
+                            <td>BOQ Date</td>
+                            <td>
+                                @*@Html.TextBoxFor(model => model.BOQDate, new { @class = "form-control datepicker" })
+                                    @Html.ValidationMessageFor(model => model.BOQDate, "", new { @class = "text-danger" })*@
+                                @*@Html.TextBox("BOQDate", "", new { @class = "form-control" })*@
+
+
+
+
+                            </td>
+
+                            <td>BOQ No</td>
+                            <td>
+                                @*@Html.TextBoxFor(model => model.BOQMo, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.BOQMo, "", new { @class = "text-danger" })*@
+                                @*@Html.TextBox("BOQNo", "", new { @class = "form-control" })*@
+
+
+
+
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>NOA Date</td>
+                            <td>
+                                @*@Html.TextBoxFor(model => model.NOADate, new { @class = "form-control datepicker" })
+                                    @Html.ValidationMessageFor(model => model.NOADate, "", new { @class = "text-danger" })*@
+                                @*@Html.TextBox("NOADate", "", new { @class = "form-control" })*@
+
+
+
+
+                            </td>
+
+                            <td>NOA No</td>
+                            <td>
+                                @*@Html.TextBoxFor(model => model.NOANo, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.NOANo, "", new { @class = "text-danger" })*@
+                                @*@Html.TextBox("NOANo", "", new { @class = "form-control" })*@
+
+
+
+
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>Project Type</td>
+                            <td>
+
+                                @*@Html.DropDownList("ProjectTypeId", null, "--Select--", htmlAttributes: new { @class = "form-control select2" })
+                                    @Html.ValidationMessageFor(model => model.ProjectType, "", new { @class = "text-danger" })*@
+
+
+                                @*<select class="form-control select2" id="ProjectTypeId" name="ProjectTypeId">
+                                        <option>--Select--</option>
+                                        <option>Government</option>
+                                        <option>Non-Government</option>
+                                    </select>*@
+                                @*@Html.TextBoxFor(model => model.ProjectType, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ProjectType, "", new { @class = "text-danger" })*@
+
+                                @*@Html.DropDownList("ProjectType", null, "Select", new { @class = "form-control select2" })*@
+                                
+                              
+
+
+
+                            </td>
+                            <td>Status</td>
+                            <td>
+                                @*@Html.TextBoxFor(model => model.Status, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })*@
+
+                                @*@Html.TextBox("Status", "", new { @class = "form-control" })*@
+
+
+
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Remarks</td>
+                            <td>
+                                @*@Html.TextBoxFor(model => model.Remarks, new { @class = "form-control", @id = "Remarks" })
+                                    @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })*@
+                                @*@Html.TextBox("Remarks", "", new { @class = "form-control" })*@
+
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+                    <hr />
+
+                }
+
+                @*<p>
+                        <button type="button" class="btn btn-primary btn-xs add-newRow"><i class="icon-add position-left"></i> Add</button>
+                    </p>*@
+
+                @*<div class="table-responsive">
+                        <table class="table table-xxs table-bordered Task-list" id="TaskTable">
+                            <thead>
+                                <tr class="bg-blue">
+
+                                    <th class="col-lg-1">SL No</th>
+                                    <th class="col-lg-3">Item Name</th>
+                                    <th class="col-lg-2">Quantity</th>
+                                    <th class="col-lg-2">Unit</th>
+                                    <th class="col-lg-1">Costing</th>
+                                    <th class="col-lg-1">Remarks</th>
+                                    <th class="col-lg-2">&nbsp;</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>*@
+
+
+
+
+
+
+                <div class="details well" style=" border 1px solid black;">
+                    <h4>Project Procurement Items</h4>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="font-size: 15px; font-weight: bold;">Item Name</td>
+                            <td style="font-size: 15px; font-weight: bold;">Qty</td>
+                            <td style="font-size: 15px; font-weight: bold;">Unit</td>
+                            <td style="font-size: 15px; font-weight: bold;">Costing</td>
+                            <td style="font-size: 15px; font-weight: bold;">Remarks</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+
+
+
+                            <td>
+
+                                @Html.DropDownList("ItemName", null, "Select item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ItemName", @style = "width: 150px;" })
+                                <span class="error">Item name required</span>
+                            </td>
+                            <td>
+                                <input type="text" id="Qty" class="form-control" />
+                                <span class="error">Valid quantity required</span>
+                            </td>
+                            <td>
+                                @Html.DropDownList("Unit", null, "Select unit", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @style = "width: 150px;" })
+                                <span class="error">Unit required</span>
+                            </td>
+                            <td>
+                                <input type="text" id="Cost" class="form-control" />
+                                <span class="error">Valid rate required</span>
+                            </td>
+                            <td>
+                                <input type="text" id="ItemRemarks" class="form-control" />
+                                <span class="error">Item remarks required</span>
+                            </td>
+                            <td>
+                                <input type="button" id="addNewRow" value="+" class="btn btn-primary" />
+                                <span class="error">required</span>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="Resource-list table table-bordered">
+                        <tr class="bg-purple-300">
+                            <th>Item Name</th>
+                            <th>Qty</th>
+                            <th>Unit</th>
+                            <th>Costing</th>
+                            <th>Remarks</th>
+                            <th></th>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            <button type="button" id="SaveItem" class="btn btn-success"><i class="icon-floppy-disk position-left"></i>  Save</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    var counter = 0; //counter for the serial 
+
+    //add new row 
+    $('#addNewRow').click(function (event) {
+        event.preventDefault();
+        counter++;
+        var ItemId = $('#ItemName option:selected').val();
+        var ItemName = $('#ItemName option:selected').text();
+        var Qty = $('#Qty').val();
+        var Unit = $('#Unit option:selected').val();
+        var Cost = $('#Cost').val();
+        var ItemRemarks = $('#ItemRemarks').val();
+
+        //var newRow = jQuery('<tr><td> <input value="' + ItemId + '" readonly="true" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" readonly="true" type="text" name="ItemName' +
+        //    counter + '"/></td><td><input class="form-control" value="' + Qty + '"  readonly="true" type="text" name="Quantity' +
+        //    counter + '"/></td><td><input class="form-control" value="' + Unit + '"  readonly="true" type="text" name="ItemUnit' +
+        //    counter + '"/></td><td><input class="form-control" value="' + Cost + '"  readonly="true" type="text" name="ItemCost' +
+        //    counter + '"/></td><td><input class="form-control" value="' + ItemRemarks + '"  readonly="true" type="text" name="ItemRemarks' +
+        //    counter + '"/></td> <td> <input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();" /></td></tr>');
+
+
+
+        var newRow = jQuery('<tr><td> <input value="' + ItemId + '" readonly="true" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" readonly="true" type="text" name="ItemName' +
+    counter + '"/></td><td><input class="form-control" value="' + Qty + '"  readonly="true" type="text" name="Quantity' +
+     '"/></td><td><input class="form-control" value="' + Unit + '"  readonly="true" type="text" name="ItemUnit' +
+    '"/></td><td><input class="form-control" value="' + Cost + '"  readonly="true" type="text" name="ItemCost' +
+     '"/></td><td><input class="form-control" value="' + ItemRemarks + '"  readonly="true" type="text" name="ItemRemarks' +
+    '"/></td> <td> <input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();" /></td></tr>');
+
+        jQuery('table.Resource-list').append(newRow);
+    });
+
+
+    $(document).ready(function () {
+        $('#SiteId').attr("disabled", "true");
+    });
+
+    $('#ProjectId').change(function () {
+
+        var id = $('#ProjectId option:selected').val();
+
+        $.ajax({
+            url: "/Demo/GetPId",
+            type: "post",
+            data: {
+                ProjectId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#SiteId').removeAttr("disabled");
+                $('#projStartDate').val(data.start);
+                $('#projEndDate').val(data.end);
+                $('#ProjectManager').val(data.manager);
+                alert('test');
+                var listOfSites = data.Sites.length;
+                alert('s' + listOfSites);
+                var sites = "<select id='sites'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#SiteId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
+
+    $("#SiteId").change(function () {
+        var SiteId = $('#SiteId').val();
+        $.ajax({
+            type: "post",
+            url: "/Demo/GetSiteEngineer",
+            data: { SiteId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#SiteEngineer').val(data.siteEngineer);
+            }
+
+        });
+    });
+
+
+    $('#SaveItem').click(function (e) {
+
+        if ($('#ProjectId option:selected').text() === "--Select--") {
+            alert('Please select Project');
+            $('#ProjectId option:selected').focus();
+
+        }
+        else if ($.trim($('#SiteId').val()) === "") {
+            alert('SiteId required');
+            $('#SiteId').focus();
+        }
+        //else if ($.trim($('#Cost').val()) === "") {
+        //    alert('Cost required');
+        //    $('#Cost').focus();
+        //}
+        else {
+            CreateProjectItem();
+        }
+
+    });
+
+
+    function CreateProjectItem() {
+
+        var Projectid = $('#ProjectId option:selected').val();
+        //alert('pid' + ProjectId);
+        var ProjectSiteId = $('#SiteId option:selected').val();
+        //alert('sid' + ProjectSiteId);
+
+        var ItemId = document.getElementsByName("ItemId");
+        var Qty = document.getElementsByName("Quantity");
+        var Unit = document.getElementsByName("ItemUnit");
+        var Cost = document.getElementsByName("ItemCost");
+        var ItemRemarks = document.getElementsByName("ItemRemarks");
+        var Length = $('.Resource-list tr').length;
+        //alert(Qty);
+        //alert('test');
+
+        var ItemDetails = [];
+
+        for (var i = 0; i < Length - 1; i++) {
+          
+            ItemDetails.push({ ItemISLNO: ItemId[i].value, PQuantity: Qty[i].value, UnitUSLNO: Unit[i].value, PCost: Cost[i].value, Remarks: ItemRemarks[i].value, ProjectId: Projectid, ProjectSiteId: ProjectSiteId });
+            console.log('Item:' + ProjectSiteId[i].value);
+            console.log('<----->');
+        }
+
+        //for (var i = 0; i < Length - 1; i++) {
+        //    console.log('Item:' + ItemDetails[i].ItemISLNO);
+        //    console.log('Qty:' + ItemDetails[i].PQuantity);
+        //    console.log('Unit:' + ItemDetails[i].UnitUSLNO);
+        //    console.log('Cost:' + ItemDetails[i].PCost);
+        //    console.log('Qty:' + ItemDetails[i].Remarks);
+        //    console.log('<----->');
+        //}
+
+        //ResourceDetails = JSON.stringify({ 'ItemDetails': ItemDetails, 'ProjectId': Projectid.value });
+
+        ResourceDetails = JSON.stringify({ ResourceDetails : ItemDetails });
+        //data: '{"ResourceDetails":"' + ItemDetails + '"}',
+        //{ 'ItemDetails': ItemDetails, 'ProjectId': Projectid.value },
+        //debugger
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/Demo/ItemCreate',
+            traditional: true,
+            data: ResourceDetails,
+            success: function (result) {
+                //alert('Successful');
+                if (result.flag) {
+                    //window.location = "/ProjectSites/Index";
+                    alert("Record save successfully!");
+                }
+                else {
+                    alert(result.message);
+                }
+            },
+            failure: function (response) {
+                alert('Error');
+            }
+        });
+
+
+    };
+
+
+
+
+    $('#save').click(function () {
+        var Pid = $('#ProjectId option:selected').val();
+        var sid = $('#SiteId  option:selected').val();
+
+        $.ajax({
+            url: "/Demo/SaveProject",
+            type: "post",
+            data: {
+                ProjectId: Pid,
+                SiteId: sid
+            },
+            dataType: "json",
+            success: function (data) {
+                alert('successful');
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+
+    });
+
+
+
+
+</script>
+
+
