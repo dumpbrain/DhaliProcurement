@@ -308,12 +308,24 @@ namespace DhaliProcurement.Controllers
             }
 
             List<SelectListItem> ReqList = new List<SelectListItem>();
-            var requisition = from requisitionDet in db.Proc_RequisitionDet
+            //var requisition = from requisitionDet in db.Proc_RequisitionDet
+            //                  join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
+            //                  join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
+            //                  join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
+            //                  where requisitionDet.ItemId == itemId && site.Id== siteId
+            //                  select requisitionMas;
+
+            var requisition = (from purchaseMas in db.Proc_PurchaseOrderMas
+                              join purchaseDet in db.Proc_PurchaseOrderDet on purchaseMas.Id equals purchaseDet.Proc_PurchaseOrderMasId
+                              join tenderMas in db.Proc_TenderMas on purchaseMas.Proc_TenderMasId equals tenderMas.Id
+                              join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Id
+                              join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
                               join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
                               join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
                               join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
-                              where requisitionDet.ItemId == itemId && site.Id== siteId
-                              select requisitionMas;
+                              where requisitionDet.ItemId == itemId && site.Id == siteId
+                              select requisitionMas).Distinct();
+
             foreach (var x in requisition)
             {
                 ReqList.Add(new SelectListItem { Text = x.Rcode, Value = x.Rcode.ToString() });

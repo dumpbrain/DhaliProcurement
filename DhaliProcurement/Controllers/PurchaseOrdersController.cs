@@ -362,7 +362,7 @@ namespace DhaliProcurement.Controllers
             var getVendorUnderTender = (from tenderMas in db.Proc_TenderMas
                                         join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
                                         join vendor in db.Vendor on tenderDet.VendorId equals vendor.Id
-                                        where tenderDet.VendorId == vendor.Id && tenderMas.Id == TenderId
+                                        where tenderDet.VendorId == vendor.Id && tenderMas.Id == TenderId && tenderDet.Status == "A"
                                         select vendor).ToList();
 
 
@@ -380,11 +380,70 @@ namespace DhaliProcurement.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult GetTender(int SiteId)
+        {
+            var tenders = (from tenderMas in db.Proc_TenderMas
+                           join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
+                           join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
+                           join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
+                           join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
+                           join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
+                           where site.Id == SiteId
+                           select tenderMas).ToList();
 
+            var result = new
+            {
+                TenderList = tenders
+            };
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetItems(int VendorId)
+        {
+            var items = (  from tenderMas in db.Proc_TenderMas
+                           join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
+                           join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
+                           join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
+                           join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
+                           join procProjectItem in db.ProcProjectItem on procProject.Id equals procProjectItem.ProcProjectId
+                           join item in db.Item on procProjectItem.ItemId equals item.Id
+                           where tenderDet.VendorId == VendorId
+                           select item).Distinct().ToList();
+            List<SelectListItem> itemList = new List<SelectListItem>();
+            foreach (var x in items)
+            {
+                //var itemName = db.Proc_TenderMas.SingleOrDefault(m => m.Id == x.Id);
+                itemList.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() });
+            }
+            var result = new
+            {
+                ItemList = itemList
+            };
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         public JsonResult GetSiteLocation(int SiteId)
         {
+            var tenders = (from tenderMas in db.Proc_TenderMas
+                           join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
+                           join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
+                           join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
+                           join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
+                           join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
+                           where site.Id == SiteId && tenderMas.isApproved=="A"
+                           select tenderMas).Distinct().ToList();
+
+            List<SelectListItem> tenderList = new List<SelectListItem>();
+            foreach (var x in tenders)
+            {
+                //var itemName = db.Proc_TenderMas.SingleOrDefault(m => m.Id == x.Id);
+                tenderList.Add(new SelectListItem { Text = x.TNo, Value = x.Id.ToString() });
+            }
+
+
             var projectSiteLocations = db.ProjectSite.SingleOrDefault(x => x.Id == SiteId);
             var siteAddress = NullHelper.ObjectToString(projectSiteLocations.Location);
 
@@ -393,6 +452,7 @@ namespace DhaliProcurement.Controllers
 
             var result = new
             {
+                TenderList = tenderList,
                 sitesLoc = siteAddress,
                 siteEngineer = siteEngineer
             };
@@ -406,8 +466,25 @@ namespace DhaliProcurement.Controllers
             var vendorContactPerson = db.Vendor.SingleOrDefault(x => x.Id == VendorId);
             var vContactPerson = NullHelper.ObjectToString(vendorContactPerson.ContactPerson);
 
+            var items = (from tenderMas in db.Proc_TenderMas
+                         join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
+                         join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
+                         join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
+                         join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
+                         join procProjectItem in db.ProcProjectItem on procProject.Id equals procProjectItem.ProcProjectId
+                         join item in db.Item on procProjectItem.ItemId equals item.Id
+                         where tenderDet.VendorId == VendorId && requisitionDet.ItemId == item.Id
+                         select item).Distinct().ToList();
+            List<SelectListItem> itemList = new List<SelectListItem>();
+            foreach (var x in items)
+            {
+                //var itemName = db.Proc_TenderMas.SingleOrDefault(m => m.Id == x.Id);
+                itemList.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() });
+            }
+
             var result = new
             {
+                ItemList = itemList,
                 vContactPerson = vContactPerson
             };
             return Json(result, JsonRequestBehavior.AllowGet);

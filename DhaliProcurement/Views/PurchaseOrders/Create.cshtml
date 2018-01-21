@@ -593,11 +593,27 @@
             traditional: true,
             success: function (data) {
                 $('#TenderId').removeAttr("disabled");
+
+                var listOfSites = data.TenderList.length;
+
+                var sites = "<select id='TenderId'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.TenderList[i].Value + '>' + data.TenderList[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#TenderId').html(sites);
+
+
+
                 $('#PurchaseAddress').val(data.sitesLoc);
                 $('#RcvConcenPerson').val(data.siteEngineer);
             }
         });
     });
+
+
+
 
     $("#VendorId").change(function () {
         var VendorId = $('#VendorId').val();
@@ -609,6 +625,17 @@
             traditional: true,
             success: function (data) {
                 $('#VContactPerson').val(data.vContactPerson);
+
+                var listOfSites = data.ItemList.length;
+
+                var sites = "<select id='ItemName'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.ItemList[i].Value + '>' + data.ItemList[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#ItemName').html(sites);
+
             }
         });
     });
