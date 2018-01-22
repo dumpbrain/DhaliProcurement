@@ -384,11 +384,8 @@
         $('#TenderId').attr("disabled", "true");
         $('#VendorId').attr("disabled", "true");
         $('#ItemName').attr("disabled", "true");     
-
         $('#ItemName_Error').hide();
         $('#POQuantity_Error').hide();
-
-
 
     });
 
@@ -455,38 +452,27 @@
         //alert('RcvConcenPerson: ' + RcvConcenPerson);
         var RcvPersonCell = $("#RcvPersonCell").val();
         //alert('RcvPersonCell: ' + RcvPersonCell);
-        var POTotalAmt = $("#totalCost").val();
-
-        debugger;
+        var POTotalAmt = $("#totalCost").val();    
         //===========Detail Form===========
         var ItemId = document.getElementsByName("ItemId");
         var ItemName = document.getElementsByName("ItemName");
-
         //for (var i = 0; i < ItemId.length; i++) {
         //    alert('ItemId '+ItemId[i].value);
         //}
-
         //alert('ItemId ' + ItemId);
         //var ItemName = document.getElementsByName("ItemName");
         var UnitId = document.getElementsByName("UnitId");
-
-
         var UnitName = document.getElementsByName("UnitName");
         //alert('UnitName ' + UnitName);
         var Size = document.getElementsByName("Size");
         //alert('Size ' + Size);
-
         var UnitPrice = document.getElementsByName("UnitPrice");
         //alert('UnitPrice ' + UnitPrice);
-
         var POQuantity = document.getElementsByName("POQuantity");
         //alert('POQuantity ' + POQuantity);
-
         var TotalPrice = document.getElementsByName("TotalPrice");
         //alert('TotalPrice ' + TotalPrice);
-
         var AddedDetItems = [];
-
         var tableCounter = $('#Item-list tr').length - 1;
         //alert('Length: ' + tableCounter);
       //  debugger;
@@ -501,7 +487,6 @@
                 POQuantity: POQuantity[i].value,
                 TotalPrice: TotalPrice[i].value
             });
-
             console.log('---------->');
             console.log('ItemId: ' + AddedDetItems[i].ItemId);
             console.log('ItemName: ' + AddedDetItems[i].ItemName);
@@ -514,7 +499,6 @@
             console.log('---------->');
 
         }
-
         ResourceDetails = JSON.stringify({
             AddedDetItems: AddedDetItems,
             PONo : PONo,
@@ -561,9 +545,7 @@
 
 
     $('#ProjectId').change(function () {
-
         var id = $('#ProjectId option:selected').val();
-
         $.ajax({
             url: "/PurchaseOrders/GetPId",
             type: "post",
@@ -575,7 +557,6 @@
                 $('#SiteId').removeAttr("disabled");
                 $('#ProjectManager').val(data.manager);
                 var listOfSites = data.Sites.length;
-
                 var sites = "<select id='sites'>";
                 sites = sites + '<option value="">--Select--</option>';
                 for (var i = 0; i < listOfSites; i++) {
@@ -583,7 +564,6 @@
                 }
                 sites = sites + '</select>';
                 $('#SiteId').html(sites);
-
             },
             error: function (xhr) {
                 alert('error');
@@ -602,9 +582,7 @@
             traditional: true,
             success: function (data) {
                 $('#TenderId').removeAttr("disabled");
-
                 var listOfSites = data.TenderList.length;
-
                 var sites = "<select id='TenderId'>";
                 sites = sites + '<option value="">--Select--</option>';
                 for (var i = 0; i < listOfSites; i++) {
@@ -612,17 +590,11 @@
                 }
                 sites = sites + '</select>';
                 $('#TenderId').html(sites);
-
-
-
                 $('#PurchaseAddress').val(data.sitesLoc);
                 $('#RcvConcenPerson').val(data.siteEngineer);
             }
         });
     });
-
-
-
 
     $("#VendorId").change(function () {
         var VendorId = $('#VendorId').val();
@@ -635,9 +607,7 @@
             success: function (data) {
                 $('#ItemName').removeAttr("disabled");
                 $('#VContactPerson').val(data.vContactPerson);
-
                 var listOfSites = data.ItemList.length;
-
                 var sites = "<select id='ItemName'>";
                 sites = sites + '<option value="">--Select--</option>';
                 for (var i = 0; i < listOfSites; i++) {
@@ -645,11 +615,9 @@
                 }
                 sites = sites + '</select>';
                 $('#ItemName').html(sites);
-
             }
         });
     });
-
 
     //debugger;
     $("#ItemName").change(function () {
@@ -671,11 +639,8 @@
     });
 
 
-
     $('#TenderId').change(function () {
-
         var id = $('#TenderId option:selected').val();
-
         $.ajax({
             url: "/PurchaseOrders/GetVendorId",
             type: "post",
@@ -685,9 +650,7 @@
             dataType: "json",
             success: function (data) {
                $('#VendorId').removeAttr("disabled");
-
                 var listOfSites = data.Vendors.length;
-
                 var sites = "<select id='sites'>";
                 sites = sites + '<option value="">--Select--</option>';
                 for (var i = 0; i < listOfSites; i++) {
@@ -695,7 +658,6 @@
                 }
                 sites = sites + '</select>';
                 $('#VendorId').html(sites);
-
             },
             error: function (xhr) {
                 alert('error');
@@ -703,17 +665,13 @@
         });
     });
 
-
-
 </script>
 
-
-
 @section Scripts {
-
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Plugins/select2/select2.min.js"></script>
     <script>
+        //22 jan 2017
       $(".select2").select2();
       //$(".datepicker").datepicker();
       $('.datepicker').datepicker({
@@ -722,7 +680,6 @@
           todayBtn: true,
           autoclose: true
       });
-
     </script>
 }
 

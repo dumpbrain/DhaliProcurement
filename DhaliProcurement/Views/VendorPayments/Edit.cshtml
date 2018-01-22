@@ -1,7 +1,7 @@
 ﻿@model DhaliProcurement.ViewModel.VendorPaymentMasterDetail
 @using DhaliProcurement.Helper
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -690,7 +690,9 @@
                 console.log(result);
                 if (result.flag === true) {
                     alert("Record Delete successfully!");
-                    window.location.replace("/VendorPayments/Edit?vPayId="+VendorPayMasId);
+                   // window.location.replace("/VendorPayments/Edit?vPayId="+VendorPayMasId);
+                    window.location.replace("/VendorPayments/Index");
+
                 }
                 else {
                     alert(result.message);

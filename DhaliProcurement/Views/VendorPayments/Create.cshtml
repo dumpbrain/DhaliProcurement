@@ -107,19 +107,20 @@
                                 <td>&nbsp;</td>
                             </tr>
                             <tr>
-                                @*<td><span class="error" id="ProjectId_Error">Required</span></td>
+                                <td><span class="error" id="ProjectId_Error">Required</span></td>
+                                <td><span class="error" id="SiteId_Error">Required</span></td>
+                                <td><span class="error" id="Req_Error">Required</span></td>
+                                <td><span class="error" id="PO_Error">Required</span></td>
+                                <td><span class="error" id="ItemId_Error">Required</span></td>
                                 <td></td>
                                 <td></td>
+                                <td><span class="error" id="Challan_Error">Required</span></td>
                                 <td></td>
                                 <td></td>
+                                <td><span class="error" id="Payment_Error">Required</span></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>*@
-                              
+                                
                             </tr>
                         </table>
                         <br />
@@ -167,8 +168,17 @@
         $("#PONo").attr("disabled", "true");
         $("#ItemName").attr("disabled", "true");
         $("#ChallanNo").attr("disabled", "true");
-        //$('#ItemName_Error').hide();
-        //$('#ReqQty_Error').hide();
+
+        $('#ProjectId_Error').hide();
+        $('#SiteId_Error').hide();
+        $('#Req_Error').hide();
+        $('#PO_Error').hide();
+        $('#ItemId_Error').hide();
+        $('#Challan_Error').hide();
+        $('#Payment_Error').hide();
+      
+
+
 
     });
 
@@ -446,6 +456,7 @@
         counter++;
 
         var isAllValid = true;
+
         var ProjectId = $('#ProjectId option:selected').val();
         var ProjectName = $('#ProjectId option:selected').text();
 
@@ -482,6 +493,62 @@
         var Payment = $('#Payment').val();
         var Remarks = $('#Remarks').val();
      
+      
+
+        if ($('#ProjectId').val().trim() == '') {
+            $('#ProjectId_Error').show();
+            isValidItem = false;          
+        }
+        else {
+            $('#ProjectId_Error').hide();
+        }
+
+        if ($('#SiteId').val().trim() == '') {
+            $('#SiteId_Error').show();
+            isValidItem = false;
+        }
+        else {
+            $('#SiteId_Error').hide();
+        }
+        if ($('#ReqNo').val().trim() == '') {
+            $('#Req_Error').show();
+            isValidItem = false;
+        }
+        else {
+            $('#Req_Error').hide();
+        }
+        if ($('#PONo').val().trim() == '') {
+            $('#PO_Error').show();
+            isValidItem = false;
+        }
+        else {
+            $('#PO_Error').hide();
+        }
+        if ($('#ItemName').val().trim() == '') {
+            $('#ItemId_Error').show();
+            isValidItem = false;
+        }
+        else {
+            $('#ItemId_Error').hide();
+        }
+        if ($('#ChallanNo').val().trim() == '') {
+            $('#Challan_Error').show();
+            isValidItem = false;
+        }
+        else {
+            $('#Challan_Error').hide();
+        }
+        if (!($('#Payment').val().trim() != '' && !isNaN($('#Payment').val().trim()))) {
+            isValidItem = false;
+            $('#Payment_Error').show();
+        }
+        else {
+            $('#Payment_Error').hide();
+        }
+
+
+
+
 
 
         if (isAllValid) {
@@ -500,16 +567,13 @@
                 + '<td><input value="' + Remarks + '" type="hidden" name="Remarks" class="form-control" style="width:50px;"/><label>' + Remarks + '</label></td>'
                 + '<td><button type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded" onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
 
-            jQuery('table.Resource-list').append(newRow);
-
-            
+            jQuery('table.Resource-list').append(newRow);       
             $('#ReqQty').val("");
             $('#UnitId').val("");
             $('#BillNo').val("");
             $('#TotalAmount').val("");
             $('#Payment').val("");
-            $('#Remarks').val("");
-         
+            $('#Remarks').val("");       
             //$('#ReqNo').attr("disabled", true);
             ////$('#ItemName').attr("disabled", true);
         }
@@ -645,3 +709,30 @@
 
 </script>
 
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Plugins/select2/select2.min.js"></script>
+    <script>
+      $(".select2").select2();
+      //$(".datepicker").datepicker();
+      $('.datepicker').datepicker({
+          format: 'dd/mm/yyyy',
+          todayHighlight: true,
+          todayBtn: true,
+          autoclose: true
+      });
+
+    </script>
+}
+
+<style>
+ 
+    span.error {
+        display: block;
+      
+        color: red;
+        font-size: 90%;
+    }
+</style>
