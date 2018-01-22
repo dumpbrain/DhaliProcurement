@@ -17,8 +17,6 @@ namespace DhaliProcurement.Controllers
         private DCPSContext db = new DCPSContext();
         public ActionResult Index(int? ProjectId, int? SiteId)
         {
-
-
             var MarterialsEntry = db.Proc_MaterialEntryMas.ToList();
 
             var procprojects = db.ProcProject.ToList();

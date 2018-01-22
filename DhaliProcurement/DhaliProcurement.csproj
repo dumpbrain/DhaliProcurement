@@ -1569,7 +1569,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3459</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:3655/</IISUrl>
+          <IISUrl>http://localhost:3656/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:3656/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
