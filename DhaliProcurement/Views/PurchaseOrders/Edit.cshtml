@@ -267,6 +267,28 @@
     }, 'input[name=POQuantity]');
 
 
+    $(document).on({
+        'change': function () {
+            var price = $(this).closest('tr').find("td:eq(3) input.UnitPriceNew").val();
+            //var row = $(this).closest('tr');
+
+            //alert('Unit Price :' + price);
+            var quantity = $(this).closest('tr').find("td:eq(4) input.POQuantityNew").val();
+            //alert('quantity :' + quantity);
+            var totalPrice = price * quantity;
+
+            if (isNaN(totalPrice)) {
+                alert('Unit Price must be a numeric value!!')
+                //$('#TQPrice').val("");
+                //$('#TotalPrice').val("");
+            }
+            else {
+                $(this).closest('tr').find("td:eq(5) input.TotalPriceNew").val(totalPrice);
+            }
+        }
+    }, 'input[name=POQuantity]');
+
+
     //edit
 
     //edit end
@@ -324,10 +346,10 @@
             var newRow = jQuery('<tr><td> <input value="' + ItemId + '" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" readonly="true" type="text" name="ItemName"' +
              counter + '"/></td><td><input value="' + UnitId + '" type="hidden" name="UnitId"/><input class="form-control" value="' + UnitName + '" readonly="true" type="text" name="UnitName"/></td>'
               +'<td><input class="form-control" value="' + Size + '" readonly="true" type="text" name="Size"' +
-              '"/></td><td><input class="form-control" value="' + UnitPrice + '"  readonly="true" type="text" name="UnitPrice"/></td>'
-              + '<td><input class="form-control" value="' + POQuantity + '" type="text" name="POQuantity"/></td>'
-              +'<td><input class="form-control" value="' + TotalPrice + '" type="text" readonly="true" name="TotalPrice"/></td>'
-              +'<td><input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();"/></td></tr>');
+              '"/></td><td><input class="form-control UnitPriceNew" value="' + UnitPrice + '"  readonly="true" type="text" name="UnitPrice"/></td>'
+              + '<td><input class="form-control POQuantityNew" value="' + POQuantity + '" type="text" name="POQuantity"/></td>'
+              +'<td><input class="form-control TotalPriceNew" value="' + TotalPrice + '" type="text" readonly="true" name="TotalPrice"/></td>'
+              +'<td><button type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded" onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
 
             jQuery('table.Resource-list').append(newRow);
             totalItemCost();
@@ -423,9 +445,9 @@
                     var newRow = jQuery('<tr><td><input value="' + data[i].ItemId + '" type="hidden" name="ItemId"/> <input class="form-control" value="' + data[i].ItemName + '" readonly="true" type="text" name="ItemName"' +
                     counter + '"/></td><td><input value="' + data[i].UnitId + '" type="hidden" name="UnitId"/><input class="form-control" value="' + data[i].UnitName + '" readonly="true" type="text" name="UnitName"/></td>'
                      +'<td><input class="form-control" value="' + data[i].Size + '" type="text" name="Size" readonly="true"' +
-                     '"/></td><td><input class="form-control" value="' + data[i].UnitPrice + '"  type="text" name="UnitPrice" readonly="true"/></td>'
-                     + '<td><input class="form-control" value="' + data[i].POQuantity + '" type="text" name="POQuantity"/></td>'
-                     +'<td><input class="form-control" value="' + data[i].TotalPrice + '" type="text" readonly="true" name="TotalPrice"/></td>'
+                     '"/></td><td><input class="form-control UnitPriceNew" value="' + data[i].UnitPrice + '"  type="text" name="UnitPrice" readonly="true"/></td>'
+                     + '<td><input class="form-control POQuantityNew" value="' + data[i].POQuantity + '" type="text" name="POQuantity"/></td>'
+                     +'<td><input class="form-control TotalPriceNew" value="' + data[i].TotalPrice + '" type="text" readonly="true" name="TotalPrice"/></td>'
                      +'<td><button onclick="RemoveTask('+data[i].PurchaseOrderDetId+')" type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
 
                     jQuery('table.Resource-list').append(newRow);
@@ -700,7 +722,7 @@
             url: '/PurchaseOrders/DeletePurchaseDetailItem',
             data: TaskDelete,
             success: function (result) {
-                alert('test 2')
+               // alert('test 2')
                 console.log(result);
                 if (result.flag === true) {
                     alert("Record Delete successfully!");

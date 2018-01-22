@@ -320,10 +320,6 @@ namespace DhaliProcurement.Controllers
                                   where procProj.ProjectSite.ProjectId == ProjectId && tenderDet.Status == "A" && tendarMas.Id == tenderDet.Proc_TenderMasId && procProj.ProjectSiteId == projSite.Id
                                   select projSite).ToList();
 
-
-
-
-
             //   var sites = db.ProjectSite.Where(x => x.ProjectId == ProjectId).ToList();
 
 
