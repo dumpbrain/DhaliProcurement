@@ -380,6 +380,7 @@
         $('#SiteId').attr("disabled", "true");
         $('#TenderId').attr("disabled", "true");
         $('#VendorId').attr("disabled", "true");
+        $('#ItemName').attr("disabled", "true");     
 
         $('#ItemName_Error').hide();
         $('#POQuantity_Error').hide();
@@ -625,6 +626,7 @@
             datatype: "json",
             traditional: true,
             success: function (data) {
+                $('#ItemName').removeAttr("disabled");
                 $('#VContactPerson').val(data.vContactPerson);
 
                 var listOfSites = data.ItemList.length;
