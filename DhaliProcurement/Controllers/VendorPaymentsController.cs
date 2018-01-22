@@ -308,10 +308,10 @@ namespace DhaliProcurement.Controllers
             List<SelectListItem> RequisitionList = new List<SelectListItem>();
 
             var itemsReq = (from procProject in db.ProcProject
-                            join procRes in db.Proc_RequisitionMas on procProject.Id equals procRes.ProcProjectId
+                            join RequisitionMas in db.Proc_RequisitionMas on procProject.Id equals RequisitionMas.ProcProjectId
                             join procSite in db.ProjectSite on procProject.ProjectSiteId equals procSite.Id
-                            where procProject.Id == ProjectId && procSite.Id == SiteId
-                            select procRes).ToList();
+                            where procSite.Project.Id == ProjectId && procSite.Id == SiteId && RequisitionMas.Status=="A"
+                            select RequisitionMas).ToList();
 
 
             foreach (var x in itemsReq)
@@ -336,13 +336,12 @@ namespace DhaliProcurement.Controllers
         {
             List<SelectListItem> POList = new List<SelectListItem>();
 
-            var itemsPONo = (
-                             from purMas in db.Proc_PurchaseOrderMas
+            var itemsPONo = (from purMas in db.Proc_PurchaseOrderMas
                              join tenderMas in db.Proc_TenderMas on purMas.Proc_TenderMasId equals tenderMas.Id
                              join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
                              join reqDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals reqDet.Id
                              join reqMas in db.Proc_RequisitionMas on reqDet.Proc_RequisitionMasId equals reqMas.Id
-                             //join vendors in db.Vendor on purMas.VendorId equals vendors.Id
+                             join vendors in db.Vendor on purMas.VendorId equals vendors.Id
                              where reqMas.Id == ReqNo
                              select purMas).Distinct().ToList();
 
