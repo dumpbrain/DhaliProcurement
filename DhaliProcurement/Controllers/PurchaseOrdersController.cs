@@ -316,7 +316,8 @@ namespace DhaliProcurement.Controllers
                                   join procProj in db.ProcProject on procItem.ProcProjectId equals procProj.Id
                                   join projSite in db.ProjectSite on procProj.ProjectSiteId equals projSite.Id
                                   join proj in db.Project on projSite.ProjectId equals proj.Id
-                                  where procProj.ProjectSite.ProjectId == proj.Id && procProj.ProjectSite.ProjectId == ProjectId
+                                //where procProj.ProjectSite.ProjectId == proj.Id && procProj.ProjectSite.ProjectId == ProjectId
+                                  where procProj.ProjectSite.ProjectId == ProjectId && tenderDet.Status == "A" && tendarMas.Id == tenderDet.Proc_TenderMasId && procProj.ProjectSiteId == projSite.Id
                                   select projSite).ToList();
 
 
