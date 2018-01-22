@@ -362,6 +362,41 @@
         });
     });
 
+
+
+
+
+    $("#ChallanNo").change(function () {
+      //  var ItemId = $('#ItemName option:selected').val();
+       var ChallanNo = $('#ChallanNo option:selected').val();
+      //  var ProjectId = $('#ProjectId option:selected').val();
+      //  var SiteId = $('#SiteId option:selected').val();
+
+       
+        $.ajax({
+            type: "post",
+            url: "/VendorPayments/GetTotalAmt",
+            data: { ChallanNo: ChallanNo },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+               // $('#ChallanNo').removeAttr("disabled");
+              //  $('#UnitId').val(data.UnitId);
+              //  $('#UnitName').val(data.UnitName);
+              //  $('#ReqQty').val(data.RemQty);
+               // $('#Proc_MaterialEntryDetId').val(data.Proc_MaterialEntryDetId);
+                $('#TotalAmount').val(data.totalAmt);
+
+              
+
+
+            }
+
+        });
+    });
+
+
+
     //$("#ReqNo").change(function () {
     //    var ItemId = $('#ItemName option:selected').val();
     //    var ProjectId = $('#ProjectId option:selected').val();

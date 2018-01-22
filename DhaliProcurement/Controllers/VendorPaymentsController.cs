@@ -360,6 +360,37 @@ namespace DhaliProcurement.Controllers
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        
+
+        [HttpPost]
+        public JsonResult GetTotalAmt(int ChallanNo)
+        {
+            //List<SelectListItem> itemList = new List<SelectListItem>();
+
+            var getUnitPrice = (from metDet in db.Proc_MaterialEntryDet
+                             join purchaseDet in db.Proc_PurchaseOrderDet on metDet.Proc_PurchaseOrderDetId equals purchaseDet.Id
+                             join purchaseMas in db.Proc_PurchaseOrderMas on purchaseDet.Proc_PurchaseOrderMasId equals purchaseMas.Id
+                             join tenderMas in db.Proc_TenderMas on purchaseMas.Proc_TenderMasId equals tenderMas.Id
+                             join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId                       
+                             where metDet.Id == ChallanNo 
+                             select new { metDet, tenderDet }).FirstOrDefault();
+
+            var qty = getUnitPrice.metDet.EntryQty;
+            var unitPrice = getUnitPrice.tenderDet.TQPrice;
+            var totalAmt = qty * unitPrice;
+
+            
+           
+
+
+            var result = new
+            {
+                totalAmt = totalAmt
+            };
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+
 
 
         [HttpPost]
