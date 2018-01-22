@@ -250,14 +250,14 @@ namespace DhaliProcurement.Controllers
 
             var projects = (from purchaseMas in db.Proc_PurchaseOrderMas
                             join tenderMas in db.Proc_TenderMas on purchaseMas.Proc_TenderMasId equals tenderMas.Id
-                            join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Id
+                            join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
                             join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
                             join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
                             join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
                             join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
                             join project in db.Project on site.ProjectId equals project.Id
                             where purchaseMas.VendorId == VendorId
-                            select project).ToList();
+                            select project).Distinct().ToList();
 
 
 
