@@ -283,7 +283,7 @@ namespace DhaliProcurement.Controllers
                              join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
                              join project in db.Project on site.ProjectId equals project.Id
                              where project.Id == ProjectId
-                             select project).ToList();
+                             select project).Distinct().ToList();
             List<SelectListItem> siteList = new List<SelectListItem>();
             foreach (var i in procsites)
             {
