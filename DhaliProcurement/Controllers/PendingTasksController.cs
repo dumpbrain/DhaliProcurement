@@ -7,8 +7,7 @@ using System.Web.Mvc;
 
 namespace DhaliProcurement.Controllers
 {
-    //[Authorize(Roles ="Management")]
-    [Authorize]
+    [Authorize(Roles = "Management")]
     public class PendingTasksController : Controller
     {
         private DCPSContext db = new DCPSContext();
