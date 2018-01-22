@@ -342,8 +342,11 @@
             jQuery('table.Resource-list').append(newRow);
             totalItemCost();
 
-            //$('#POQuantity').val("");
-            //$('#TotalPrice').val("");
+            $('#POQuantity').val("");
+            $('#TotalPrice').val("");
+            $('#Size').val("");
+            $('#UnitName').val("");
+            $('#UnitPrice').val("");
         }
         //end
     });
@@ -402,6 +405,10 @@
         else if ($.trim($('#PODate').val()) === "") {
             alert('PO Date required!');
             $('#PODate').focus();
+        }
+        else if ($.trim($('#LeadTime').val()) === "" || isNaN($('#LeadTime').val())) {
+            alert('Lead Time required!');
+            $('#LeadTime').focus();
         }
         //else if ($('.Resource-list tr').length < 2) {
         //    alert('Please Add Item to this order');
