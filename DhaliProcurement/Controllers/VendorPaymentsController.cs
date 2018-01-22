@@ -276,18 +276,30 @@ namespace DhaliProcurement.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetSites(int ProjectId)
+        public JsonResult GetSites(int ProjectId,int VendorId)
         {
 
-            var procsites = (from procProject in db.ProcProject
+            //var procsites = (from procProject in db.ProcProject
+            //                 join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
+            //                 join project in db.Project on site.ProjectId equals project.Id
+            //                 where project.Id == ProjectId
+            //                 select project).Distinct().ToList();
+
+            var procsites = (from purchaseMas in db.Proc_PurchaseOrderMas
+                             join tenderMas in db.Proc_TenderMas on purchaseMas.Proc_TenderMasId equals tenderMas.Id
+                             join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
+                             join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
+                             join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
+                             join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
                              join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
                              join project in db.Project on site.ProjectId equals project.Id
-                             where project.Id == ProjectId
-                             select project).Distinct().ToList();
+                             where purchaseMas.VendorId == VendorId && project.Id== ProjectId
+                             select site).Distinct().ToList();
+
             List<SelectListItem> siteList = new List<SelectListItem>();
             foreach (var i in procsites)
             {
-                var site = db.ProjectSite.FirstOrDefault(x => x.ProjectId == i.Id);
+                var site = db.ProjectSite.FirstOrDefault(x => x.Id == i.Id);
                 siteList.Add(new SelectListItem { Text = site.Name, Value = site.Id.ToString() });
 
             }

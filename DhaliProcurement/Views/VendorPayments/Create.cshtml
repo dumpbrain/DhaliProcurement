@@ -205,12 +205,14 @@
 
     $('#ProjectId').change(function () {
         var id = $('#ProjectId option:selected').val();
+        var vendorId = $('#VendorId option:selected').val();
 
         $.ajax({
             url: "/VendorPayments/GetSites",
             type: "post",
             data: {
-                ProjectId: id
+                ProjectId: id,
+                VendorId: vendorId
             },
             dataType: "json",
             success: function (data) {
