@@ -458,7 +458,7 @@ namespace DhaliProcurement.Controllers
             //var tenders = db.Proc_TenderDet.FirstOrDefault(x=>x.);
 
 
-            foreach (var x in challanData)
+            foreach (var x in challanData.Distinct())
             {
 
                 challanList.Add(new SelectListItem { Text = x.metEntry.ChallanNo, Value = x.metEntry.Id.ToString() });
