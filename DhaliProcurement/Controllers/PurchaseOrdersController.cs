@@ -439,7 +439,7 @@ namespace DhaliProcurement.Controllers
             List<SelectListItem> tenderList = new List<SelectListItem>();
             foreach (var x in tenders)
             {
-                //var itemName = db.Proc_TenderMas.SingleOrDefault(m => m.Id == x.Id);
+               
                 tenderList.Add(new SelectListItem { Text = x.TNo, Value = x.Id.ToString() });
             }
 
