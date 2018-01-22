@@ -341,7 +341,7 @@ namespace DhaliProcurement.Controllers
                              join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
                              join reqDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals reqDet.Id
                              join reqMas in db.Proc_RequisitionMas on reqDet.Proc_RequisitionMasId equals reqMas.Id
-                             //join vendors in db.Vendor on purMas.VendorId equals vendors.Id
+                             join vendors in db.Vendor on purMas.VendorId equals vendors.Id
                              where reqMas.Id == ReqNo
                              select purMas).Distinct().ToList();
 
