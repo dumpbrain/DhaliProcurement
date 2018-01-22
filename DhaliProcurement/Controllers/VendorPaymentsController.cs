@@ -68,7 +68,6 @@ namespace DhaliProcurement.Controllers
             ViewBag.ProjectId = new SelectList(projects.Distinct(), "Id", "Name");
             ViewBag.SiteId = new SelectList(sites, "Id", "Name");
 
-
             ViewBag.ItemName = new SelectList(db.Item, "Id", "Name");
             ViewBag.ReqNo = new SelectList(db.Proc_RequisitionMas, "Id", "RCode");
             //ViewBag.VendorId = new SelectList(db.Vendor, "Id", "Name");
@@ -80,10 +79,17 @@ namespace DhaliProcurement.Controllers
         }
 
 
-        public ActionResult Edit(int vPayId)
+        public ActionResult Edit(int? vPayId)
         {
-            ViewBag.VendorPayPrimaryKey = db.Proc_VendorPaymentDet.Max(x => x.Id);
-            ViewBag.vPayId = vPayId;
+            try
+            {
+                ViewBag.VendorPayPrimaryKey = db.Proc_VendorPaymentDet.Max(x => x.Id);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            ViewBag.VPayId = vPayId;
             VendorPaymentMasterDetail vm = new VendorPaymentMasterDetail();
             var proc_vPaymentMasLists = db.Proc_VendorPaymentMas.FirstOrDefault(x => x.Id == vPayId);
             vm.proc_vPaymentMas = proc_vPaymentMasLists;
@@ -820,6 +826,54 @@ namespace DhaliProcurement.Controllers
             }
 
         }
+
+
+
+
+        public ActionResult DeleteVendorPaymentDetails(int Proc_VendorPaymentDetId)
+        {
+            var flag = false;
+            var result = new
+            {
+                flag = false,
+                message = "Delete error !"
+            };
+
+            // Proc_PurchaseOrderDet data = db.Proc_PurchaseOrderDet.Find(PurchaseOrderDetId);
+            var checkVendorPaymentDet = db.Proc_VendorPaymentDet.Where(x => x.Id == Proc_VendorPaymentDetId).FirstOrDefault();
+
+            if (checkVendorPaymentDet != null)
+            {
+                var data = db.Proc_VendorPaymentDet.Where(x => x.Id == Proc_VendorPaymentDetId).FirstOrDefault();
+                db.Proc_VendorPaymentDet.Remove(data);
+                flag = db.SaveChanges() > 0;
+
+                if (flag == true)
+                {
+                    result = new
+                    {
+                        flag = true,
+                        message = "Delete Successful Successful!"
+                    };
+                }
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+
+            else
+            {
+                result = new
+                {
+                    flag = false,
+                    message = "Delete Failed!"
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
+
+
 
     }
 }
