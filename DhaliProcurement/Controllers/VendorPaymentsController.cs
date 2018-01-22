@@ -447,7 +447,7 @@ namespace DhaliProcurement.Controllers
                         join units in db.Unit on procProjectItem.UnitId equals units.Id
                         join procReqDet in db.Proc_RequisitionDet on procProjectItem.ItemId equals procReqDet.ItemId
                         join procReqMas in db.Proc_RequisitionMas on procReqDet.Proc_RequisitionMasId equals procReqMas.Id
-                        where procProjectItem.ItemId == itemId && procProjectItem.ProcProjectId == projectId && procProjectItem.ProcProject.ProjectSiteId == siteId
+                        where procProjectItem.ItemId == itemId  && procProjectItem.ProcProject.ProjectSiteId == siteId
                         select new { units, procReqDet }).FirstOrDefault();
 
 
@@ -476,7 +476,7 @@ namespace DhaliProcurement.Controllers
                                join reqMas in db.Proc_RequisitionMas on reqDet.Proc_RequisitionMasId equals reqMas.Id
                                join procProj in db.ProcProject on reqMas.ProcProjectId equals procProj.Id
                                join projSite in db.ProjectSite on procProj.ProjectSiteId equals projSite.Id
-                               where reqDet.ItemId == itemId && procProj.Id == projectId && procProj.ProjectSiteId == siteId
+                               where reqDet.ItemId == itemId  && procProj.ProjectSiteId == siteId
                                select new { metEntry }).Distinct().FirstOrDefault();
 
             //if (totalRequired == null)
