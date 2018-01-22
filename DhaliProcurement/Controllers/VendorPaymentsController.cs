@@ -363,9 +363,8 @@ namespace DhaliProcurement.Controllers
 
         [HttpPost]
         public JsonResult GetTotalAmt(int ChallanNo)
-        {
-            //List<SelectListItem> itemList = new List<SelectListItem>();
-
+        {         
+            //total amount in vendor payments create view
             var getUnitPrice = (from metDet in db.Proc_MaterialEntryDet
                              join purchaseDet in db.Proc_PurchaseOrderDet on metDet.Proc_PurchaseOrderDetId equals purchaseDet.Id
                              join purchaseMas in db.Proc_PurchaseOrderMas on purchaseDet.Proc_PurchaseOrderMasId equals purchaseMas.Id
@@ -377,11 +376,7 @@ namespace DhaliProcurement.Controllers
             var qty = getUnitPrice.metDet.EntryQty;
             var unitPrice = getUnitPrice.tenderDet.TQPrice;
             var totalAmt = qty * unitPrice;
-
-            
-           
-
-
+                          
             var result = new
             {
                 totalAmt = totalAmt
