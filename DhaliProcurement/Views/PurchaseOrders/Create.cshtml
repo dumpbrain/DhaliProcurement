@@ -342,7 +342,7 @@
             jQuery('table.Resource-list').append(newRow);
             totalItemCost();
 
-            $('#POQuantity').val("");
+           // $('#POQuantity').val("");
             $('#TotalPrice').val("");
             $('#Size').val("");
             $('#UnitName').val("");
@@ -475,7 +475,7 @@
         var AddedDetItems = [];
         var tableCounter = $('#Item-list tr').length - 1;
         //alert('Length: ' + tableCounter);
-      //  debugger;
+     //  debugger;
         for (var i = 0; i < tableCounter-1; i++) {
             AddedDetItems.push({
                 ItemId: ItemId[i].value,
