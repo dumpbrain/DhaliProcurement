@@ -1,7 +1,7 @@
 ﻿@model DhaliProcurement.ViewModel.VendorPaymentMasterDetail
 @using DhaliProcurement.Helper
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -163,7 +163,7 @@
     var counter = 0;
     var VendorPayPrimaryKey=0;
     $(document).ready(function () {
-       
+
         $('#SiteId').attr("disabled", "true");
         //$("#ItemName").attr("disabled", "true");
         $("#ReqNo").attr("disabled", "true");
@@ -180,16 +180,16 @@
 
 
         VendorPayPrimaryKey= @ViewBag.VendorPayPrimaryKey;
-      //  alert('VendorPayPrimaryKey '+VendorPayPrimaryKey);
+        //  alert('VendorPayPrimaryKey '+VendorPayPrimaryKey);
 
         //debugger;
 
         ResourceDetails = JSON.stringify({
             vPayId: vPayId,
-           // ProcProjId: ProcProjId,
-          //  ProcProjSiteId: ProcProjSiteId
-             
-        });      
+            // ProcProjId: ProcProjId,
+            //  ProcProjSiteId: ProcProjSiteId
+
+        });
 
         $.ajax({
             contentType: 'application/json; charset=utf-8',
@@ -212,9 +212,9 @@
                     //console.log("BillNo "+data.List[i].BillNo);
                     //console.log("Payment "+data.List[i].Payment);
                     //console.log("Remarks "+ data.List[i].Remarks);
-                    data.List[i].Proc_VendorPaymentDetId
-                    console.log("VP "+data.List[i].Proc_VendorPaymentDetId);
-                  
+                    // data.List[i].Proc_VendorPaymentDetId
+                    //console.log("VP "+data.List[i].Proc_VendorPaymentDetId);
+
                     var newRow = jQuery('<tr>'
                           + '<td><input value="' + data.List[i].ProjectId + '" type="hidden" name="ProjectId" class="form-control" style="width:50px;"/><label>' + data.List[i].ProjectName + '</label></td>'
                           + '<td><input value="' + data.List[i].SiteId + '" type="hidden" name="SiteId" class="form-control" style="width:50px;"/><label>' + data.List[i].SiteName + '</label></td>'
@@ -228,11 +228,15 @@
                           + '<td><input value="' + data.List[i].Qty + '" type="hidden" name="TotalAmount" class="form-control" style="width:50px;"/><label>' + data.List[i].Qty + '</label></td>'
                           + '<td><input value="' + data.List[i].Payment + '" type="hidden" class="form-control" style="width:50px;"/><input class="form-control" value="' +data.List[i].Payment+ '" type="text" name="Payment"/></td>'
                           + '<td><input value="' + data.List[i].Remarks + '" type="hidden" class="form-control" style="width:50px;"/><input class="form-control" value="' +data.List[i].Remarks+ '" type="text" name="Remarks"/></td>'
-                          + '<td> <input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();" /></td></tr>');
+                          + '<td><button onclick="RemoveTask('+data.List[i].Proc_VendorPaymentDetId+')" type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
                     jQuery('table.Resource-list').append(newRow);
+
+
+
+
                 }
 
-              //  alert('vp2');
+                //  alert('vp2');
 
                 //totalItemCost();
 
@@ -456,24 +460,24 @@
         var ProjectName = $('#ProjectId option:selected').text();
 
         VendorPayPrimaryKey++;
-      //  alert('VendorPayPrimaryKey++ '+VendorPayPrimaryKey);
-      //  alert('ProjectID: ' + ProjectId);
+        //  alert('VendorPayPrimaryKey++ '+VendorPayPrimaryKey);
+        //  alert('ProjectID: ' + ProjectId);
 
 
         var SiteId = $('#SiteId option:selected').val();
         var SiteName = $('#SiteId option:selected').text();
 
-    //    alert('SiteId: ' + SiteId);
+        //    alert('SiteId: ' + SiteId);
 
         var ReqNo = $('#ReqNo option:selected').val();
         var ReqNoName = $('#ReqNo option:selected').text();
 
-    //    alert('ReqNo: ' + ReqNo);
+        //    alert('ReqNo: ' + ReqNo);
 
         var PONo = $('#PONo option:selected').val();
         var PONoName = $('#PONo option:selected').text();
 
-    //    alert('PONo: ' + PONo);
+        //    alert('PONo: ' + PONo);
 
         var ItemId = $('#ItemName option:selected').val();
         var ItemName = $('#ItemName option:selected').text();
@@ -481,8 +485,8 @@
         var ReqQty = $('#ReqQty').val();
         var UnitName = $('#UnitName').val();
         var UnitId = $('#UnitId').val();
-    //    alert('UnitId '+UnitId);
-     //   alert('UnitName '+UnitName);
+        //    alert('UnitId '+UnitId);
+        //   alert('UnitName '+UnitName);
         var ChallanNo = $('#ChallanNo option:selected').val();
         var ChallanNoName = $('#ChallanNo option:selected').text();
 
@@ -491,7 +495,7 @@
         var Payment = $('#Payment').val();
         var Remarks = $('#Remarks').val();
         var Proc_MaterialEntryDetId= $('#Proc_MaterialEntryDetId').val();
-     //   alert('Proc_MaterialEntryDetId '+Proc_MaterialEntryDetId);
+        //   alert('Proc_MaterialEntryDetId '+Proc_MaterialEntryDetId);
 
         if (isAllValid) {
             var newRow = jQuery('<tr>'
@@ -507,7 +511,7 @@
                 + '<td><input value="' + TotalAmount + '" type="hidden" name="TotalAmount" class="form-control" style="width:50px;"/><label>' + TotalAmount + '</label></td>'
                 + '<td><input value="' + Payment + '" type="hidden" name="Payment" class="form-control" style="width:50px;"/><label>' + Payment + '</label></td>'
                 + '<td><input value="' + Remarks + '" type="hidden" name="Remarks" class="form-control" style="width:50px;"/><label>' + Remarks + '</label></td>'
-                + '<td> <input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();" /></td></tr>');
+                + '<td><button type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded" onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
 
             jQuery('table.Resource-list').append(newRow);
 
@@ -555,7 +559,7 @@
         var VendorMasId = $('#VendorMasId').val();
         var VendorId= $('#VendorId').val();
         var PayDate = $('#PayDate').val();
-     //   alert('VendorId '+VendorId);
+        //   alert('VendorId '+VendorId);
         //===========Detail Form===========
 
         var Proc_MaterialEntryDetId = $('#Proc_MaterialEntryDetId').val();
@@ -571,17 +575,17 @@
         var BillNo = document.getElementsByName("BillNo");
         var Payment = document.getElementsByName("Payment");
         var Remarks = document.getElementsByName("Remarks");
-        
-       
+
+
         var Proc_VendorPaymentDetId=document.getElementsByName("Proc_VendorPaymentDetId");
         var Proc_MaterialEntryDetId=document.getElementsByName("Proc_MaterialEntryDetId");
-     
+
         var PaymentItems = [];
         //alert($('#RequisitionDetails tr').length - 1)
 
         var tableCounter = $('#PaymentDetails tr').length - 1;
         //alert('Length: ' + tableCounter);
-       // debugger;
+        // debugger;
         for (var i = 0; i < tableCounter; i++) {
             PaymentItems.push({
                 ProjectId: ProjectId[i].value,
@@ -658,6 +662,52 @@
             }
         });
     }
+
+
+
+
+
+
+    function RemoveTask(Proc_VendorPaymentDetId){
+
+        var VendorPayMasId = @ViewBag.VPayId;
+        alert('VendorPayMasId '+VendorPayMasId);
+        // alert('test');
+        //  var PurchaseMasId = PurMasId;
+        TaskDelete = JSON.stringify({
+            Proc_VendorPaymentDetId: Proc_VendorPaymentDetId,
+            // PurchaseMasId:PurchaseMasId
+        });
+
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/VendorPayments/DeleteVendorPaymentDetails',
+            data: TaskDelete,
+            success: function (result) {
+                // alert('test 2')
+                console.log(result);
+                if (result.flag === true) {
+                    alert("Record Delete successfully!");
+                   // window.location.replace("/VendorPayments/Edit?vPayId="+VendorPayMasId);
+                    window.location.replace("/VendorPayments/Index");
+
+                }
+                else {
+                    alert(result.message);
+                }
+
+            },
+            failure: function (response) {
+                alert('error');
+            }
+        });
+    }
+
+
+
+
 
 
 </script>
