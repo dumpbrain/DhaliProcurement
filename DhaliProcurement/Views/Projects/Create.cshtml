@@ -294,7 +294,7 @@
 
     //add new row
     $('#addNewRow').click(function (event) {
-       // debugger;
+        // debugger;
         event.preventDefault();
 
 
@@ -305,10 +305,10 @@
         //alert('SiteLocation' + SiteLocation);
 
         var SiteEngineer = $('#SiteRName option:selected').text();
-       // alert('SiteEngineer' + SiteEngineer);
+        // alert('SiteEngineer' + SiteEngineer);
 
         var SiteEngineerId = $('#SiteRName option:selected').val();
-       // alert('SiteEngineerId' + SiteEngineerId);
+        // alert('SiteEngineerId' + SiteEngineerId);
 
         //new
         var isValidSite = true;
@@ -339,6 +339,16 @@
         else {
             $('#SiteEngineer_Error').hide();
         }
+
+        $('table.Resource-list tr').each(function(){
+            var name = $(this).find("td input[name=SiteName]").val();
+            //alert(name);
+            if (SiteName == name) {
+                alert('This Site is already exists!');
+                isValidSite = false;
+            }
+ 
+         });
 
         //Add site to list if valid
         if (isValidSite) {

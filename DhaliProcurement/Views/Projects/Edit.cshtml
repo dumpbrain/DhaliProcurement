@@ -381,6 +381,16 @@
             $('#SiteEngineer_Error').hide();
         }
 
+        $('table.Resource-list tr').each(function(){
+            var name = $(this).find("td input[name=SiteName]").val();
+            //alert(name);
+            if (SiteName == name) {
+                alert('This Site is already exists!');
+                isValidSite = false;
+            }
+ 
+        });
+
         //Add site to list if valid
         if (isValidSite)
         {
@@ -396,7 +406,8 @@
 
         }
 
-      
+        $('#SiteName').val("");
+        $('#SiteLocation').val("");
         //end
     });
 
