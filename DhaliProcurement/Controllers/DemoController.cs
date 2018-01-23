@@ -9,8 +9,10 @@ using System.Web.Mvc;
 
 namespace DhaliProcurement.Controllers
 {
+    [Authorize]
     public class DemoController : Controller
     {
+
         private DCPSContext db = new DCPSContext();
 
         // GET: Demo

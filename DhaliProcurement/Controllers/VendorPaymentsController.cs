@@ -9,6 +9,7 @@ using System.Data.Entity;
 
 namespace DhaliProcurement.Controllers
 {
+    [Authorize]
     public class VendorPaymentsController : Controller
     {
 
