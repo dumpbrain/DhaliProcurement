@@ -44,7 +44,10 @@ namespace DhaliProcurement.Controllers
 
         public ActionResult Create()
         {
+
             var vendors = (from purchaseMas in db.Proc_PurchaseOrderMas
+                           join purchaseDet in db.Proc_PurchaseOrderDet on purchaseMas.Id equals purchaseDet.Proc_PurchaseOrderMasId
+                           join entryDet in db.Proc_MaterialEntryDet on purchaseDet.Id equals entryDet.Proc_PurchaseOrderDetId
                            join vendor in db.Vendor on purchaseMas.VendorId equals vendor.Id
                            select vendor).Distinct();
             ViewBag.VendorId = new SelectList(vendors, "Id", "Name");
@@ -135,10 +138,29 @@ namespace DhaliProcurement.Controllers
                                        //where vPayMas.Id == vPayId
                                        select new { procProj }).FirstOrDefault();
 
+            List<SelectListItem> ProjectList = new List<SelectListItem>();
+            var vendorIdforProject = db.Proc_VendorPaymentMas.SingleOrDefault(x => x.Id == vPayId).VendorId;
+            var VendorProjects = (from purchaseMas in db.Proc_PurchaseOrderMas
+                            join tenderMas in db.Proc_TenderMas on purchaseMas.Proc_TenderMasId equals tenderMas.Id
+                            join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
+                            join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
+                            join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
+                            join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
+                            join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
+                            join project in db.Project on site.ProjectId equals project.Id
+                            where purchaseMas.VendorId == vendorIdforProject
+                            select project).Distinct().ToList();
 
-            //ViewBag.ProjectId = new SelectList(projects.Distinct(), "Id", "Name", findingPIdAndSiteId.procProj.Id);
-            //ViewBag.SiteId = new SelectList(sites, "Id", "Name", findingPIdAndSiteId.procProj.ProjectSiteId);
-            ViewBag.ProjectId = new SelectList(projects.Distinct(), "Id", "Name");
+
+            foreach (var x in VendorProjects)
+            {
+
+                ProjectList.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() });
+            }
+            ViewBag.ProjectId = ProjectList.Distinct();
+            //ViewBag.ProjectId = new SelectList(ProjectList.Distinct(), "Id", "Name");
+
+            //ViewBag.ProjectId = new SelectList(projects.Distinct(), "Id", "Name");
             ViewBag.SiteId = new SelectList(sites, "Id", "Name");
 
             ViewBag.ProcProjId = findingPIdAndSiteId.procProj.Id;
