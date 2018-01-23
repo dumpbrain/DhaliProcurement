@@ -186,11 +186,11 @@
 
                             </td>
                             <td>
-                                <input type="text" id="POQuantity" name="POQuantity" class="form-control" />
+                                <input type="text" id="POQuantity1" name="POQuantity1" class="form-control" />
 
                             </td>
                             <td>
-                                <input type="text" id="TotalPrice" class="form-control" disabled="disabled" />
+                                <input type="text" id="TotalPrice1" class="form-control" disabled="disabled" />
 
                             </td>
                             <td>
@@ -253,12 +253,12 @@
         'change': function () {
             var price = $('#UnitPrice').val();
             //alert('Unit Price :' + price);
-            var quantity = $('#POQuantity').val();
+            var quantity = $('#POQuantity1').val();
             var totalPrice = price * quantity;
             //alert('ttl'+totalPrice);
-            $('#TotalPrice').val(totalPrice);
+            $('#TotalPrice1').val(totalPrice);
         }
-    }, 'input[name=POQuantity]');
+    }, 'input[name=POQuantity1]');
 
 
     $(document).on({
@@ -303,9 +303,9 @@
 
         var UnitPrice = $('#UnitPrice').val();
         //alert('UnitPrice ' + UnitPrice);
-        var POQuantity = $('#POQuantity').val();
+        var POQuantity = $('#POQuantity1').val();
         //alert('POQuantity ' + POQuantity);
-        var TotalPrice = $('#TotalPrice').val();
+        var TotalPrice = $('#TotalPrice1').val();
         //alert('TotalPrice ' + TotalPrice);
         //new
         var isValidItem = true;
@@ -319,7 +319,7 @@
             $('#ItemName_Error').hide();
         }
 
-        if (!($('#POQuantity').val().trim() != '' && !isNaN($('#POQuantity').val().trim()))) {
+        if (!($('#POQuantity1').val().trim() != '' && !isNaN($('#POQuantity1').val().trim()))) {
             isValidItem = false;
             $('#POQuantity_Error').show();
         }
@@ -337,17 +337,23 @@
               + '<td><input class="form-control UnitPriceNew" value="' + UnitPrice + '"  type="text" name="UnitPrice"/></td>'
               + '<td><input class="form-control POQuantityNew" value="' + POQuantity + '" type="text" name="POQuantity"/></td>'
               + '<td><input class="form-control TotalPriceNew" value="' + TotalPrice + '" type="text" readonly="true" name="TotalPrice"/></td>'
-              + '<td><input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();"/></td></tr>');
+              + '<td><button class="btn  text-warning-600 btn-flat btn-icon btn-rounded"  onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
 
             jQuery('table.Resource-list').append(newRow);
             totalItemCost();
 
            // $('#POQuantity').val("");
-            $('#TotalPrice').val("");
-            $('#Size').val("");
-            $('#UnitName').val("");
-            $('#UnitPrice').val("");
+            //$('#TotalPrice').val("");
+            //$('#Size').val("");
+            //$('#UnitName').val("");
+            //$('#UnitPrice').val("");
         }
+
+        $('#TotalPrice1').val("");
+        $('#Size').val("");
+        $('#UnitName').val("");
+        $('#UnitPrice').val("");
+        $('#POQuantity1').val("");
         //end
     });
 

@@ -191,11 +191,11 @@
 
                             </td>
                             <td>
-                                <input type="text" id="POQuantity" name="POQuantity" class="form-control" />
+                                <input type="text" id="POQuantity1" name="POQuantity1" class="form-control" />
 
                             </td>
                             <td>
-                                <input type="text" id="TotalPrice" class="form-control" disabled="disabled" />
+                                <input type="text" id="TotalPrice1" class="form-control" disabled="disabled" />
 
                             </td>
                             <td>
@@ -259,12 +259,12 @@
         'change': function () {
             var price = $('#UnitPrice').val();
             //alert('Unit Price :' + price);
-            var quantity = $('#POQuantity').val();
+            var quantity = $('#POQuantity1').val();
             var totalPrice = price * quantity;
             //alert('ttl'+totalPrice);
-            $('#TotalPrice').val(totalPrice);
+            $('#TotalPrice1').val(totalPrice);
         }
-    }, 'input[name=POQuantity]');
+    }, 'input[name=POQuantity1]');
 
 
     $(document).on({
@@ -316,9 +316,9 @@
 
         var UnitPrice = $('#UnitPrice').val();
       //  alert('UnitPrice ' + UnitPrice);
-        var POQuantity = $('#POQuantity').val();
+        var POQuantity = $('#POQuantity1').val();
       //  alert('POQuantity ' + POQuantity);
-        var TotalPrice = $('#TotalPrice').val();
+        var TotalPrice = $('#TotalPrice1').val();
      //   alert('TotalPrice ' + TotalPrice);
         //new
         var isValidItem = true;
@@ -332,7 +332,7 @@
             $('#ItemName_Error').hide();
         }
 
-        if (!($('#POQuantity').val().trim() != '' && !isNaN($('#POQuantity').val().trim()))) {
+        if (!($('#POQuantity1').val().trim() != '' && !isNaN($('#POQuantity1').val().trim()))) {
             isValidItem = false;
             $('#POQuantity_Error').show();
         }

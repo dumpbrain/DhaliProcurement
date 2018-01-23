@@ -180,19 +180,28 @@ namespace DhaliProcurement.Controllers
             ViewBag.TenderId = new SelectList(db.Proc_TenderMas.Where(x => x.Id == tenderMasId), "Id", "TNo", vendorAndTenderId.Proc_TenderMasId);
 
 
-            try
-            {
+
                 ViewBag.PurchaseAddress = purchaseItemDet.ProcProject.ProjectSite.Location;
 
-            }
-            catch (Exception ex)
+            var items = (from tenderMas in db.Proc_TenderMas
+                         join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
+                         join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
+                         join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
+                         join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
+                         join procProjectItem in db.ProcProjectItem on procProject.Id equals procProjectItem.ProcProjectId
+                         join item in db.Item on procProjectItem.ItemId equals item.Id
+                         where tenderDet.VendorId == vendorAndTenderId.VendorId && requisitionDet.ItemId == item.Id
+                         select item).Distinct().ToList();
+
+            List<SelectListItem> itemList = new List<SelectListItem>();
+            foreach (var x in items)
             {
-
+                //var itemName = db.Proc_TenderMas.SingleOrDefault(m => m.Id == x.Id);
+                itemList.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() });
             }
 
-            //  ViewBag.PurchaseAddress = purchaseItemDet.ProcProject.ProjectSite.Location;
-
-            ViewBag.ItemName = new SelectList(db.Item, "Id", "Name");
+            //ViewBag.ItemName = new SelectList(db.Item, "Id", "Name");
+            ViewBag.ItemName = itemList.Distinct();
             ViewBag.UnitName = new SelectList(db.Unit, "Id", "Name");
 
             var puchaseOrders = db.Proc_PurchaseOrderMas.FirstOrDefault(x => x.Id == purchaseOrderId);

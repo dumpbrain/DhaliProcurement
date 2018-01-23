@@ -234,6 +234,8 @@
                 sites = sites + '</select>';
                 $('#SiteId').html(sites);
 
+                RebindDatePicker();
+
             },
             error: function (xhr) {
                 alert('error');
