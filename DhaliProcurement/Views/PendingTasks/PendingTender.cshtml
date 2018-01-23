@@ -5,6 +5,7 @@
     ViewBag.Title = "PendingTender";
     Layout = "~/Views/Shared/_Layout.cshtml";
     //AuditReport.Models.EPARSDbContext db = new AuditReport.Models.EPARSDbContext();
+    var counter = 0;
 }
 
 
@@ -29,7 +30,8 @@
                <table class="table table-xxs table-bordered">
                    <tr class="bg-grey">
                        <th>
-                           <input type="checkbox" id="myCheckAll">
+                           @*<input type="checkbox" id="myCheckAll">*@
+                           <label>SL. No.</label>
                        </th>
                        <th>Tender No.</th>
                        <th>Tender Date</th>
@@ -40,10 +42,12 @@
 
                    @foreach (var item in Model)
                 {
+                       counter++;
                        <tr>
                            <td>
                                @*<input type="checkbox" class="cbCheck" name="TaskId" id="TaskId" value="@item.PlanId" />*@
                                @*<input type="hidden" name="PlanId" value="@item.PlanId" />*@
+                               <label>@counter</label>
                                <input type="hidden" name="StatDate" value="@DhaliProcurement.Helper.NullHelper.DateToString(item.TDate)" />
                            </td>
                            <td>@Html.ActionLink(item.TNo, "Edit", "TenderQuotation", new { TenderId = item.Id }, new { }) @*@item.TNo*@</td>
@@ -53,7 +57,7 @@
                            <td><span class="label label-danger">Pending</span></td>
                            @*<td>@Html.ActionLink("View Status", "ProjectSitePlanTaskInfoExisting", "ProjectSitePlanTasks", new { PId = item.PlanId, SiteStatusDate = item.StatusDate.ToString("MM/dd/yyyy") }, new { @class = "label label-info" })</td>*@
                            <td>
-                               <button type="button" onclick="AuthorizeStatus(@item.Id,'@DhaliProcurement.Helper.NullHelper.DateToString(item.TDate)')" class="btn btn-success btn-ladda btn-ladda-spinner btn-xs" data-spinner-color="#333" data-style="zoom-in"><span class="ladda-label">Approve</span></button>
+                               @*<button type="button" onclick="AuthorizeStatus(@item.Id,'@DhaliProcurement.Helper.NullHelper.DateToString(item.TDate)')" class="btn btn-success btn-ladda btn-ladda-spinner btn-xs" data-spinner-color="#333" data-style="zoom-in"><span class="ladda-label">Approve</span></button>*@
                            </td>
                        </tr>
                    }
