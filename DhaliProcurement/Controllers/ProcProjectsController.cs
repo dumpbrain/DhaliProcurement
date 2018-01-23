@@ -49,14 +49,14 @@ namespace DhaliProcurement.Controllers
             //return View();
         }
 
-        
+
         public ActionResult Create()
         {
             ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name");
             ViewBag.SiteId = new SelectList(db.ProjectSite, "Id", "Name");
 
-           // ViewBag.PrManId = new SelectList(db.CompanyResource, "Id", "Name");
-           // ViewBag.StEngId = new SelectList(db.CompanyResource, "Id", "Name");
+            // ViewBag.PrManId = new SelectList(db.CompanyResource, "Id", "Name");
+            // ViewBag.StEngId = new SelectList(db.CompanyResource, "Id", "Name");
 
             ViewBag.ItemName = new SelectList(db.Item, "Id", "Name");
             ViewBag.Unit = new SelectList(db.Unit, "Id", "Name");
@@ -500,7 +500,10 @@ namespace DhaliProcurement.Controllers
             ViewBag.NOADate = NullHelper.DateToString(procProjects.NOADate);
             ViewBag.BOQNo = NullHelper.ObjectToString(procProjects.BOQNo);
             ViewBag.NOANo = NullHelper.ObjectToString(procProjects.NOANo);
-            ViewBag.PType = NullHelper.ObjectToString(procProjects.ProjectType);
+            //ViewBag.PType = NullHelper.ObjectToString(procProjects.ProjectType);
+            var projectType = new SelectList(new List<SelectListItem> { new SelectListItem { Text = "Government", Value = "Government" },
+                new SelectListItem { Text = "Non-Government", Value = "Non-Government" }, }, "Value", "Text", procProjects.ProjectType);
+            ViewBag.ProjectType = projectType;
             ViewBag.PStatus = NullHelper.ObjectToString(procProjects.Status);
             ViewBag.PRemarks = NullHelper.ObjectToString(procProjects.Remarks);
 
@@ -599,10 +602,10 @@ namespace DhaliProcurement.Controllers
         {
 
             var ProcProjectCount = (from procProjectmas in db.ProcProject
-                                   //join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
-                               join requisitionMas in db.Proc_RequisitionMas on procProjectmas.Id equals requisitionMas.ProcProjectId
-                               where procProjectmas.Id == procProjectId
-                                select procProjectmas).Distinct().Count();
+                                        //join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
+                                    join requisitionMas in db.Proc_RequisitionMas on procProjectmas.Id equals requisitionMas.ProcProjectId
+                                    where procProjectmas.Id == procProjectId
+                                    select procProjectmas).Distinct().Count();
 
 
             if (ProcProjectCount == 0)
@@ -610,18 +613,18 @@ namespace DhaliProcurement.Controllers
                 bool flag = false;
                 try
                 {
-                var itemsToDeleteTask = db.ProcProjectItem.Where(x => x.ProcProjectId == procProjectId);
-                db.ProcProjectItem.RemoveRange(itemsToDeleteTask);
-                db.SaveChanges();
+                    var itemsToDeleteTask = db.ProcProjectItem.Where(x => x.ProcProjectId == procProjectId);
+                    db.ProcProjectItem.RemoveRange(itemsToDeleteTask);
+                    db.SaveChanges();
 
-                var itemsToDeletePlan = db.ProcProject.Where(x => x.Id == procProjectId);
-                db.ProcProject.RemoveRange(itemsToDeletePlan);
+                    var itemsToDeletePlan = db.ProcProject.Where(x => x.Id == procProjectId);
+                    db.ProcProject.RemoveRange(itemsToDeletePlan);
 
-                //var procProjectDelete = db.ProcProject.Where(x => x.Id == Pid);
-                //db.ProcProject.RemoveRange(procProjectDelete);
+                    //var procProjectDelete = db.ProcProject.Where(x => x.Id == Pid);
+                    //db.ProcProject.RemoveRange(procProjectDelete);
 
 
-                flag = db.SaveChanges() > 0;
+                    flag = db.SaveChanges() > 0;
 
                 }
                 catch (Exception ex)
