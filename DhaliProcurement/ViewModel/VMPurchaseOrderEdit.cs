@@ -19,4 +19,18 @@ namespace DhaliProcurement.ViewModel
         public int PurchaseOrderDetId { get; set; }
         //public int TenderMasId { get; set; }
     }
+
+    public class VMUpdatePO
+    {
+        public int ItemId { get; set; }
+        public string ItemName { get; set; }
+        public decimal UnitPrice { get; set; }
+        public int UnitId { get; set; }
+        public string UnitName { get; set; }
+        public decimal POQuantity { get; set; }
+        public decimal TotalPrice { get; set; }
+        public string Size { get; set; }
+        public int ProcPurchaseMasterId { get; set; }
+    }
+
 }

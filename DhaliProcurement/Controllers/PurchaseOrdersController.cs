@@ -710,7 +710,7 @@ namespace DhaliProcurement.Controllers
 
 
 
-        public JsonResult PurchaseUpdate(IEnumerable<VMPurchaseOrderEdit> AddedDetItems, int ProcPurchaseMasterId, int ProcPurchaseDetId, string PONo, DateTime PODate, int VendorId, int TenderId, string VendorAttention, string AttnManager, string AttnCell, string Email, string Subject, int LeadTime, string Content, string RcvConcernPerson, string RcvConcernPersonCell, decimal POTotalAmt)
+        public JsonResult PurchaseUpdate(IEnumerable<VMUpdatePO> AddedDetItems, int ProcPurchaseMasterId, string PONo, DateTime PODate, int VendorId, int TenderId, string VendorAttention, string AttnManager, string AttnCell, string Email, string Subject, int LeadTime, string Content, string RcvConcernPerson, string RcvConcernPersonCell, decimal POTotalAmt)
         {
             var result = new
             {
