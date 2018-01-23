@@ -333,8 +333,8 @@
             var newRow = jQuery('<tr>'
               + '<td> <input value="' + ItemId + '" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" readonly="true" type="text" name="ItemName"' + counter + '"/></td>'
               + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><input class="form-control" value="' + UnitName + '" readonly="true" type="text" name="UnitName"/></td>'
-              + '<td><input class="form-control" value="' + Size + '" type="text" name="Size"/></td>'
-              + '<td><input class="form-control UnitPriceNew" value="' + UnitPrice + '"  type="text" name="UnitPrice"/></td>'
+              + '<td><input class="form-control" value="' + Size + '" type="text" name="Size" disabled="disabled"/></td>'
+              + '<td><input class="form-control UnitPriceNew" value="' + UnitPrice + '"  type="text" name="UnitPrice" disabled="disabled"/></td>'
               + '<td><input class="form-control POQuantityNew" value="' + POQuantity + '" type="text" name="POQuantity"/></td>'
               + '<td><input class="form-control TotalPriceNew" value="' + TotalPrice + '" type="text" readonly="true" name="TotalPrice"/></td>'
               + '<td><button class="btn  text-warning-600 btn-flat btn-icon btn-rounded"  onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
