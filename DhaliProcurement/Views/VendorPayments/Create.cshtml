@@ -494,17 +494,17 @@
                 + '<td><input value="' + ReqQty + '" type="hidden" name="ReqQty" class="form-control" style="width:50px;"/><label>' + ReqQty + '</label></td>'
                 + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>' + UnitName + '</label></td>'
                 + '<td><input value="' + ChallanNo + '" type="hidden" name="ChallanNo" class="form-control" style="width:50px;"/><label>' + ChallanNoName + '</label></td>'
-                + '<td><input value="' + BillNo + '" type="hidden" name="BillNo" class="form-control" style="width:50px;"/><label>' + BillNo + '</label></td>'
+                + '<td><input value="' + BillNo + '" type="text" name="BillNo" class="form-control" style="width:50px;"/></td>'
                 + '<td><input value="' + TotalAmount + '" type="hidden" name="TotalAmount" class="form-control" style="width:50px;"/><label>' + TotalAmount + '</label></td>'
-                + '<td><input value="' + Payment + '" type="hidden" name="Payment" class="form-control" style="width:50px;"/><label>' + Payment + '</label></td>'
-                + '<td><input value="' + Remarks + '" type="hidden" name="Remarks" class="form-control" style="width:50px;"/><label>' + Remarks + '</label></td>'
-                + '<td> <input type="button" class="btn btn-danger btn-xs" value="Delete" onclick="$(this).parent().parent().remove();" /></td></tr>');
+                + '<td><input value="' + Payment + '" type="text" name="Payment" class="form-control" style="width:80px;"/></td>'
+                + '<td><input value="' + Remarks + '" type="text" name="Remarks" class="form-control" style="width:80px;"/></td>'
+                + '<td><button class="btn  text-warning-600 btn-flat btn-icon btn-rounded"  onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
 
             jQuery('table.Resource-list').append(newRow);
 
             
             $('#ReqQty').val("");
-            $('#UnitId').val("");
+            //$('#UnitId').val("");
             $('#BillNo').val("");
             $('#TotalAmount').val("");
             $('#Payment').val("");

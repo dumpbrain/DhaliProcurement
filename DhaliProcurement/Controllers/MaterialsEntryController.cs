@@ -410,8 +410,10 @@ namespace DhaliProcurement.Controllers
                           join tenderDet in db.Proc_TenderDet on requisitionDet.Id equals tenderDet.Proc_RequisitionDetId
                           join tenderMas in db.Proc_TenderMas on tenderDet.Proc_TenderMasId equals tenderMas.Id
                           join purchaseMas in db.Proc_PurchaseOrderMas on tenderMas.Id equals purchaseMas.Proc_TenderMasId
-                          where requisitionMas.Rcode == ReqNo && requisitionDet.ItemId == itemId
-                          select purchaseMas).Distinct().ToList();
+                          join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
+                          join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
+                      where requisitionMas.Rcode == ReqNo && requisitionDet.ItemId == itemId && site.Id == siteId
+                      select purchaseMas).Distinct().ToList();
 
             var totalMaterial = (from total in db.ProcProjectItem
                                  join procProject in db.ProcProject on total.ProcProjectId equals procProject.Id

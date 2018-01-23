@@ -104,7 +104,7 @@
                                 <td>
                                     @*@Html.TextBox("PONo", null, new {@class = "form-control", @id = "PONo" })*@
                                     @*<input type="text" class="form-control" value="" id="PONo" />*@
-                                    @Html.DropDownList("PONo", null, "Select item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "PONo", @style = "width: 100px;" })
+                                    @Html.DropDownList("PONo", null, "Select item", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "PONo1", @style = "width: 100px;" })
 
                                 </td>
                                 <td>
@@ -205,7 +205,8 @@
             //$('#SiteId').attr("disabled", "true");
             //$("#RCode").attr("disabled", "true");
             //$("#ItemName").attr("disabled", "true");
-
+            $("#ReqNo").attr("disabled", "true");
+            $("#PONo1").attr("disabled", "true");
             //$(".datepicker").datepicker({
             //    dateFormat: 'dd/mm/yy',
             //    autoclose: true,
@@ -443,11 +444,11 @@
                     $('#UnitPrice').val(data.UnitPrice);
                     var previousRemaining = data.TotalMaterial - data.RemainingQty;
                     $('#PreviousQty').val(previousRemaining);
-                    $('#PONo').removeAttr("disabled");
+                    $('#PONo1').removeAttr("disabled");
                     //alert('test');
                     var listOfitems = data.POs.length;
                     //alert(listOfitems);
-                    var items = "<select id='PONo'>";
+                    var items = "<select id='PONo1'>";
                     items = items + '<option value="">--Select--</option>';
 
                     for (var i = 0; i < listOfitems; i++) {
@@ -455,7 +456,7 @@
                     }
 
                     items = items + '</select>';
-                    $('#PONo').html(items);
+                    $('#PONo1').html(items);
 
 
                 }            
@@ -463,12 +464,12 @@
             });
         })
 
-        $("#PONo").change(function () {
+        $("#PONo1").change(function () {
             var ItemId = $('#ItemName option:selected').val();
             var ProjectId = $('#ProjectId').val();
             var SiteId = $('#SiteId').val();
             var ReqNo = $('#ReqNo option:selected').val();
-            var PONo = $('#PONo option:selected').val();
+            var PONo = $('#PONo1 option:selected').val();
 
             if (ProjectId == "" && SiteId == "") {
                 alert('Please Select Project Id and Site Id');
@@ -543,7 +544,8 @@
 
             var RCode = $('#ReqNo option:selected').val();
             //alert('Requisition: ' + RCode);
-            var PONo = $('#PONo').val();
+            var PONo = $('#PONo1 option:selected').val();
+            alert('PO NO:'+PONo);
             var VendorId = $('#VendorId').val();
             //alert('Vendor Id: ' + VendorId);
             var VendorName = $('#VendorName').val();
@@ -625,7 +627,7 @@
                 //$('#SiteId').val("");
                 $('#ReqNo').val("");
                 $('#ItemName').val("");
-                $('#PONo').val("");
+                //$('#PONo1').val("");
                 $('#UnitName').val("");
                 $('#VendorName').val("");
                 $('#TotalMaterial').val("");
