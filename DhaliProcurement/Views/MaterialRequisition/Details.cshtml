@@ -100,7 +100,7 @@
                                     <th>Size</th>
                                     <th>Required Date</th>
                                     <th>Remarks</th>
-                                    <th>&nbsp;</th>
+                                    @*<th>&nbsp;</th>*@
                                 </tr>
                                 @foreach (var item in Model.requisitionDetail)
                                 {
@@ -157,7 +157,6 @@
                                             }
                                             <input type="text" value="@remaining" class="form-control" name="RemainingBalance" disabled="disabled" style="width:90px;" />
                                         </td>
-                                        <td></td>
                                         <td>
                                             <label>@item.CStockQty</label>
                                             @*<input type="text" value="@item.CStockQty" class="form-control" name="CStockQty" />*@

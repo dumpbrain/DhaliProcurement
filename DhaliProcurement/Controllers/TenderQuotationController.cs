@@ -106,10 +106,8 @@ namespace DhaliProcurement.Controllers
             //ViewBag.SiteId = new SelectList(db.ProjectSite, "Id", "Name");
             var requisitionProjects = (from requisitionMas in db.Proc_RequisitionMas
                                        join procproject in db.ProcProject on requisitionMas.ProcProjectId equals procproject.Id
-                                       //join site in db.ProjectSite on procproject.ProjectSiteId equals site.Id
-                                       //join project in db.Project on site.ProjectId equals project.Id
-                                       where requisitionMas.ProcProjectId == procproject.Id
-                                       select procproject).Distinct().ToList();
+                                       where requisitionMas.ProcProjectId == procproject.Id && requisitionMas.Status == "A"
+                                       select procproject).ToList();
 
             List<ProjectSite> sites = new List<ProjectSite>();
 
@@ -174,7 +172,7 @@ namespace DhaliProcurement.Controllers
                                        join site in db.ProjectSite on procproject.ProjectSiteId equals site.Id
                                        join project in db.Project on site.ProjectId equals project.Id
                                        //where requisitionMas.ProcProjectId == procproject.Id
-                                       where project.Id == ProjectId
+                                       where project.Id == ProjectId && requisitionMas.Status=="A"
                                        select site).Distinct().ToList();
 
             List<SelectListItem> siteList = new List<SelectListItem>();
@@ -268,7 +266,8 @@ namespace DhaliProcurement.Controllers
                 flag = true,
                 UnitName = unit.Name,
                 UnitId = unit.Id,
-                Qty = items.ReqQty
+                Qty = items.ReqQty,
+                Proc_RequisitionDetId = items.Id
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -455,7 +454,7 @@ namespace DhaliProcurement.Controllers
                                   join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
                                   join procProjectItem in db.ProcProjectItem on procProject.Id equals procProjectItem.ProcProjectId
                                   join items in db.Item on procProjectItem.ItemId equals items.Id
-                                  where tenderDet.Proc_TenderMasId == TenderId
+                                  where tenderDet.Proc_TenderMasId == TenderId &&  requisitionDet.Id == i.Proc_RequisitionDetId && items.Id == requisitionDet.ItemId
                                   select items).FirstOrDefault();
                     vm.ItemId = ItemId.Id;
                     vm.ItemName = ItemId.Name;

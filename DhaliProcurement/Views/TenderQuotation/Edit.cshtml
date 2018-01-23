@@ -456,7 +456,7 @@
                 success: function (data) {
                     //$('#SiteEngineer').val(data.siteEngineer);
                     $('#ItemName').removeAttr("disabled");
-                    $('#Proc_RequisitionDetId').val(data.Proc_RequisitionDetId);
+                    //$('#Proc_RequisitionDetId').val(data.Proc_RequisitionDetId);
                     //alert('Requisition ID' + data.Proc_RequisitionDetId);
                     //alert($('#Proc_RequisitionDetId').val());
                     var listOfitems = data.Items.length;
@@ -475,8 +475,11 @@
         });
 
         $("#ItemName").change(function () {
+            //alert('Test');
             var ItemId = $('#ItemName option:selected').val();
+            //alert('ItemId'+ItemId);
             var Rcode = $('#RCode  option:selected').val();
+      
             $.ajax({
                 type: "post",
                 url: "/TenderQuotation/GetUnit",
@@ -487,6 +490,10 @@
                     $('#UnitId').val(data.UnitId);
                     $('#UnitName').val(data.UnitName);
                     $('#Qty').val(data.Qty);
+
+                    //alert('data.Proc_RequisitionDetId'+ data.Proc_RequisitionDetId);
+                    $('#Proc_RequisitionDetId').val(data.Proc_RequisitionDetId);
+                    //alert('data.Proc_RequisitionDetId after'+$('#Proc_RequisitionDetId').val());
                 }
 
             });

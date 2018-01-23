@@ -377,8 +377,9 @@ namespace DhaliProcurement.Controllers
             ViewBag.ItemName = new SelectList(db.Item, "ISLNO", "ItemName");
             ViewBag.Unit = new SelectList(db.Unit, "USLNO", "UnitName");
 
-            var projectTypeStatus = new SelectList(new List<SelectListItem> { new SelectListItem { Text = "Government", Value = "Government" }, new SelectListItem { Text = "Non-Government", Value = "Non-Government" }, }, "Value", "Text");
-            ViewBag.ProjectType = projectTypeStatus;
+            //var projectTypeStatus = new SelectList(new List<SelectListItem> { new SelectListItem { Text = "Government", Value = "Government" }, new SelectListItem { Text = "Non-Government", Value = "Non-Government" }, }, "Value", "Text");
+            //ViewBag.ProjectType = projectTypeStatus;
+
 
             //ViewBag.PrManId = new SelectList(db.CompanyResource, "Id", "Name");
             //ViewBag.StEngId = new SelectList(db.CompanyResource, "Id", "Name");
@@ -406,10 +407,11 @@ namespace DhaliProcurement.Controllers
 
             ViewBag.ProcProjectIdDetailsForm = procProjectId.ProjectSite.Project.Name;
 
-
-
-
             var procProjects = db.ProcProject.SingleOrDefault(x => x.Id == projectId && x.ProjectSiteId == siteId);
+
+            var projectType = new SelectList(new List<SelectListItem> { new SelectListItem { Text = "Government", Value = "Government" },
+                new SelectListItem { Text = "Non-Government", Value = "Non-Government" }, }, "Value", "Text", procProjects.ProjectType);
+            ViewBag.ProjectType = projectType;
             ViewBag.BOQDate = NullHelper.DateToString(procProjects.BOQDate);
             ViewBag.NOADate = NullHelper.DateToString(procProjects.NOADate);
             ViewBag.BOQNo = NullHelper.ObjectToString(procProjects.BOQNo);

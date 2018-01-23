@@ -236,6 +236,7 @@ CREATE TABLE Proc_TenderMas(
  TDate            Datetime,
  Specs            nvarchar(100),
  Remarks          nvarchar(100),
+ isApproved       nvarchar(1) NOT NULL,
  CONSTRAINT PK_Proc_TenderMas PRIMARY KEY (Id)
 )
 
