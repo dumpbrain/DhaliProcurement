@@ -491,7 +491,7 @@ namespace DhaliProcurement.Controllers
                 result = new
                 {
                     flag = false,
-                    message = "Delete failed!"
+                    message = "Delete failed!This site has been used!"
                 };
             }
 
