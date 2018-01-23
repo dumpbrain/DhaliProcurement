@@ -24,7 +24,7 @@ namespace DhaliProcurement.Models
         [StringLength(100)]
         public string HSCode { get; set; }
 
-        [Display(Name = "Item Descending")]
+        [Display(Name = "Item Description")]
         [StringLength(100)]
         public string ItemDesc { get; set; }
 

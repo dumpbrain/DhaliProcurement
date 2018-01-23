@@ -15,8 +15,8 @@ namespace DhaliProcurement.ViewModel
         public decimal POQuantity { get; set; }
         public decimal TotalPrice { get; set; }
         public string Size { get; set; }
-        public int PurchaseOrderMasId { get; set; }
+        public int ProcPurchaseMasterId { get; set; }
         public int PurchaseOrderDetId { get; set; }
-        public int TenderMasId { get; set; }
+        //public int TenderMasId { get; set; }
     }
 }
