@@ -105,22 +105,24 @@
                                     <input type="button" id="addNewRow" value="+" class="btn btn-primary" style = "background-color: grey;border: none;"/>
                                 </td>
                                 <td>&nbsp;</td>
-                            </tr>
+                            </tr>                    
                             <tr>
-                                @*<td><span class="error" id="ProjectId_Error">Required</span></td>
+                                <td><span class="error" id="ProjectId_Error">Required</span></td>
+                                <td><span class="error" id="SiteId_Error">Required</span></td>
+                                <td><span class="error" id="Req_Error">Required</span></td>
+                                <td><span class="error" id="PO_Error">Required</span></td>
+                                <td><span class="error" id="ItemId_Error">Required</span></td>
                                 <td></td>
                                 <td></td>
+                                <td><span class="error" id="Challan_Error">Required</span></td>
                                 <td></td>
                                 <td></td>
+                                <td><span class="error" id="Payment_Error">Required</span></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>*@
-                              
+
                             </tr>
+
                         </table>
                         <br />
                         <div class="table-responsive scrolling">
@@ -170,6 +172,14 @@
         //$('#ItemName_Error').hide();
         //$('#ReqQty_Error').hide();
 
+        $('#ProjectId_Error').hide();
+        $('#SiteId_Error').hide();
+        $('#Req_Error').hide();
+        $('#PO_Error').hide();
+        $('#ItemId_Error').hide();
+        $('#Challan_Error').hide();
+        $('#Payment_Error').hide();
+
     });
 
     $('#VendorId').change(function () {
@@ -207,31 +217,37 @@
         var id = $('#ProjectId option:selected').val();
         var vendorId = $('#VendorId option:selected').val();
 
-        $.ajax({
-            url: "/VendorPayments/GetSites",
-            type: "post",
-            data: {
-                ProjectId: id,
-                VendorId: vendorId
-            },
-            dataType: "json",
-            success: function (data) {
-                $('#SiteId').removeAttr("disabled");
-                var listOfSites = data.Sites.length;
+        if (vendorId == "" || vendorId == null) {
+            alert('Please select Party!!');
+        }
+        else {
+            $.ajax({
+                url: "/VendorPayments/GetSites",
+                type: "post",
+                data: {
+                    ProjectId: id,
+                    VendorId: vendorId
+                },
+                dataType: "json",
+                success: function (data) {
+                    $('#SiteId').removeAttr("disabled");
+                    var listOfSites = data.Sites.length;
 
-                var sites = "<select id='sites'>";
-                sites = sites + '<option value="">--Select--</option>';
-                for (var i = 0; i < listOfSites; i++) {
-                    sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                    var sites = "<select id='sites'>";
+                    sites = sites + '<option value="">--Select--</option>';
+                    for (var i = 0; i < listOfSites; i++) {
+                        sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                    }
+                    sites = sites + '</select>';
+                    $('#SiteId').html(sites);
+
+                },
+                error: function (xhr) {
+                    alert('error');
                 }
-                sites = sites + '</select>';
-                $('#SiteId').html(sites);
-
-            },
-            error: function (xhr) {
-                alert('error');
-            }
-        });
+            });
+        }
+       
     });
 
 
@@ -484,6 +500,59 @@
      
 
 
+        if ($('#ProjectId').val().trim() == '') {
+            $('#ProjectId_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ProjectId_Error').hide();
+        }
+
+        if ($('#SiteId').val().trim() == '') {
+            $('#SiteId_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#SiteId_Error').hide();
+        }
+        if ($('#ReqNo').val().trim() == '') {
+            $('#Req_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#Req_Error').hide();
+        }
+        if ($('#PONo').val().trim() == '') {
+            $('#PO_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#PO_Error').hide();
+        }
+        if ($('#ItemName').val().trim() == '') {
+            $('#ItemId_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ItemId_Error').hide();
+        }
+        if ($('#ChallanNo').val().trim() == '') {
+            $('#Challan_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#Challan_Error').hide();
+        }
+        if (!($('#Payment').val().trim() != '' && !isNaN($('#Payment').val().trim()))) {
+            isAllValid = false;
+            $('#Payment_Error').show();
+        }
+        else {
+            $('#Payment_Error').hide();
+        }
+
+
+
         if (isAllValid) {
             var newRow = jQuery('<tr>'
                 + '<td><input value="' + ProjectId + '" type="hidden" name="ProjectId" class="form-control" style="width:50px;"/><label>' + ProjectName + '</label></td>'
@@ -645,3 +714,10 @@
 
 </script>
 
+<style>
+    span.error {
+        display: block;
+        color: red;
+        font-size: 90%;
+    }
+</style>

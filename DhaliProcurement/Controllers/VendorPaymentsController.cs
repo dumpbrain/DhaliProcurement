@@ -79,16 +79,11 @@ namespace DhaliProcurement.Controllers
         }
 
 
-        public ActionResult Edit(int? vPayId)
+        public ActionResult Edit(int vPayId)
         {
-            try
-            {
-                ViewBag.VendorPayPrimaryKey = db.Proc_VendorPaymentDet.Max(x => x.Id);
-            }
-            catch (Exception ex)
-            {
 
-            }
+            ViewBag.VendorPayPrimaryKey = db.Proc_VendorPaymentDet.Max(x => x.Id);
+
             ViewBag.VPayId = vPayId;
             VendorPaymentMasterDetail vm = new VendorPaymentMasterDetail();
             var proc_vPaymentMasLists = db.Proc_VendorPaymentMas.FirstOrDefault(x => x.Id == vPayId);
@@ -121,27 +116,40 @@ namespace DhaliProcurement.Controllers
 
 
 
-            var findingPIdAndSiteId = (from vPaydet in db.Proc_VendorPaymentDet
-                                       join vPayMas in db.Proc_VendorPaymentMas on vPaydet.Proc_VendorPaymentMasId equals vPayMas.Id
-                                       join metEntryDet in db.Proc_MaterialEntryDet on vPaydet.Proc_MaterialEntryDetId equals metEntryDet.Id
+            //var findingPIdAndSiteId = (from vPaydet in db.Proc_VendorPaymentDet
+            //                           join vPayMas in db.Proc_VendorPaymentMas on vPaydet.Proc_VendorPaymentMasId equals vPayMas.Id
+            //                           join metEntryDet in db.Proc_MaterialEntryDet on vPaydet.Proc_MaterialEntryDetId equals metEntryDet.Id
+            //                           join purDet in db.Proc_PurchaseOrderDet on metEntryDet.Proc_PurchaseOrderDetId equals purDet.Id
+            //                           join procItem in db.ProcProjectItem on purDet.ItemId equals procItem.ItemId
+            //                           join procProj in db.ProcProject on procItem.ProcProjectId equals procProj.Id
+            //                           join projSite in db.ProjectSite on procProj.ProjectSiteId equals projSite.Id
+            //                           where vPayMas.Id == vPayId
+            //                           select new { procProj, vPayMas }).FirstOrDefault();
+
+            var findingPIdAndSiteId = (from metEntryDet in db.Proc_MaterialEntryDet
                                        join purDet in db.Proc_PurchaseOrderDet on metEntryDet.Proc_PurchaseOrderDetId equals purDet.Id
                                        join procItem in db.ProcProjectItem on purDet.ItemId equals procItem.ItemId
                                        join procProj in db.ProcProject on procItem.ProcProjectId equals procProj.Id
                                        join projSite in db.ProjectSite on procProj.ProjectSiteId equals projSite.Id
-                                       where vPayMas.Id == vPayId
-                                       select new { procProj, vPayMas }).FirstOrDefault();
+                                       //where vPayMas.Id == vPayId
+                                       select new { procProj }).FirstOrDefault();
 
 
-            ViewBag.ProjectId = new SelectList(projects.Distinct(), "Id", "Name", findingPIdAndSiteId.procProj.Id);
-            ViewBag.SiteId = new SelectList(sites, "Id", "Name", findingPIdAndSiteId.procProj.ProjectSiteId);
-
+            //ViewBag.ProjectId = new SelectList(projects.Distinct(), "Id", "Name", findingPIdAndSiteId.procProj.Id);
+            //ViewBag.SiteId = new SelectList(sites, "Id", "Name", findingPIdAndSiteId.procProj.ProjectSiteId);
+            ViewBag.ProjectId = new SelectList(projects.Distinct(), "Id", "Name");
+            ViewBag.SiteId = new SelectList(sites, "Id", "Name");
 
             ViewBag.ProcProjId = findingPIdAndSiteId.procProj.Id;
             ViewBag.ProcProjSiteId = findingPIdAndSiteId.procProj.ProjectSiteId;
 
             ViewBag.ItemName = new SelectList(db.Item, "Id", "Name");
             ViewBag.ReqNo = new SelectList(db.Proc_RequisitionMas, "Id", "RCode");
-            ViewBag.VendorId = new SelectList(db.Vendor, "Id", "Name", findingPIdAndSiteId.vPayMas.VendorId);
+            ViewBag.VendorId = new SelectList(db.Vendor, "Id", "Name");
+            var vendors = (from purchaseMas in db.Proc_PurchaseOrderMas
+                           join vendor in db.Vendor on purchaseMas.VendorId equals vendor.Id
+                           select vendor).Distinct();
+            ViewBag.VendorId = new SelectList(vendors, "Id", "Name",db.Proc_VendorPaymentMas.SingleOrDefault(x=>x.Id== vPayId).VendorId);
             ViewBag.ChallanNo = new SelectList(db.Proc_MaterialEntryDet, "Id", "ChallanNo");
             ViewBag.PONo = new SelectList(db.Proc_PurchaseOrderMas, "Id", "PONo");
 
@@ -196,16 +204,18 @@ namespace DhaliProcurement.Controllers
                                        select new { procProj, vPayMas }).FirstOrDefault();
 
 
-            ViewBag.ProjectId = new SelectList(projects.Distinct(), "Id", "Name", findingPIdAndSiteId.procProj.Id);
-            ViewBag.SiteId = new SelectList(sites, "Id", "Name", findingPIdAndSiteId.procProj.ProjectSiteId);
+            ViewBag.ProjectId = new SelectList(projects.Distinct(), "Id", "Name");
+            ViewBag.SiteId = new SelectList(sites, "Id", "Name");
 
 
-            ViewBag.ProcProjId = findingPIdAndSiteId.procProj.Id;
-            ViewBag.ProcProjSiteId = findingPIdAndSiteId.procProj.ProjectSiteId;
-
+            //ViewBag.ProcProjId = findingPIdAndSiteId.procProj.Id;
+            //ViewBag.ProcProjSiteId = findingPIdAndSiteId.procProj.ProjectSiteId;
+            var vendors = (from purchaseMas in db.Proc_PurchaseOrderMas
+                           join vendor in db.Vendor on purchaseMas.VendorId equals vendor.Id
+                           select vendor).Distinct();
+            ViewBag.VendorId = new SelectList(vendors, "Id", "Name", db.Proc_VendorPaymentMas.SingleOrDefault(x => x.Id == vPayId).VendorId);
             ViewBag.ItemName = new SelectList(db.Item, "Id", "Name");
             ViewBag.ReqNo = new SelectList(db.Proc_RequisitionMas, "Id", "RCode");
-            ViewBag.VendorId = new SelectList(db.Vendor, "Id", "Name", findingPIdAndSiteId.vPayMas.VendorId);
             ViewBag.ChallanNo = new SelectList(db.Proc_MaterialEntryDet, "Id", "ChallanNo");
             ViewBag.PONo = new SelectList(db.Proc_PurchaseOrderMas, "Id", "PONo");
 
@@ -755,7 +765,15 @@ namespace DhaliProcurement.Controllers
                     vm.UnitName = dataUnits.units.Name;
                     vm.BillNo = i.BillNo;
                     vm.Payment = i.PayAmt;
-                    vm.Remarks = i.Remarks;
+                    if (i.Remarks==null || i.Remarks == "")
+                    {
+                        vm.Remarks = "";
+                    }
+                    else
+                    {
+                        vm.Remarks = i.Remarks;
+                    }
+
                     vm.PONo = requisitionId.purMas.PONo;
                     vm.ChallanNo = requisitionId.metEntryDet.ChallanNo;
 

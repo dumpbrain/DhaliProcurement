@@ -79,21 +79,17 @@
     var counter = 0;
     $(document).ready(function () {
 
-        $('#SiteId').attr("disabled", "true");
+        //$('#SiteId').attr("disabled", "true");
         //$("#ItemName").attr("disabled", "true");
-        $("#ReqNo").attr("disabled", "true");
-        $("#PONo").attr("disabled", "true");
-        $("#ItemName").attr("disabled", "true");
-        $("#ChallanNo").attr("disabled", "true");
+        //$("#ReqNo").attr("disabled", "true");
+        //$("#PONo").attr("disabled", "true");
+        //$("#ItemName").attr("disabled", "true");
+        //$("#ChallanNo").attr("disabled", "true");
         //$('#ItemName_Error').hide();
         //$('#ReqQty_Error').hide();
 
         var vPayId = @ViewBag.vPayId;
-        //alert('vPayId '+vPayId);
-        var ProcProjId = @ViewBag.ProcProjId;
-        var ProcProjSiteId = @ViewBag.ProcProjSiteId;
 
-        debugger;
 
         ResourceDetails = JSON.stringify({
             vPayId: vPayId,

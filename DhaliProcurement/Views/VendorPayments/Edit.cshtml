@@ -23,7 +23,7 @@
                     <tr>
                         <td>Party Name</td>
                         <td> 
-                            @Html.DropDownList("VendorId", null, "--Select--", htmlAttributes: new { @id = "VendorId", @class = "form-control select2" })
+                            @Html.DropDownList("VendorId", null, "--Select--", htmlAttributes: new { @id = "VendorId", @class = "form-control select2" ,@disabled= "disabled" })
                             <input type="hidden" value="@ViewBag.vPayId" id="VendorMasId" />
                          </td>
                         <td>Payment Date</td>
@@ -109,19 +109,19 @@
                             <td>&nbsp;</td>
                         </tr>
                         <tr>
-                            @*<td><span class="error" id="ProjectId_Error">Required</span></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>*@
-
+                            <td><span class="error" id="ProjectId_Error">Required</span></td>
+                            <td><span class="error" id="SiteId_Error">Required</span></td>
+                            <td><span class="error" id="Req_Error">Required</span></td>
+                            <td><span class="error" id="PO_Error">Required</span></td>
+                            <td><span class="error" id="ItemId_Error">Required</span></td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="error" id="Challan_Error">Required</span></td>
+                            <td></td>
+                            <td></td>
+                            <td><span class="error" id="Payment_Error">Required</span></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </table>
                     <br />
@@ -184,6 +184,15 @@
 
         //debugger;
 
+        $('#ProjectId_Error').hide();
+        $('#SiteId_Error').hide();
+        $('#Req_Error').hide();
+        $('#PO_Error').hide();
+        $('#ItemId_Error').hide();
+        $('#Challan_Error').hide();
+        $('#Payment_Error').hide();
+
+
         ResourceDetails = JSON.stringify({
             vPayId: vPayId,
             // ProcProjId: ProcProjId,
@@ -223,16 +232,13 @@
                           + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId" class="form-control" style="width:50px;"/><label>' + data.List[i].ItemName + '</label></td>'
                           + '<td><input value="' + data.List[i].Qty + '" type="hidden" name="ReqQty" class="form-control" style="width:50px;"/><label>' + data.List[i].Qty + '</label></td>'
                           + '<td><input value="' + data.List[i].UnitId + '" type="hidden" name="UnitId"/><label>' + data.List[i].UnitName + '</label></td>'
-                          + '<td><input value="' + data.List[i].ChallanNo + '" type="hidden" name="ChallanNo" class="form-control" style="width:50px;"/><label>' + data.List[i].ChallanNo + '</label></td>'
-                          + '<td><input value="' + data.List[i].BillNo + '" type="hidden" name="BillNo" class="form-control" style="width:50px;"/><label>' + data.List[i].BillNo + '</label></td>'
+                          + '<td><input value="' + data.List[i].ChallanNo + '" type="hidden" name="ChallanNo" class="form-control" style="width:80px;"/><label>' + data.List[i].ChallanNo + '</label></td>'
+                          + '<td><input value="' + data.List[i].BillNo + '" type="text" name="BillNo" class="form-control" style="width:80px;"/></td>'
                           + '<td><input value="' + data.List[i].Qty + '" type="hidden" name="TotalAmount" class="form-control" style="width:50px;"/><label>' + data.List[i].Qty + '</label></td>'
-                          + '<td><input value="' + data.List[i].Payment + '" type="hidden" class="form-control" style="width:50px;"/><input class="form-control" value="' +data.List[i].Payment+ '" type="text" name="Payment"/></td>'
-                          + '<td><input value="' + data.List[i].Remarks + '" type="hidden" class="form-control" style="width:50px;"/><input class="form-control" value="' +data.List[i].Remarks+ '" type="text" name="Remarks"/></td>'
+                          + '<td><input value="' + data.List[i].Payment + '" type="text" class="form-control" style="width:80px;" name="Payment"/></td>'
+                          + '<td><input value="' + data.List[i].Remarks + '" type="text" class="form-control" style="width:80px;" name="Remarks"/></td>'
                           + '<td><button onclick="RemoveTask('+data.List[i].Proc_VendorPaymentDetId+')" type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
                     jQuery('table.Resource-list').append(newRow);
-
-
-
 
                 }
 
@@ -254,12 +260,14 @@
 
     $('#ProjectId').change(function () {
         var id = $('#ProjectId option:selected').val();
+        var vendorId =  $('#VendorId option:selected').val();
 
         $.ajax({
             url: "/VendorPayments/GetSites",
             type: "post",
             data: {
-                ProjectId: id
+                ProjectId: id,
+                VendorId:vendorId
             },
             dataType: "json",
             success: function (data) {
@@ -451,6 +459,32 @@
 
     //add new row
 
+    
+    $("#ChallanNo").change(function () {
+        //  var ItemId = $('#ItemName option:selected').val();
+        var ChallanNo = $('#ChallanNo option:selected').val();
+        //  var ProjectId = $('#ProjectId option:selected').val();
+        //  var SiteId = $('#SiteId option:selected').val();
+
+       
+        $.ajax({
+            type: "post",
+            url: "/VendorPayments/GetTotalAmt",
+            data: { ChallanNo: ChallanNo },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                // $('#ChallanNo').removeAttr("disabled");
+                //  $('#UnitId').val(data.UnitId);
+                //  $('#UnitName').val(data.UnitName);
+                //  $('#ReqQty').val(data.RemQty);
+                // $('#Proc_MaterialEntryDetId').val(data.Proc_MaterialEntryDetId);
+                $('#TotalAmount').val(data.totalAmt);
+            }
+
+        });
+    });
+
     $('#addNewRow').click(function (event) {
         event.preventDefault();
         counter++;
@@ -496,6 +530,58 @@
         var Remarks = $('#Remarks').val();
         var Proc_MaterialEntryDetId= $('#Proc_MaterialEntryDetId').val();
         //   alert('Proc_MaterialEntryDetId '+Proc_MaterialEntryDetId);
+        
+        if ($('#ProjectId').val().trim() == '') {
+            $('#ProjectId_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ProjectId_Error').hide();
+        }
+
+        if ($('#SiteId').val().trim() == '') {
+            $('#SiteId_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#SiteId_Error').hide();
+        }
+        if ($('#ReqNo').val().trim() == '') {
+            $('#Req_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#Req_Error').hide();
+        }
+        if ($('#PONo').val().trim() == '') {
+            $('#PO_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#PO_Error').hide();
+        }
+        if ($('#ItemName').val().trim() == '') {
+            $('#ItemId_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ItemId_Error').hide();
+        }
+        if ($('#ChallanNo').val().trim() == '') {
+            $('#Challan_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#Challan_Error').hide();
+        }
+        if (!($('#Payment').val().trim() != '' && !isNaN($('#Payment').val().trim()))) {
+            isAllValid = false;
+            $('#Payment_Error').show();
+        }
+        else {
+            $('#Payment_Error').hide();
+        }
+
 
         if (isAllValid) {
             var newRow = jQuery('<tr>'
@@ -507,10 +593,10 @@
                 + '<td><input value="' + ReqQty + '" type="hidden" name="ReqQty" class="form-control" style="width:50px;"/><label>' + ReqQty + '</label></td>'
                 + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>' + UnitName + '</label></td>'
                 + '<td><input value="' + ChallanNo + '" type="hidden" name="ChallanNo" class="form-control" style="width:50px;"/><label>' + ChallanNoName + '</label></td>'
-                + '<td><input value="' + BillNo + '" type="hidden" name="BillNo" class="form-control" style="width:50px;"/><label>' + BillNo + '</label></td>'
-                + '<td><input value="' + TotalAmount + '" type="hidden" name="TotalAmount" class="form-control" style="width:50px;"/><label>' + TotalAmount + '</label></td>'
-                + '<td><input value="' + Payment + '" type="hidden" name="Payment" class="form-control" style="width:50px;"/><label>' + Payment + '</label></td>'
-                + '<td><input value="' + Remarks + '" type="hidden" name="Remarks" class="form-control" style="width:50px;"/><label>' + Remarks + '</label></td>'
+                + '<td><input value="' + BillNo + '" type="text" name="BillNo" class="form-control" style="width:80px;"/></td>'
+                + '<td><input value="' + TotalAmount + '" type="hidden" name="TotalAmount" class="form-control" style="width:80px;"/><label>' + TotalAmount + '</label></td>'
+                + '<td><input value="' + Payment + '" type="text" name="Payment" class="form-control" style="width:80px;"/></td>'
+                + '<td><input value="' + Remarks + '" type="text" name="Remarks" class="form-control" style="width:80px;"/></td>'
                 + '<td><button type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded" onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
 
             jQuery('table.Resource-list').append(newRow);
@@ -534,13 +620,9 @@
     $('#SaveItem').click(function (e) {
         //alert('Length:' + $('.Resource-list tr').length)
 
-        if ($('#ProjectId option:selected').text() === "--Select--") {
-            alert('Please select project');
-            $('#ProjectId option:selected').focus();
-        }
-        else if ($('#SiteId option:selected').text() === "--Select--") {
-            alert('Please select site');
-            $('#SiteId option:selected').focus();
+        if ($('#VendorId option:selected').text() === "--Select--") {
+            alert('Please select party');
+            $('#VendorId option:selected').focus();
         }
         else if ($.trim($('#PayDate').val()) === "") {
             alert('Pay date required');
@@ -690,8 +772,8 @@
                 console.log(result);
                 if (result.flag === true) {
                     alert("Record Delete successfully!");
-                   // window.location.replace("/VendorPayments/Edit?vPayId="+VendorPayMasId);
-                    window.location.replace("/VendorPayments/Index");
+                    window.location.replace("/VendorPayments/Edit?vPayId="+VendorPayMasId);
+                    //window.location.replace("/VendorPayments/Index");
 
                 }
                 else {
@@ -711,4 +793,13 @@
 
 
 </script>
+
+
+<style>
+    span.error {
+        display: block;
+        color: red;
+        font-size: 90%;
+    }
+</style>
 
