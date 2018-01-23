@@ -388,7 +388,8 @@
         $('#resourceStaffModal').modal('hide');
         $.get("@Url.Action("GetStaff", "CompanyResources")", function(resp) {
             if (resp.Flag) {
-                $("#RName").empty().html("<option value>--Select--</option>");
+                //$("#RName").empty().html("<option value>--Select--</option>");
+                //$("#RName").html("<option value>--Select--</option>");
                 $("#SiteRName").empty().html("<option value>--Select--</option>");
                 $.each(resp.CompanyResources, function (key, item) {
                     $("<option>").attr("value", item.Value).html(item.Text).appendTo($("#RName"));
