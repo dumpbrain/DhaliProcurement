@@ -174,20 +174,32 @@ namespace DhaliProcurement.Controllers
 
             List<SelectListItem> ItemList = new List<SelectListItem>();
 
-            var items = (from procProjectItem in db.ProcProjectItem
-                         join procproject in db.ProcProject on procProjectItem.ProcProjectId equals procproject.Id
+            //var items = (from procProjectItem in db.ProcProjectItem
+            //             join procproject in db.ProcProject on procProjectItem.ProcProjectId equals procproject.Id
+            //             join site in db.ProjectSite on procproject.ProjectSiteId equals site.Id
+            //             join project in db.Project on site.ProjectId equals project.Id
+            //             where project.Id == id.project.Id && site.Id == id.site.Id
+            //             select procProjectItem).ToList();
+
+            var items = (from purchaseMas in db.Proc_PurchaseOrderMas
+                         join purchaseDet in db.Proc_PurchaseOrderDet on purchaseMas.Id equals purchaseDet.Proc_PurchaseOrderMasId
+                         join tenderMas in db.Proc_TenderMas on purchaseMas.Proc_TenderMasId equals tenderMas.Id
+                         join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
+                         join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
+                         join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
+                         join procproject in db.ProcProject on requisitionMas.ProcProjectId equals procproject.Id
+                         join procProjectItem in db.ProcProjectItem on procproject.Id equals procProjectItem.ProcProjectId
                          join site in db.ProjectSite on procproject.ProjectSiteId equals site.Id
                          join project in db.Project on site.ProjectId equals project.Id
-                         where project.Id == id.project.Id && site.Id == id.site.Id
-                         select procProjectItem).ToList();
-
+                         where project.Id == id.project.Id && site.Id == id.site.Id && purchaseDet.ItemId == procProjectItem.ItemId
+                         select procProjectItem).Distinct().ToList();
 
             foreach (var x in items)
             {
                 var itemName = db.Item.SingleOrDefault(m => m.Id == x.ItemId);
                 ItemList.Add(new SelectListItem { Text = itemName.Name, Value = x.ItemId.ToString() });
             }
-
+            //var items = from requisitionDet in db.Proc_RequisitionDet
 
             ViewBag.ItemName = ItemList;
             ViewBag.PONo = new SelectList(db.Proc_PurchaseOrderMas, "PONo", "PONo");
@@ -219,20 +231,21 @@ namespace DhaliProcurement.Controllers
 
             var projects = (from purchaseMas in db.Proc_PurchaseOrderMas
                                 join tenderMas in db.Proc_TenderMas on purchaseMas.Proc_TenderMasId equals tenderMas.Id
-                                join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Id
+                                join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
                                 join requisitionDet in db.Proc_RequisitionDet on tenderDet.Proc_RequisitionDetId equals requisitionDet.Id
                                 join requisitionMas in db.Proc_RequisitionMas on requisitionDet.Proc_RequisitionMasId equals requisitionMas.Id
                                 join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
                                 join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
-                                join project in db.Project on site.ProjectId equals project.Id
-                                select project).ToList();
+                                //join project in db.Project on site.ProjectId equals project.Id
+                                where tenderMas.isApproved=="A" && site.ProjectId== ProjectId
+                            select site).Distinct().ToList();
 
-            var sites = db.ProjectSite.Where(x => x.ProjectId == ProjectId).ToList();
+            //var sites = db.ProjectSite.Where(x => x.ProjectId == ProjectId).ToList();
             var projectResources = db.ProjectResource.SingleOrDefault(x => x.ProjectId == ProjectId);
             var projectManager = projectResources.CompanyResource.Name;
 
 
-            foreach (var x in sites)
+            foreach (var x in projects)
             {
                 siteList.Add(new SelectListItem { Text = x.Name, Value = x.Id.ToString() });
             }

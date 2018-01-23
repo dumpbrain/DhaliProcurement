@@ -545,7 +545,7 @@
             var RCode = $('#ReqNo option:selected').val();
             //alert('Requisition: ' + RCode);
             var PONo = $('#PONo1 option:selected').val();
-            alert('PO NO:'+PONo);
+            //alert('PO NO:'+PONo);
             var VendorId = $('#VendorId').val();
             //alert('Vendor Id: ' + VendorId);
             var VendorName = $('#VendorName').val();
@@ -725,6 +725,7 @@
                 EDate: EDate
             });
 
+            alert('Test');
             //alert('Test');
             $.ajax({
                 contentType: 'application/json; charset=utf-8',
