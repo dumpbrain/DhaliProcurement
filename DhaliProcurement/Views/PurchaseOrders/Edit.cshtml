@@ -254,7 +254,8 @@
 
 <script>
     var counter = 0; //counter for the serial
-
+    var deleteCounter = 0;
+    var deleteList = [];
     $(document).on({
         'change': function () {
             var price = $('#UnitPrice').val();
@@ -296,9 +297,9 @@
 
     //add new row
     $('#addNewRow').click(function (event) {
-     
-        
-        
+
+
+
         event.preventDefault();
         counter++;
         var ItemId = $('#ItemName option:selected').val();
@@ -348,7 +349,8 @@
               '"/></td><td><input class="form-control UnitPriceNew" value="' + UnitPrice + '"  readonly="true" type="text" name="UnitPrice"/></td>'
               + '<td><input class="form-control POQuantityNew" value="' + POQuantity + '" type="text" name="POQuantity"/></td>'
               +'<td><input class="form-control TotalPriceNew" value="' + TotalPrice + '" type="text" readonly="true" name="TotalPrice"/></td>'
-              +'<td><button type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded" onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
+              +'<td><button type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded" onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td>'
+              +'</tr>');
 
             jQuery('table.Resource-list').append(newRow);
             totalItemCost();
@@ -453,12 +455,60 @@
                      '"/></td><td><input class="form-control UnitPriceNew" value="' + data[i].UnitPrice + '"  type="text" name="UnitPrice" readonly="true"/></td>'
                      + '<td><input class="form-control POQuantityNew" value="' + data[i].POQuantity + '" type="text" name="POQuantity"/></td>'
                      +'<td><input class="form-control TotalPriceNew" value="' + data[i].TotalPrice + '" type="text" readonly="true" name="TotalPrice"/></td>'
-                     +'<td><button onclick="RemoveTask('+data[i].PurchaseOrderDetId+')" type="button" class="btn text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
+                     +'<td>'
+                     +'<button class="btn text-warning-600 btn-flat btn-icon btn-rounded deleteDetailTask"><i class="icon-cross"></i></button>'
+                     +'</td></tr>');
 
                     jQuery('table.Resource-list').append(newRow);
                 }
 
                 totalItemCost();
+
+
+                $('.deleteDetailTask').click(function (e) {
+                    e.preventDefault();
+                    var retVal = confirm("Do you want to delete this Item ?");
+                    if (retVal == true) {
+                        var row = $(this).closest('tr');
+                        var itemDetId = $(this).closest('tr').find('td input[name=ItemId]').val();
+                        var ProcPurchaseMasterId= @ViewBag.ProcPurchaseMasterId;
+                        //alert(itemDetId);
+
+                        PurchaseDelete = JSON.stringify({
+                            PurchaseItemId: itemDetId,
+                            ProcPurchaseMasterId:ProcPurchaseMasterId
+                        });
+
+                        $.ajax({
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            type: 'POST',
+                            url: '/PurchaseOrders/DeleteDetailItem',
+                            data: PurchaseDelete,
+                            success: function (result) {
+                                console.log(result);
+                                if (result.flag === true) {
+                                    deleteList[deleteCounter] = itemDetId;
+                                    deleteCounter++;
+                                    row.remove();
+                                }
+                                else {
+                                    alert(result.message);
+                                }
+
+
+                            },
+                            failure: function (response) {
+                                alert('error');
+                            }
+                        });
+
+                    }
+                    else {
+                        return false;
+                    }
+
+                });
 
             },
             error: function (data) {
@@ -486,9 +536,9 @@
             alert('PO Date required!');
             $('#PODate').focus();
         }
-            //else if ($('.Resource-list tr').length < 2) {
-            //    alert('Please Add Item to this order');
-            //}
+            else if ($('.Resource-list tr').length < 3) {
+                alert('Please Add Item to this order');
+            }
         else {
             //alert('All Validation Donne...');
             EditPurchaseOrder();
@@ -599,6 +649,7 @@
 
         ResourceDetails = JSON.stringify({
             AddedDetItems: AddedDetItems,
+            DeleteItems:deleteList,
             PONo : PONo,
             PODate: PODate,
             //ProjectId :ProjectId,
@@ -709,7 +760,7 @@
 
 
 
-    
+
     var PurchaseMasId = @ViewBag.PurchaseMasId;
     var TenderMasId= @ViewBag.TenderMasId;
 

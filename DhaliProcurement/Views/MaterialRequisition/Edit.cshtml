@@ -295,7 +295,8 @@
                                             <input type="text" value="@item.Remarks" class="form-control" name="ItemRemarks" style="width:80px;" />
                                         </td>
                                         <td>
-                                            <input type="button" class="btn btn-danger btn-xs deleteRequisitionItem" value="Delete"/>
+                                            <button type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded deleteRequisitionItem"><i class="icon-cross"></i></button>
+                                            @*<input type="button" class="btn btn-danger btn-xs deleteRequisitionItem" value="Delete"/>*@
                                             @*<input type="button" class="btn btn-danger btn-xs deleteItem" value="Delete" onclick="$(this).parent().parent().remove();" />*@
                                             @*<span class="btn text-warning-600 btn-flat btn-icon btn-rounded" onclick="RemoveTask(@item.Id)"><i class="icon-cross"></i></span>*@
                                         </td>
@@ -801,13 +802,13 @@
     var deleteList = [];
 
 
-    $('#deletecheck').click(function () {
-        alert('Length: ' + deleteList.length);
-        for(var i = 0;i<deleteList.length;i++)
-        {
-            alert(deleteList[i]);
-        }
-    });
+    //$('#deletecheck').click(function () {
+    //    alert('Length: ' + deleteList.length);
+    //    for(var i = 0;i<deleteList.length;i++)
+    //    {
+    //        alert(deleteList[i]);
+    //    }
+    //});
 
 
     //$('#RequisitionDetails').on('click', 'tr', function () {

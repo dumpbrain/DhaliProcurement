@@ -512,13 +512,27 @@ namespace DhaliProcurement.Controllers
         }
 
 
-        public JsonResult EditTender(IEnumerable<VMTenderItem> TenderItems, int TenderId, string TNo, string TDate, string Specs, string TenderRemarks)
+        public JsonResult EditTender(IEnumerable<VMTenderItem> TenderItems, int?[] DeleteItems, int TenderId, string TNo, string TDate, string Specs, string TenderRemarks)
         {
             var result = new
             {
                 flag = false,
                 message = "Tender saving error !"
             };
+
+            if (DeleteItems != null)
+            {
+                foreach (var i in DeleteItems)
+                {
+                    var delteItem = db.Proc_TenderDet.Find(i);
+                    db.Proc_TenderDet.Remove(delteItem);
+                    db.SaveChanges();
+
+                }
+            }
+
+
+
             var flag = false;
             var master = db.Proc_TenderMas.Find(TenderId);
             master.TNo = TNo;
@@ -701,45 +715,87 @@ namespace DhaliProcurement.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+
+        //public ActionResult DeleteTenderDetailItem(int TenderDetailId)
+        //{
+        //    var flag = false;
+        //    var result = new
+        //    {
+        //        flag = false,
+        //        message = "Delete error !"
+        //    };
+
+        //    var TenderMasId = db.Proc_TenderDet.SingleOrDefault(x => x.Id == TenderDetailId).Proc_TenderMasId;
+        //    var check = db.Proc_PurchaseOrderDet.Where(x => x.Proc_PurchaseOrderMas.Proc_TenderMasId == TenderMasId).ToList();
+        //    if (check.Count == 0)
+        //    {
+        //        var data = db.Proc_TenderDet.Where(x => x.Id == TenderDetailId).FirstOrDefault();
+        //        db.Proc_TenderDet.Remove(data);
+        //        flag = db.SaveChanges() > 0;
+        //        //return RedirectToAction("Edit", "Projects", new { id = projectId });
+        //        if (flag == true)
+        //        {
+        //            result = new
+        //            {
+        //                flag = true,
+        //                message = "Delete Successful Successful!"
+        //            };
+        //        }
+
+        //        return Json(result, JsonRequestBehavior.AllowGet);
+        //    }
+        //    else
+        //    {
+
+        //        result = new
+        //        {
+        //            flag = false,
+        //            message = "This tender has been used in purchase order. Please delete PO first!"
+        //        };
+
+        //        return Json(result, JsonRequestBehavior.AllowGet);
+        //    }
+
+        //}
+
+
+
         public ActionResult DeleteTenderDetailItem(int TenderDetailId)
         {
-            var flag = false;
+
             var result = new
             {
                 flag = false,
                 message = "Delete error !"
             };
 
-            var TenderMasId = db.Proc_TenderDet.SingleOrDefault(x => x.Id == TenderDetailId).Proc_TenderMasId;
-            var check = db.Proc_PurchaseOrderDet.Where(x => x.Proc_PurchaseOrderMas.Proc_TenderMasId == TenderMasId).ToList();
+            var check = (from purchaseMas in db.Proc_PurchaseOrderMas
+                               join purchaseDet in db.Proc_PurchaseOrderDet on purchaseMas.Id equals purchaseDet.Proc_PurchaseOrderMasId
+                               join tenderMas in db.Proc_TenderMas on purchaseMas.Proc_TenderMasId equals tenderMas.Id
+                               join tenderDet in db.Proc_TenderDet on tenderMas.Id equals tenderDet.Proc_TenderMasId
+                               where tenderDet.Id == TenderDetailId && tenderDet.VendorId == purchaseMas.VendorId
+                               select tenderDet).Distinct().ToList();
+
             if (check.Count == 0)
             {
-                var data = db.Proc_TenderDet.Where(x => x.Id == TenderDetailId).FirstOrDefault();
-                db.Proc_TenderDet.Remove(data);
-                flag = db.SaveChanges() > 0;
-                //return RedirectToAction("Edit", "Projects", new { id = projectId });
-                if (flag == true)
+                result = new
                 {
-                    result = new
-                    {
-                        flag = true,
-                        message = "Delete Successful Successful!"
-                    };
-                }
+                    flag = true,
+                    message = "Delete Successful!"
+                };
 
-                return Json(result, JsonRequestBehavior.AllowGet);
             }
             else
             {
-
                 result = new
                 {
                     flag = false,
-                    message = "This tender has been used in purchase order. Please delete PO first!"
+                    message = "Delete Failed! This item has been used in purchase order!"
                 };
-
-                return Json(result, JsonRequestBehavior.AllowGet);
             }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+
         }
     
         

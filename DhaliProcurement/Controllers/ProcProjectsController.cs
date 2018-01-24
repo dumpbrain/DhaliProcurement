@@ -668,7 +668,43 @@ namespace DhaliProcurement.Controllers
 
         }
 
+        public ActionResult DeleteTDetailItem(int DetailId)
+        {
 
+            var result = new
+            {
+                flag = false,
+                message = "Delete error !"
+            };
+
+            var check = (from procProject in db.ProcProject
+                         join procProjectItems in db.ProcProjectItem on procProject.Id equals procProjectItems.ProcProjectId
+                         join requisitioMas in db.Proc_RequisitionMas on procProject.Id equals requisitioMas.ProcProjectId
+                         join requisitionDet in db.Proc_RequisitionDet on requisitioMas.Id equals requisitionDet.Proc_RequisitionMasId
+                         where procProjectItems.ItemId== DetailId && requisitionDet.Proc_RequisitionMas.ProcProjectId == procProject.Id
+                         select procProjectItems).Distinct().ToList();
+
+            if (check.Count == 0)
+            {
+                result = new
+                {
+                    flag = true,
+                    message = "Delete Successful!"
+                };
+
+            }
+            else
+            {
+                result = new
+                {
+                    flag = false,
+                    message = "Delete Failed! This item has been used in purchase order!"
+                };
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+
+        }
 
     }
 }

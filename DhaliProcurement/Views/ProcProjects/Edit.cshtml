@@ -282,12 +282,60 @@
                     '"/></td><td><input value="' + data[i].UnitUSLNO + '" type="hidden" name="UnitId"/> <label>'+data[i].UnitName+'</label><input type="hidden" class="form-control" value="' + data[i].UnitName + '" " readonly="true" type="text" name="ItemUnit' +
                     '"/></td><td><input class="form-control" value="' + data[i].PCost + '"  type="text" name="ItemCost' +
                     '"/></td><td><input class="form-control" value="' + data[i].Remarks + '" type="text" name="ItemRemarks' +
-                    '"/></td><td><button  onclick="RemoveTask(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td> </tr>');
+                    '"/></td>'
+                    +'<td><button  onclick="RemoveTask(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td>'
+                    +' </tr>');
 
                     jQuery('table.Resource-list').append(newRow);
                 }
 
                 totalItemCost();
+
+                
+                //$('.deleteDetailTask').click(function (e) {
+                //    e.preventDefault();
+                //    var retVal = confirm("Do you want to delete this Item ?");
+                //    if (retVal == true) {
+                //        var row = $(this).closest('tr');
+                //        var itemDetId = $(this).closest('tr').find('td input[name=TenderDetailId]').val();
+                //        //alert(itemDetId);
+
+                //        RequisitionDelete = JSON.stringify({
+                //            TenderDetailId: itemDetId
+                //        });
+
+                //        $.ajax({
+                //            contentType: 'application/json; charset=utf-8',
+                //            dataType: 'json',
+                //            type: 'POST',
+                //            url: '/TenderQuotation/DeleteTenderDetailItem',
+                //            data: RequisitionDelete,
+                //            success: function (result) {
+                //                console.log(result);
+                //                if (result.flag === true) {
+                //                    deleteList[deleteCounter] = itemDetId;
+                //                    deleteCounter++;
+                //                    row.remove();
+                //                }
+                //                else {
+                //                    alert(result.message);
+                //                }
+
+
+                //            },
+                //            failure: function (response) {
+                //                alert('error');
+                //            }
+                //        });
+
+                //    }
+                //    else {
+                //        return false;
+                //    }
+                        
+                //});
+
+
 
             },
             error: function (data) {

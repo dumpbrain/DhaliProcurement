@@ -710,7 +710,7 @@ namespace DhaliProcurement.Controllers
 
 
 
-        public JsonResult PurchaseUpdate(IEnumerable<VMUpdatePO> AddedDetItems, int ProcPurchaseMasterId, string PONo, DateTime PODate, int VendorId, int TenderId, string VendorAttention, string AttnManager, string AttnCell, string Email, string Subject, int LeadTime, string Content, string RcvConcernPerson, string RcvConcernPersonCell, decimal POTotalAmt)
+        public JsonResult PurchaseUpdate(IEnumerable<VMUpdatePO> AddedDetItems, int?[] DeleteItems, int ProcPurchaseMasterId, string PONo, DateTime PODate, int VendorId, int TenderId, string VendorAttention, string AttnManager, string AttnCell, string Email, string Subject, int LeadTime, string Content, string RcvConcernPerson, string RcvConcernPersonCell, decimal POTotalAmt)
         {
             var result = new
             {
@@ -718,6 +718,20 @@ namespace DhaliProcurement.Controllers
                 message = "Updating error !"
             };
             var flag = false;
+
+            if (DeleteItems != null)
+            {
+                foreach (var i in DeleteItems)
+                {
+                    var delteItem = db.Proc_PurchaseOrderDet.SingleOrDefault(x => x.ItemId == i && x.Proc_PurchaseOrderMasId== ProcPurchaseMasterId);
+                    var purchaseDetId = db.Proc_PurchaseOrderDet.Find(delteItem.Id);
+                    db.Proc_PurchaseOrderDet.Remove(purchaseDetId);
+                    db.SaveChanges();
+
+                }
+            }
+
+
 
             var master = db.Proc_PurchaseOrderMas.Find(ProcPurchaseMasterId);
             master.Proc_TenderMasId = TenderId;
@@ -795,43 +809,59 @@ namespace DhaliProcurement.Controllers
         public JsonResult DeletePurchaseOrders(int PurchaseOrderId)
         {
             bool flag = false;
-            try
+
+
+
+
+            //flag = db.SaveChanges() > 0;
+
+            var check = (from purchaseMas in db.Proc_PurchaseOrderMas
+                         join purchaseDet in db.Proc_PurchaseOrderDet on purchaseMas.Id equals purchaseDet.Proc_PurchaseOrderMasId
+                         join entryDet in db.Proc_MaterialEntryDet on purchaseDet.Id equals entryDet.Proc_PurchaseOrderDetId
+                         where purchaseMas.Id == PurchaseOrderId select purchaseMas).ToList();
+
+            if (check.Count == 0)
             {
                 var itemsToDeleteDetails = db.Proc_PurchaseOrderDet.Where(x => x.Proc_PurchaseOrderMasId == PurchaseOrderId);
                 db.Proc_PurchaseOrderDet.RemoveRange(itemsToDeleteDetails);
-                db.SaveChanges();
+               
                 var itemsToDeleteMaster = db.Proc_PurchaseOrderMas.Where(x => x.Id == PurchaseOrderId);
                 db.Proc_PurchaseOrderMas.RemoveRange(itemsToDeleteMaster);
 
-
                 flag = db.SaveChanges() > 0;
-            }
-            catch (Exception ex)
-            {
 
-            }
-
-            if (flag)
-            {
-                var result = new
+                if (flag)
                 {
-                    flag = true,
-                    message = "Purchase Order deletion successful."
-                };
-                return Json(result, JsonRequestBehavior.AllowGet);
+                    var result = new
+                    {
+                        flag = true,
+                        message = "Purchase Order deletion successful."
+                    };
+                    return Json(result, JsonRequestBehavior.AllowGet);
 
+                }
+                else
+                {
+                    var result = new
+                    {
+                        flag = false,
+                        message = "Purchase Order deletion failed!\nError Occured."
+                    };
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
             }
             else
             {
                 var result = new
                 {
                     flag = false,
-                    message = "Purchase Order deletion failed!\nError Occured."
+                    message = "Deletion Failed! Delete Material Entry first!"
                 };
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
-
         }
+
+        
 
 
 
@@ -882,7 +912,42 @@ namespace DhaliProcurement.Controllers
         }
         //21jan end
 
+        public ActionResult DeleteDetailItem(int PurchaseItemId,int ProcPurchaseMasterId)
+        {
 
+            var result = new
+            {
+                flag = false,
+                message = "Delete error !"
+            };
+
+            var check = (from metEntry in db.Proc_MaterialEntryDet
+                         join purDet in db.Proc_PurchaseOrderDet on metEntry.Proc_PurchaseOrderDetId equals purDet.Id
+                         join purMas in db.Proc_PurchaseOrderMas on purDet.Proc_PurchaseOrderMasId equals purMas.Id
+                         where purDet.ItemId == PurchaseItemId && purMas.Id== ProcPurchaseMasterId
+                         select purDet).Distinct().ToList();
+
+            if (check.Count == 0)
+            {
+                result = new
+                {
+                    flag = true,
+                    message = "Delete Successful!"
+                };
+
+            }
+            else
+            {
+                result = new
+                {
+                    flag = false,
+                    message = "Delete Failed! This item has been used in Material Entry!"
+                };
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+
+        }
 
 
 

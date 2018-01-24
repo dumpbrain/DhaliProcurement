@@ -170,6 +170,7 @@
     </div>
     <div class="form-group">
         <div class="col-md-12" style="text-align:center;">
+            @*<input type="button" id="deletecheck" value="Delete Selected"/>*@
             @*@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info" ,@style = "background-color: grey;border: none;" })*@
             @if (User.IsInRole("Management"))
             {
@@ -201,6 +202,17 @@
     <script>
         var counter = 0;
         var TenderDetailId =0;
+        var deleteCounter = 0;
+        var deleteList = [];
+
+        
+        $('#deletecheck').click(function () {
+            alert('Length: ' + deleteList.length);
+            for(var i = 0;i<deleteList.length;i++)
+            {
+                alert(deleteList[i]);
+            }
+        });
 
         $(document).ready(function () {
             //$(".datepicker").datepicker({ dateFormat: 'dd/mm/yy', changeYear: true });
@@ -272,7 +284,7 @@
                                                 +'</td>'
 
                                      +'</tr>');
-
+                                   
                                     $('#RequisitionDetails').append(row);
                                     //$("input[name='StartDate']").addClass('datepicker').datepicker();
                                     //$("input[name='EndDate']").addClass('datepicker').datepicker();
@@ -294,7 +306,10 @@
                                        +'<td><input class="form-control" style="width:70px;" type="text" name="TQPrice" value="' + data.List[i].TQPrice + '"/></td>'
                                        +'<td><input value="' + data.List[i].Qty * data.List[i].TQPrice + '" type="text" name="TotalPrice" class="form-control TotalPrice" style="width:90px;" disabled="disabled"/><input class="Status"  value="'+data.List[i].Status +'" type="hidden" name="Status"/></td>'
                                        +'<td style="width:100px;">'+
-                                                ' <input type="checkbox"/><button  onclick="RemoveTask('+data.List[i].TenderDetailId+')" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button>'+
+                                                ' <input type="checkbox"/>'
+                                                  +'<button class="btn text-warning-600 btn-flat btn-icon btn-rounded deleteDetailTask"><i class="icon-cross"></i></button>'+
+                                                    //+' <input type="button" class="btn btn-danger btn-xs deleteDetailTask" value="Delete"/>'+
+                                                //+'<button  onclick="RemoveTask('+data.List[i].TenderDetailId+')" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button>'+
                                                 '</td>'
 
                                        +'</tr>');
@@ -332,8 +347,10 @@
                                        //         ' <input type="checkbox"  />'+
                                        //         ' <button   type="button"  onclick="AddNewRowAfter(this);"   class="btn  text-success-600 btn-flat btn-icon btn-rounded "><i class=" icon-plus-circle2"></i></button></td>'
                                       +'<td style="width:100px;">'+
-                                                '<input type="checkbox" checked="checked" style="display:none"/><button  onclick="RemoveTask('+data.List[i].TenderDetailId+')" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded" style="display:none"><i class="icon-cross"></i></button>'+
-                                                ' </td>'
+                                                '<input type="checkbox" checked="checked" style="display:none"/>'
+                                                //+'<button type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded deleteDetailTask"><i class="icon-cross"></i></button>'+
+                                                //+'<button  onclick="RemoveTask('+data.List[i].TenderDetailId+')" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded" style="display:none"><i class="icon-cross"></i></button>'+
+                                               + ' </td>'
                                      +'</tr>');
 
                                     $('#RequisitionDetails').append(row);
@@ -357,9 +374,11 @@
                                        +'<td><input class="form-control" style="width:70px;" type="text" name="TQPrice" value="' + data.List[i].TQPrice + '"/></td>'
                                        +'<td><input value="' + data.List[i].Qty * data.List[i].TQPrice + '" type="text" name="TotalPrice" class="form-control TotalPrice" style="width:90px;" disabled="disabled"/><input class="Status"  value="'+data.List[i].Status +'" type="hidden" name="Status"/></td>'
                                        +'<td style="width:100px;">'+
-                                                '<input type="checkbox" style="display:none"/><button  onclick="RemoveTask('+data.List[i].TenderDetailId+')" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button>'+
+                                                '<input type="checkbox" style="display:none"/>'
+                                                +'<button type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded deleteDetailTask"><i class="icon-cross"></i></button>'+
+                                                //+'<button  onclick="RemoveTask('+data.List[i].TenderDetailId+')" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button>'+
                                                 ' </td>'
-
+                                                
                                        +'</tr>');
 
                                     $('#RequisitionDetails').append(row);
@@ -370,6 +389,50 @@
                         }
                      
                     }
+
+
+                    $('.deleteDetailTask').click(function (e) {
+                        e.preventDefault();
+                        var retVal = confirm("Do you want to delete this Item ?");
+                        if (retVal == true) {
+                            var row = $(this).closest('tr');
+                            var itemDetId = $(this).closest('tr').find('td input[name=TenderDetailId]').val();
+                            //alert(itemDetId);
+
+                            RequisitionDelete = JSON.stringify({
+                                TenderDetailId: itemDetId
+                            });
+
+                            $.ajax({
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                type: 'POST',
+                                url: '/TenderQuotation/DeleteTenderDetailItem',
+                                data: RequisitionDelete,
+                                success: function (result) {
+                                    console.log(result);
+                                    if (result.flag === true) {
+                                        deleteList[deleteCounter] = itemDetId;
+                                        deleteCounter++;
+                                        row.remove();
+                                    }
+                                    else {
+                                        alert(result.message);
+                                    }
+
+
+                                },
+                                failure: function (response) {
+                                    alert('error');
+                                }
+                            });
+
+                        }
+                        else {
+                            return false;
+                        }
+                        
+                    });
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -509,7 +572,7 @@
                 var totalPrice = price * quantity;
                 //$('#TotalPrice').val(totalPrice);
                 if (isNaN(totalPrice)) {
-                    alert('MUnit Price must be a numeric value!!')
+                    alert('Unit Price must be a numeric value!!')
                     $('#TQPrice').val("");
                     $('#TotalPrice').val("");
                 }
@@ -607,14 +670,10 @@
             $('table.Resource-list tr').each(function () {
                 var Item = $(this).find("td input[name=ItemName]").val();
                 var VName = $(this).find("td input[name=VendorName]").val();
-                alert(Item);
-                alert(VName);
-                alert('-----');
                 if (ItemName == Item && VendorName == VName.trim()) {
                     alert('This vendor already exists!');
                     isAllValid = false;
                 }
-
             });
 
             if (isAllValid) {
@@ -751,6 +810,7 @@
 
             TaskDetails = JSON.stringify({
                 TenderItems: TenderItems,
+                DeleteItems:deleteList,
                 TenderId:TenderId,
                 TNo: TNo,
                 TDate: TDate,
@@ -866,6 +926,7 @@
                 }
                 TaskDetails = JSON.stringify({
                     TenderItems: TenderItems,
+                    //DeleteItems:deleteList,
                     TenderMasId : TenderMasId,
                     isApproved: isApproved
                 });
@@ -895,34 +956,37 @@
 
         });
 
-        function RemoveTask(TenderDetailId){
-            var TenderId = $("#TenderId").val();
-            TaskDelete = JSON.stringify({
-                TenderDetailId: TenderDetailId
-            });
+        //function RemoveTask(TenderDetailId){
+        //    var TenderId = $("#TenderId").val();
+        //    TaskDelete = JSON.stringify({
+        //        TenderDetailId: TenderDetailId
+        //    });
 
-            $.ajax({
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                type: 'POST',
-                url: '/TenderQuotation/DeleteTenderDetailItem',
-                data: TaskDelete,
-                success: function (result) {
-                    console.log(result);
-                    if (result.flag === true) {
-                        alert("Record Delete successfully!");
-                        window.location.replace("/TenderQuotation/Edit?TenderId="+TenderId);
-                    }
-                    else {
-                        alert(result.message);
-                    }
+        //    $.ajax({
+        //        contentType: 'application/json; charset=utf-8',
+        //        dataType: 'json',
+        //        type: 'POST',
+        //        url: '/TenderQuotation/DeleteTenderDetailItem',
+        //        data: TaskDelete,
+        //        success: function (result) {
+        //            console.log(result);
+        //            if (result.flag === true) {
+        //                alert("Record Delete successfully!");
+        //                window.location.replace("/TenderQuotation/Edit?TenderId="+TenderId);
+        //            }
+        //            else {
+        //                alert(result.message);
+        //            }
 
-                },
-                failure: function (response) {
-                    alert('error');
-                }
-            });
-        }
+        //        },
+        //        failure: function (response) {
+        //            alert('error');
+        //        }
+        //    });
+        //}
+
+
+
 
 
         function RebindDatePicker() {
