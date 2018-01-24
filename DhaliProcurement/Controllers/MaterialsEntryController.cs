@@ -843,18 +843,32 @@ namespace DhaliProcurement.Controllers
                 message = "Delete error !"
             };
 
-            var data = db.Proc_MaterialEntryDet.Where(x => x.Id == EntryDetailId).FirstOrDefault();
-            db.Proc_MaterialEntryDet.Remove(data);
-            flag = db.SaveChanges() > 0;
-            //return RedirectToAction("Edit", "Projects", new { id = projectId });
-            if (flag == true)
+            var check = (from entryDet in db.Proc_MaterialEntryDet
+                         join vendorDet in db.Proc_VendorPaymentDet on entryDet.Id equals vendorDet.Proc_MaterialEntryDetId
+                         where entryDet.Id == EntryDetailId
+                         select entryDet).ToList();
+            //var data = db.Proc_MaterialEntryDet.Where(x => x.Id == EntryDetailId).FirstOrDefault();
+            //db.Proc_MaterialEntryDet.Remove(data);
+            //flag = db.SaveChanges() > 0;
+            if (check.Count == 0)
+            {
+
+                    result = new
+                    {
+                        flag = true,
+                        message = "Delete Successful Successful!"
+                    };
+              
+            }
+            else
             {
                 result = new
                 {
-                    flag = true,
-                    message = "Delete Successful Successful!"
+                    flag = false,
+                    message = "Delete failed! Please delete Vendor payment first!"
                 };
             }
+ 
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
