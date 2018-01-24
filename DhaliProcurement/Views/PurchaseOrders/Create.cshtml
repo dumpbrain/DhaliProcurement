@@ -327,6 +327,13 @@
             $('#POQuantity_Error').hide();
         }
 
+        $('table.Resource-list tr').each(function () {
+            var Item = $(this).find("td input[name=ItemName1]").val();
+            if (ItemName == Item) {
+                alert('This item already exists!');
+                isValidItem = false;
+            }
+        });
         //Add item to list if valid
         if (isValidItem) {
 

@@ -524,6 +524,15 @@
             $('#MaterialEntry_Error').hide();
         }
 
+        $('table.Resource-list tr').each(function () {
+            var Item = $(this).find("td input[name=ChallanNo]").val();
+            //var VName = $(this).find("td input[name=VendorName]").val();
+            if (ChallanNo == Item) {
+                alert('This challan no. already exists!');
+                isAllValid = false;
+            }
+        });
+
         if (isAllValid) {
             var newRow = jQuery('<tr>'
                 //+ '<td><input value="' + ProjectId + '" type="hidden" name="ProjectId"/><label>' + ProjectName + '<label></td>'
