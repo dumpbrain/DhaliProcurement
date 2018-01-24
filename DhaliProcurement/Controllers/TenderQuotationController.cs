@@ -21,7 +21,7 @@ namespace DhaliProcurement.Controllers
             ViewBag.TenderId = new SelectList(db.Proc_TenderMas, "Id", "TNo");
             var TenderList = db.Proc_TenderMas.ToList();
 
-           if (TenderId != null)
+            if (TenderId != null)
             {
                 TenderList = TenderList.Where(x => x.Id == TenderId).ToList();
                 ViewBag.TenderNo = new SelectList(db.Proc_TenderMas.Where(y => y.Id == TenderId), "Id", "TNo");
@@ -34,7 +34,7 @@ namespace DhaliProcurement.Controllers
             }
 
 
-           
+
         }
 
         public ActionResult Create()
@@ -54,10 +54,10 @@ namespace DhaliProcurement.Controllers
             //    projects.Add(proj);
             //}
             var requisitionProjects = (from requisitionMas in db.Proc_RequisitionMas
-                                      join procproject in db.ProcProject on requisitionMas.ProcProjectId equals procproject.Id
-                                      //join site in db.ProjectSite on procproject.ProjectSiteId equals site.Id
-                                      //join project in db.Project on site.ProjectId equals project.Id
-                                      where requisitionMas.ProcProjectId == procproject.Id && requisitionMas.Status=="A"
+                                       join procproject in db.ProcProject on requisitionMas.ProcProjectId equals procproject.Id
+                                       //join site in db.ProjectSite on procproject.ProjectSiteId equals site.Id
+                                       //join project in db.Project on site.ProjectId equals project.Id
+                                       where requisitionMas.ProcProjectId == procproject.Id && requisitionMas.Status == "A"
                                        select procproject).ToList();
 
             List<ProjectSite> sites = new List<ProjectSite>();
@@ -172,7 +172,7 @@ namespace DhaliProcurement.Controllers
                                        join site in db.ProjectSite on procproject.ProjectSiteId equals site.Id
                                        join project in db.Project on site.ProjectId equals project.Id
                                        //where requisitionMas.ProcProjectId == procproject.Id
-                                       where project.Id == ProjectId && requisitionMas.Status=="A"
+                                       where project.Id == ProjectId && requisitionMas.Status == "A"
                                        select site).Distinct().ToList();
 
             List<SelectListItem> siteList = new List<SelectListItem>();
@@ -201,7 +201,7 @@ namespace DhaliProcurement.Controllers
                                 join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
                                 join site in db.ProjectSite on procProject.ProjectSiteId equals site.Id
                                 join project in db.Project on site.ProjectId equals project.Id
-                                where project.Id == ProjectId && site.Id == SiteId && requisitionMas.Status=="A"
+                                where project.Id == ProjectId && site.Id == SiteId && requisitionMas.Status == "A"
                                 select requisitionMas).ToList().Distinct();
 
             foreach (var x in requisitions)
@@ -404,7 +404,7 @@ namespace DhaliProcurement.Controllers
 
         public JsonResult getEditTender(int TenderId)
         {
-            
+
             bool flag = false;
 
             var check = db.Proc_TenderDet.Where(x => x.Proc_TenderMasId == TenderId).Count();
@@ -454,7 +454,7 @@ namespace DhaliProcurement.Controllers
                                   join procProject in db.ProcProject on requisitionMas.ProcProjectId equals procProject.Id
                                   join procProjectItem in db.ProcProjectItem on procProject.Id equals procProjectItem.ProcProjectId
                                   join items in db.Item on procProjectItem.ItemId equals items.Id
-                                  where tenderDet.Proc_TenderMasId == TenderId &&  requisitionDet.Id == i.Proc_RequisitionDetId && items.Id == requisitionDet.ItemId
+                                  where tenderDet.Proc_TenderMasId == TenderId && requisitionDet.Id == i.Proc_RequisitionDetId && items.Id == requisitionDet.ItemId
                                   select items).FirstOrDefault();
                     vm.ItemId = ItemId.Id;
                     vm.ItemName = ItemId.Name;
@@ -534,7 +534,7 @@ namespace DhaliProcurement.Controllers
             {
                 foreach (var item in TenderItems)
                 {
-                    var check = db.Proc_TenderDet.FirstOrDefault(x => x.Proc_TenderMasId == TenderMasId && x.Proc_RequisitionDetId == item.Proc_RequisitionDetId && x.VendorId==item.VendorId);
+                    var check = db.Proc_TenderDet.FirstOrDefault(x => x.Proc_TenderMasId == TenderMasId && x.Proc_RequisitionDetId == item.Proc_RequisitionDetId && x.VendorId == item.VendorId);
                     //var check = db.Proc_TenderDet.FirstOrDefault(x => x.Id==item.TenderDetailId);
                     if (check == null)
                     {
@@ -597,7 +597,7 @@ namespace DhaliProcurement.Controllers
 
         public ActionResult PendingTender()
         {
-            var data = db.Proc_TenderMas.Where(y => y.isApproved.Trim()!="A").ToList();
+            var data = db.Proc_TenderMas.Where(y => y.isApproved.Trim() != "A").ToList();
 
             //var data = (from status in db.ProjectSiteStatus
             //            join siteTask in db.ProjectSitePlanTask on status.ProjectSitePlanTaskId equals siteTask.Id
@@ -623,7 +623,7 @@ namespace DhaliProcurement.Controllers
             //return View(data);
         }
 
-        public JsonResult ApproveTender(IEnumerable<VMTenderItem> TenderItems,int TenderMasId, string isApproved) {
+        public JsonResult ApproveTender(IEnumerable<VMTenderItem> TenderItems, int TenderMasId, string isApproved) {
             var flag = false;
             var result = new
             {
@@ -710,20 +710,38 @@ namespace DhaliProcurement.Controllers
                 message = "Delete error !"
             };
 
-            var data = db.Proc_TenderDet.Where(x => x.Id == TenderDetailId).FirstOrDefault();
-            db.Proc_TenderDet.Remove(data);
-            flag = db.SaveChanges() > 0;
-            //return RedirectToAction("Edit", "Projects", new { id = projectId });
-            if (flag == true)
+            var TenderMasId = db.Proc_TenderDet.SingleOrDefault(x => x.Id == TenderDetailId).Proc_TenderMasId;
+            var check = db.Proc_PurchaseOrderDet.Where(x => x.Proc_PurchaseOrderMas.Proc_TenderMasId == TenderMasId).ToList();
+            if (check.Count == 0)
             {
+                var data = db.Proc_TenderDet.Where(x => x.Id == TenderDetailId).FirstOrDefault();
+                db.Proc_TenderDet.Remove(data);
+                flag = db.SaveChanges() > 0;
+                //return RedirectToAction("Edit", "Projects", new { id = projectId });
+                if (flag == true)
+                {
+                    result = new
+                    {
+                        flag = true,
+                        message = "Delete Successful Successful!"
+                    };
+                }
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+
                 result = new
                 {
-                    flag = true,
-                    message = "Delete Successful Successful!"
+                    flag = false,
+                    message = "This tender has been used in purchase order. Please delete PO first!"
                 };
+
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
-            
-            return Json(result, JsonRequestBehavior.AllowGet);
         }
+    
+        
     }
 }

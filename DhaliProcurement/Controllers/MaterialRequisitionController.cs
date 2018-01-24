@@ -460,7 +460,7 @@ namespace DhaliProcurement.Controllers
         }
 
 
-        public JsonResult EditRequisition(IEnumerable<VMRequisitionItem> RequisitionItems, int ProjectId, int SiteId, DateTime RequisitionDate, string ReqNo, string remarks, int RequisitionMasId)
+        public JsonResult EditRequisition(IEnumerable<VMRequisitionItem> RequisitionItems,int?[] DeleteItems, int ProjectId, int SiteId, DateTime RequisitionDate, string ReqNo, string remarks, int RequisitionMasId)
         {
             var result = new
             {
@@ -468,6 +468,21 @@ namespace DhaliProcurement.Controllers
                 message = "Requisition saving error !"
             };
             var flag = false;
+
+            //Delete requisition details item
+            if (DeleteItems!=null)
+            {
+                foreach (var i in DeleteItems)
+                {
+                    var delteItem = db.Proc_RequisitionDet.Find(i);
+                    db.Proc_RequisitionDet.Remove(delteItem);
+                    db.SaveChanges();
+
+                }
+            }
+
+
+            //=======================
 
             var master = db.Proc_RequisitionMas.Find(RequisitionMasId);
             master.ReqDate = RequisitionDate;
@@ -704,18 +719,52 @@ namespace DhaliProcurement.Controllers
                 message = "Delete error !"
             };
 
-            var data = db.Proc_RequisitionDet.Where(x => x.Id == RequisitionDetailId).FirstOrDefault();
-            db.Proc_RequisitionDet.Remove(data);
-            flag = db.SaveChanges() > 0;
-            //return RedirectToAction("Edit", "Projects", new { id = projectId });
-            if (flag == true)
+            var check = db.Proc_TenderDet.Where(x => x.Proc_RequisitionDetId == RequisitionDetailId).ToList();
+            if (check.Count == 0)
             {
                 result = new
                 {
                     flag = true,
                     message = "Delete Successful Successful!"
                 };
+
+                //var data = db.Proc_RequisitionDet.Where(x => x.Id == RequisitionDetailId).FirstOrDefault();
+                //db.Proc_RequisitionDet.Remove(data);
+                //try
+                //{
+                //    flag = db.SaveChanges() > 0;
+                //    //return RedirectToAction("Edit", "Projects", new { id = projectId });
+                //    if (flag == true)
+                //    {
+                //        result = new
+                //        {
+                //            flag = true,
+                //            message = "Delete Successful Successful!"
+                //        };
+                //    }
+                //    else
+                //    {
+                //        result = new
+                //        {
+                //            flag = false,
+                //            message = "Delete falied!"
+                //        };
+                //    }
+                //}
+                //catch (Exception e)
+                //{
+
+                //}
             }
+            else
+            {
+                result = new
+                {
+                    flag = false,
+                    message = "Delete Failed! This item has been used in purchase order!"
+                };
+            }
+            
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
