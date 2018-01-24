@@ -344,11 +344,13 @@
             var name = $(this).find("td input[name=SiteName]").val();
             //alert(name);
             if (SiteName == name) {
-                alert('This Site is already exists!');
+                alert('This Site already exists!');
                 isValidSite = false;
             }
  
-         });
+        });
+
+
 
         //Add site to list if valid
         if (isValidSite) {
@@ -357,7 +359,7 @@
                 + '<td><label>' + counter + '</label></td>'
                 + '<td><input class="form-control" value="' + SiteName + '" type="text" name="SiteName"/></td>'
                 + '<td><input class="form-control" value="' + SiteLocation + '" type="text" name="SiteLocation"/></td>'
-                + '<td><input value="' + SiteEngineerId + '" type="hidden" name="SiteEngineerId"/><input class="form-control" value="' + SiteEngineer + '"  type="text" name="SiteEngineer"/></td>'
+                + '<td><input value="' + SiteEngineerId + '" type="hidden" name="SiteEngineerId"/><input class="form-control" value="' + SiteEngineer + '"  type="text" name="SiteEngineer" disabled="disabled"/></td>'
                 + '<td><button class="btn  text-warning-600 btn-flat btn-icon btn-rounded"  onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button></td></tr>');
 
             jQuery('table.Resource-list').append(newRow);

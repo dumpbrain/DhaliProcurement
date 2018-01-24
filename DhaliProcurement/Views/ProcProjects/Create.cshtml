@@ -291,11 +291,21 @@
 
         }
 
+        $('table.Resource-list tr').each(function () {
+            var name = $(this).find("td input[name=ItemName]").val();
+            //alert(name);
+            if (ItemName == name) {
+                alert('This item already exists!');
+                isValidItem = false;
+            }
+
+        });
+
         //Add item to list if valid
         if (isValidItem) {
 
             var newRow = jQuery('<tr>'
-                + '<td> <input value="' + ItemId + '" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" readonly="true" type="text" name="ItemName' + counter + '"/></td>'
+                + '<td> <input value="' + ItemId + '" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" readonly="true" type="text" name="ItemName"/></td>'
                 + '<td><input class="form-control" value="' + Qty + '" type="text" name="Quantity"/></td>'
                 + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><input class="form-control" value="' + Unit + '" " readonly="true" type="text" name="ItemUnit"/></td>'
                 + '<td><input class="form-control" value="' + Cost + '"  type="text" name="ItemCost' +

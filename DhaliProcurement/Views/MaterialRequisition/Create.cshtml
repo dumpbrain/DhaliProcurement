@@ -353,9 +353,20 @@
             $('#ReqQty_Error').hide();
         }
 
+        $('table.Resource-list tr').each(function () {
+            var name = $(this).find("td input[name=ItemName]").val();
+            //alert(name);
+            if (ItemName == name) {
+                alert('This item already exists!');
+                isAllValid = false;
+            }
+
+        });
+
+
         if (isAllValid) {
             var newRow = jQuery('<tr>'
-                + '<td><input value="' + ItemId + '" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" type="hidden" name="ItemName' + counter + '"/><label>' + ItemName + '<label></td>'
+                + '<td><input value="' + ItemId + '" type="hidden" name="ItemId"/> <input class="form-control" value="' + ItemName + '" type="hidden" name="ItemName"/><label>' + ItemName + '<label></td>'
                 //+ '<td><input type="hidden" value="' + UnitId + '" type="text" name="UnitId"/></td>'
                 + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>' + Unit + '</label></td>'
                 + '<td><input class="form-control" value="' + TotalRequired + '"  type="hidden" name="TotalRequired"/><label>' + TotalRequired + '</label></td>'

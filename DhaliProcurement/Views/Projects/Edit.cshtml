@@ -313,7 +313,7 @@
 
              var newRow = jQuery('<tr><td><input class="form-control" value="' + data[i].ProjectSiteId + '" type="hidden" name="ProjectSiteId"/><input class="form-control" value="' + data[i].SiteName + '" type="text" name="SiteName"/></td>'
                 + '<td><input class="form-control" value="' + data[i].SiteLocation + '" type="text" name="SiteLocation"/></td>'
-                + '<td><input value="' + data[i].SiteEngineerId + '" type="hidden" name="SiteEngineerId"/><input class="form-control" value="' + data[i].SiteEngineer + '"  type="text" name="SiteEngineer"/></td><td><button  onclick="RemoveTask(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
+                + '<td><input value="' + data[i].SiteEngineerId + '" type="hidden" name="SiteEngineerId"/><input class="form-control" value="' + data[i].SiteEngineer + '"  type="text" name="SiteEngineer" disabled="disabled"/></td><td><button  onclick="RemoveTask(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
 
                     jQuery('table.Resource-list').append(newRow);
                 }
@@ -396,7 +396,7 @@
         {
             var newRow = jQuery('<tr><td><input class="form-control" value="' + ProjectSiteId + '" type="hidden" name="ProjectSiteId"/><input class="form-control" value="' + SiteName + '" type="text" name="SiteName"/></td>'
                 + '<td><input class="form-control" value="' + SiteLocation + '" type="text" name="SiteLocation"/></td>'
-                + '<td><input value="' + SiteEngineerId + '" type="hidden" name="SiteEngineerId"/><input class="form-control" value="' + SiteEngineer + '"  type="text" name="SiteEngineer"/></td><td><button  onclick="RemoveTask(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
+                + '<td><input value="' + SiteEngineerId + '" type="hidden" name="SiteEngineerId"/><input class="form-control" value="' + SiteEngineer + '"  type="text" name="SiteEngineer" disabled="disabled"/></td><td><button  onclick="RemoveTask(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
 
             jQuery('table.Resource-list').append(newRow);
             $('#SiteName').val("");

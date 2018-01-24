@@ -277,8 +277,8 @@
                     //if(data[i].Remarks == "null"){
                     //    data[i].Remarks = "";
                     //}
-                    var newRow = jQuery('<tr><td> <input value="' + data[i].ItemISLNO + '" type="hidden" name="ItemId"/>  <label>'+data[i].ItemName+'</label> <input type="hidden" class="form-control" value="' + data[i].ItemName + '" readonly="true" type="text" name="ItemName' +
-                    counter + '"/></td><td><input class="form-control" value="' + data[i].PQuantity + '" type="text" name="Quantity' +
+                    var newRow = jQuery('<tr><td> <input value="' + data[i].ItemISLNO + '" type="hidden" name="ItemId"/>  <label>'+data[i].ItemName+'</label> <input type="hidden" class="form-control" value="' + data[i].ItemName + '" readonly="true" type="text" name="ItemName"/></td>'
+                        +'<td><input class="form-control" value="' + data[i].PQuantity + '" type="text" name="Quantity' +
                     '"/></td><td><input value="' + data[i].UnitUSLNO + '" type="hidden" name="UnitId"/> <label>'+data[i].UnitName+'</label><input type="hidden" class="form-control" value="' + data[i].UnitName + '" " readonly="true" type="text" name="ItemUnit' +
                     '"/></td><td><input class="form-control" value="' + data[i].PCost + '"  type="text" name="ItemCost' +
                     '"/></td><td><input class="form-control" value="' + data[i].Remarks + '" type="text" name="ItemRemarks' +
@@ -474,12 +474,21 @@
 
         }
 
+        $('table.Resource-list tr').each(function () {
+            var name = $(this).find("td input[name=ItemName]").val();
+            //alert(name);
+            if (ItemName == name) {
+                alert('This item already exists!');
+                isValidItem = false;
+            }
+
+        });
 
         //Add item to list if valid
         if (isValidItem) {
 
-            var newRow = jQuery('<tr><td> <input value="' + ItemId + '" type="hidden" name="ItemId"/> <label>'+ItemName+'</label><input type="hidden" class="form-control" value="' + ItemName + '" readonly="true" type="text" name="ItemName' +
-                  counter + '"/></td><td><input class="form-control" value="' + Qty + '" type="text" name="Quantity' +
+            var newRow = jQuery('<tr><td> <input value="' + ItemId + '" type="hidden" name="ItemId"/> <label>'+ItemName+'</label><input type="hidden" class="form-control" value="' + ItemName + '" readonly="true" type="text" name="ItemName"/></td>' 
+                +'<td><input class="form-control" value="' + Qty + '" type="text" name="Quantity' +
                    '"/></td><td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>'+Unit+'</label><input type="hidden" class="form-control" value="' + Unit + '" " readonly="true" type="text" name="ItemUnit' +
                    '"/></td><td><input class="form-control" value="' + Cost + '"  type="text" name="ItemCost' +
                    '"/></td><td><input class="form-control" value="' + ItemRemarks + '" type="text" name="ItemRemarks' +

@@ -253,10 +253,10 @@
                                        + '<td><input value="' + data.List[i].ProjectId + '" type="hidden" name="ProjectId"/><label style="font-weight:bold;">' + data.List[i].ProjectName + '<label></td>'
                                        + '<td><input value="' + data.List[i].SiteId + '" type="hidden" name="SiteId"/><label style="font-weight:bold;">' + data.List[i].SitetName + '<label></td>'
                                        + '<td><input value="' + data.List[i].RCode + '" type="hidden" name="ReqCode"/><label style="font-weight:bold;">' + data.List[i].RCode + '<label><input value="' + data.List[i].Proc_RequisitionDetId + '" type="hidden" name="Proc_RequisitionDetId"/></td>'
-                                       + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId"/><label style="font-weight:bold;">' + data.List[i].ItemName + '<label></td>'
+                                       + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId"/><label style="font-weight:bold;">' + data.List[i].ItemName + '<label><input value="' + data.List[i].ItemName + '" type="hidden" name="ItemName"/></td>'
                                        + '<td><label style="font-weight:bold;">' + data.List[i].Qty + '<label></td>'
                                        + '<td><input value="" type="hidden" name="UnitId"/><label style="font-weight:bold;">' + data.List[i].UnitName + '<label></td>'
-                                       + '<td><input value="' + data.List[i].VendorId + '" type="hidden" name="Vendor"/><label style="font-weight:bold;">' + data.List[i].VendorName + '<label></td>'
+                                       + '<td><input value="' + data.List[i].VendorId + '" type="hidden" name="Vendor"/><label style="font-weight:bold;">' + data.List[i].VendorName + '<label><input value="' + data.List[i].VendorName + '" type="hidden" name="VendorName"/></td>'
                                        +'<td> <input class="form-control" style="width:110px;" type="text" name="TQNo" value="' + data.List[i].TQNo + '" style="font-weight:bold;" /></td>'
                                        +'<td><input class="form-control datepicker" style="width:90px;" type="text" name="TQDate" value="' + data.List[i].TQDate + '"/></td>'
                                        +'<td><input class="form-control" style="width:70px;" type="text" name="TQPrice" value="' + data.List[i].TQPrice + '"/></td>'
@@ -267,8 +267,9 @@
                                        //         ' <input type="checkbox"  />'+
                                        //         ' <button   type="button"  onclick="AddNewRowAfter(this);"   class="btn  text-success-600 btn-flat btn-icon btn-rounded "><i class=" icon-plus-circle2"></i></button></td>'
                                       +'<td style="width:100px;">'+
-                                                ' <input type="checkbox" checked="checked"/><button  onclick="RemoveTask('+data.List[i].TenderDetailId+')" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button>'+
-                                                '</td>'
+                                                ' <input type="checkbox" checked="checked"/>'
+                                                //+'<button  onclick="RemoveTask('+data.List[i].TenderDetailId+')" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button>'
+                                                +'</td>'
 
                                      +'</tr>');
 
@@ -284,10 +285,10 @@
                                        + '<td><input value="' + data.List[i].ProjectId + '" type="hidden" name="ProjectId"/><label>' + data.List[i].ProjectName + '<label></td>'
                                        + '<td><input value="' + data.List[i].SiteId + '" type="hidden" name="SiteId"/><label>' + data.List[i].SitetName + '<label></td>'
                                        + '<td><input value="' + data.List[i].RCode + '" type="hidden" name="ReqCode"/><label>' + data.List[i].RCode + '<label><input value="' + data.List[i].Proc_RequisitionDetId + '" type="hidden" name="Proc_RequisitionDetId"/></td>'
-                                       + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId"/><label>' + data.List[i].ItemName + '<label></td>'
+                                       + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId"/><label>' + data.List[i].ItemName + '<label><input value="' + data.List[i].ItemName + '" type="hidden" name="ItemName"/></td>'
                                        + '<td><label>' + data.List[i].Qty + '<label></td>'
                                        + '<td><input value="" type="hidden" name="UnitId"/><label>' + data.List[i].UnitName + '<label></td>'
-                                       + '<td><input value="' + data.List[i].VendorId + '" type="hidden" name="Vendor"/><label>' + data.List[i].VendorName + '<label></td>'
+                                       + '<td><input value="' + data.List[i].VendorId + '" type="hidden" name="Vendor"/><label>' + data.List[i].VendorName + '<label><input value="' + data.List[i].VendorName + '" type="hidden" name="VendorName"/></td>'
                                        +'<td> <input class="form-control" style="width:110px;" type="text" name="TQNo" value="' + data.List[i].TQNo + '" /></td>'
                                        +'<td><input class="form-control datepicker" style="width:90px;" type="text" name="TQDate" value="' + data.List[i].TQDate + '"/></td>'
                                        +'<td><input class="form-control" style="width:70px;" type="text" name="TQPrice" value="' + data.List[i].TQPrice + '"/></td>'
@@ -317,10 +318,10 @@
                                        + '<td><input value="' + data.List[i].ProjectId + '" type="hidden" name="ProjectId"/><label style="font-weight:bold;">' + data.List[i].ProjectName + '<label></td>'
                                        + '<td><input value="' + data.List[i].SiteId + '" type="hidden" name="SiteId"/><label style="font-weight:bold;">' + data.List[i].SitetName + '<label></td>'
                                        + '<td><input value="' + data.List[i].RCode + '" type="hidden" name="ReqCode"/><label style="font-weight:bold;">' + data.List[i].RCode + '<label><input value="' + data.List[i].Proc_RequisitionDetId + '" type="hidden" name="Proc_RequisitionDetId"/></td>'
-                                       + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId"/><label style="font-weight:bold;">' + data.List[i].ItemName + '<label></td>'
+                                       + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId"/><label style="font-weight:bold;">' + data.List[i].ItemName + '<label><input value="' + data.List[i].ItemName + '" type="hidden" name="ItemName"/></td>'
                                        + '<td><label style="font-weight:bold;">' + data.List[i].Qty + '<label></td>'
                                        + '<td><input value="" type="hidden" name="UnitId"/><label style="font-weight:bold;">' + data.List[i].UnitName + '<label></td>'
-                                       + '<td><input value="' + data.List[i].VendorId + '" type="hidden" name="Vendor"/><label style="font-weight:bold;">' + data.List[i].VendorName + '<label></td>'
+                                       + '<td><input value="' + data.List[i].VendorId + '" type="hidden" name="Vendor"/><label style="font-weight:bold;">' + data.List[i].VendorName + '<label><input value="' + data.List[i].VendorName + '" type="hidden" name="VendorName"/></td>'
                                        +'<td> <input class="form-control" style="width:110px;" type="hidden" name="TQNo" value="' + data.List[i].TQNo + '" /><label style="font-weight:bold;">' + data.List[i].TQNo + '<label></td>'
                                        +'<td><input class="form-control datepicker" style="width:90px;" type="hidden" name="TQDate" value="' + data.List[i].TQDate + '"/><label style="font-weight:bold;">' + data.List[i].TQDate  + '<label></td>'
                                        +'<td><input class="form-control" style="width:70px;" type="hidden" name="TQPrice" value="' + data.List[i].TQPrice + '"/><label style="font-weight:bold;">' + data.List[i].TQPrice  + '<label></td>'
@@ -347,10 +348,10 @@
                                        + '<td><input value="' + data.List[i].ProjectId + '" type="hidden" name="ProjectId"/><label>' + data.List[i].ProjectName + '<label></td>'
                                        + '<td><input value="' + data.List[i].SiteId + '" type="hidden" name="SiteId"/><label>' + data.List[i].SitetName + '<label></td>'
                                        + '<td><input value="' + data.List[i].RCode + '" type="hidden" name="ReqCode"/><label>' + data.List[i].RCode + '<label><input value="' + data.List[i].Proc_RequisitionDetId + '" type="hidden" name="Proc_RequisitionDetId"/></td>'
-                                       + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId"/><label>' + data.List[i].ItemName + '<label></td>'
+                                       + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId"/><label>' + data.List[i].ItemName + '<label><input value="' + data.List[i].ItemName + '" type="hidden" name="ItemName"/></td>'
                                        + '<td><label>' + data.List[i].Qty + '<label></td>'
                                        + '<td><input value="" type="hidden" name="UnitId"/><label>' + data.List[i].UnitName + '<label></td>'
-                                       + '<td><input value="' + data.List[i].VendorId + '" type="hidden" name="Vendor"/><label>' + data.List[i].VendorName + '<label></td>'
+                                       + '<td><input value="' + data.List[i].VendorId + '" type="hidden" name="Vendor"/><label>' + data.List[i].VendorName + '<label><input value="' + data.List[i].VendorName + '" type="hidden" name="VendorName"/></td>'
                                        +'<td> <input class="form-control" style="width:110px;" type="text" name="TQNo" value="' + data.List[i].TQNo + '" /></td>'
                                        +'<td><input class="form-control datepicker" style="width:90px;" type="text" name="TQDate" value="' + data.List[i].TQDate + '"/></td>'
                                        +'<td><input class="form-control" style="width:70px;" type="text" name="TQPrice" value="' + data.List[i].TQPrice + '"/></td>'
@@ -603,6 +604,18 @@
                 $('#UnitPrice_Error').hide();
             }
 
+            $('table.Resource-list tr').each(function () {
+                var Item = $(this).find("td input[name=ItemName]").val();
+                var VName = $(this).find("td input[name=VendorName]").val();
+                alert(Item);
+                alert(VName);
+                alert('-----');
+                if (ItemName == Item && VendorName == VName.trim()) {
+                    alert('This vendor already exists!');
+                    isAllValid = false;
+                }
+
+            });
 
             if (isAllValid) {
                 var newRow = jQuery('<tr>'
@@ -610,10 +623,10 @@
                     + '<td><input value="' + ProjectId + '" type="hidden" name="ProjectId"/><label>' + ProjectName + '<label></td>'
                     + '<td><input value="' + SiteId + '" type="hidden" name="SiteId"/><label>' + SiteName + '<label></td>'
                     + '<td><input value="' + RCode + '" type="hidden" name="ReqCode"/><label>' + RCode + '</label><input value="' + Proc_RequisitionDetId + '" type="hidden" name="Proc_RequisitionDetId"/></td>'
-                    + '<td><input value="' + ItemId + '" type="hidden" name="ItemId"/><label>' + ItemName + '<label>'
+                    + '<td><input value="' + ItemId + '" type="hidden" name="ItemId"/><label>' + ItemName + '<label><input value="' + ItemName + '" type="hidden" name="ItemName"/></td>'
                     + '<td><input value="' + Qty + '" type="hidden" name="Qty" class="form-control" style="width:50px;"/><label>' + Qty + '<label></td>'
                     + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label>' + UnitName + '</label></td>'
-                    + '<td><input value="' + VendorId + '" type="hidden" name="Vendor"/><label>' + VendorName + '</label></td>'
+                    + '<td><input value="' + VendorId + '" type="hidden" name="Vendor"/><label>' + VendorName + '</label><input value="' + VendorName + '" type="hidden" name="VendorName"/></td>'
                     + '<td><input value="' + TQNo + '" type="text" name="TQNo" class="form-control" style="width:50px;"/></td>'
                     + '<td><input value="' + TQDate + '" type="text" name="TQDate" class="form-control datepicker" style="width:50px;"/></td>'
                     + '<td><input value="' + TQPrice + '" type="text" name="TQPrice" class="form-control" style="width:40px;"/></td>'
@@ -783,7 +796,7 @@
         $('#ApproveItem').click(function(){
             var isApproved ="A";
             var TenderMasId = $("#TenderId").val();
-
+            var approveCounter =0;
             //var val = [];
             //$(':checkbox:checked').each(function (i) {
             //    //val[i] = $(this).closest('tr').find("td:eq(1) input.TenderCheck").val();
@@ -794,6 +807,7 @@
             $(':checkbox').each(function (i) {
                 if($(this).is(':checked') ){
                     $(this).closest('tr').find("td:eq(11) input.Status").val('A');
+                    approveCounter++;
                 }
                 else{
                     $(this).closest('tr').find("td:eq(11) input.Status").val('N');
@@ -803,77 +817,82 @@
                 //alert($(this).closest('tr').find("td:eq(7) input.Status").val()+" :"+t);
             });
 
-
-
-            //alert('Test');
-            var TenderDetailId = document.getElementsByName("TenderDetailId");
-            var RCode = document.getElementsByName("ReqCode");
-
-            var Proc_RequisitionDetId = document.getElementsByName("Proc_RequisitionDetId");
-            var VendorId = document.getElementsByName("Vendor");
-            var TQNo = document.getElementsByName("TQNo");
-            var TQDate = document.getElementsByName("TQDate");
-            var TQPrice = document.getElementsByName("TQPrice");
-            var Status = document.getElementsByName("Status");
-
-            var TenderItems = [];
-            //alert($('#RequisitionDetails tr').length - 1)
-
-            var tableCounter = $('#RequisitionDetails tr').length - 1;
-            //alert('Length: ' + tableCounter);
-            //for (var i = 0; i < tableCounter; i++) {
-            //    alert(VendorId[i].value);
-            //}
-            for (var i = 0; i < tableCounter; i++) {
-                TenderItems.push({
-                    TenderDetailId:TenderDetailId,
-                    RCode: RCode[i].value,
-                    Proc_RequisitionDetId: Proc_RequisitionDetId[i].value,
-                    VendorId: VendorId[i].value,
-                    TQNo: TQNo[i].value,
-                    TQDate: TQDate[i].value,
-                    TQPrice: TQPrice[i].value,
-                    Status: Status[i].value
-                    //Status: Status
-                });
-                console.log('---------->');
-                console.log('RCode: ' + TenderItems[i].RCode);
-                console.log('Proc_RequisitionDetId: ' + TenderItems[i].Proc_RequisitionDetId);
-                console.log('VendorId: ' + TenderItems[i].VendorId);
-                console.log('TQNo: ' + TenderItems[i].TQNo);
-                console.log('TQDate: ' + TenderItems[i].TQDate);
-                console.log('TQPrice: ' + TenderItems[i].TQPrice);
-                console.log('Status: ' + TenderItems[i].Status);
-                console.log('---------->');
-
+            if(approveCounter==0)
+            {
+                alert('Please select atleast one item');
             }
-            TaskDetails = JSON.stringify({
-                TenderItems: TenderItems,
-                TenderMasId : TenderMasId,
-                isApproved: isApproved
-            });
+            else{
+                //alert('Test');
+                var TenderDetailId = document.getElementsByName("TenderDetailId");
+                var RCode = document.getElementsByName("ReqCode");
 
-            $.ajax({
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                type: 'POST',
-                url: '/TenderQuotation/ApproveTender',
-                data: TaskDetails,
-                success: function (result) {
-                    console.log(result);
-                    if (result.flag === true) {
-                        alert("Record approved successfully!");
-                        window.location.replace("/TenderQuotation/Index");
-                    }
-                    else {
-                        alert(result.message);
-                    }
+                var Proc_RequisitionDetId = document.getElementsByName("Proc_RequisitionDetId");
+                var VendorId = document.getElementsByName("Vendor");
+                var TQNo = document.getElementsByName("TQNo");
+                var TQDate = document.getElementsByName("TQDate");
+                var TQPrice = document.getElementsByName("TQPrice");
+                var Status = document.getElementsByName("Status");
 
-                },
-                failure: function (response) {
-                    alert('error');
+                var TenderItems = [];
+                //alert($('#RequisitionDetails tr').length - 1)
+
+                var tableCounter = $('#RequisitionDetails tr').length - 1;
+                //alert('Length: ' + tableCounter);
+                //for (var i = 0; i < tableCounter; i++) {
+                //    alert(VendorId[i].value);
+                //}
+                for (var i = 0; i < tableCounter; i++) {
+                    TenderItems.push({
+                        TenderDetailId:TenderDetailId,
+                        RCode: RCode[i].value,
+                        Proc_RequisitionDetId: Proc_RequisitionDetId[i].value,
+                        VendorId: VendorId[i].value,
+                        TQNo: TQNo[i].value,
+                        TQDate: TQDate[i].value,
+                        TQPrice: TQPrice[i].value,
+                        Status: Status[i].value
+                        //Status: Status
+                    });
+                    console.log('---------->');
+                    console.log('RCode: ' + TenderItems[i].RCode);
+                    console.log('Proc_RequisitionDetId: ' + TenderItems[i].Proc_RequisitionDetId);
+                    console.log('VendorId: ' + TenderItems[i].VendorId);
+                    console.log('TQNo: ' + TenderItems[i].TQNo);
+                    console.log('TQDate: ' + TenderItems[i].TQDate);
+                    console.log('TQPrice: ' + TenderItems[i].TQPrice);
+                    console.log('Status: ' + TenderItems[i].Status);
+                    console.log('---------->');
+
                 }
-            });
+                TaskDetails = JSON.stringify({
+                    TenderItems: TenderItems,
+                    TenderMasId : TenderMasId,
+                    isApproved: isApproved
+                });
+
+                $.ajax({
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    type: 'POST',
+                    url: '/TenderQuotation/ApproveTender',
+                    data: TaskDetails,
+                    success: function (result) {
+                        console.log(result);
+                        if (result.flag === true) {
+                            alert("Record approved successfully!");
+                            window.location.replace("/TenderQuotation/Index");
+                        }
+                        else {
+                            alert(result.message);
+                        }
+
+                    },
+                    failure: function (response) {
+                        alert('error');
+                    }
+                });
+            }
+
         });
 
         function RemoveTask(TenderDetailId){
