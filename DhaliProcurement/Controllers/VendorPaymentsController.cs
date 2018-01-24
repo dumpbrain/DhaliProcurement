@@ -610,13 +610,26 @@ namespace DhaliProcurement.Controllers
 
 
 
-        public JsonResult VendorPaymentUpdate(IEnumerable<VendorPaymentEditDetail> PaymentItems, int VendorId, int VendorMasId, DateTime PayDate)
+        public JsonResult VendorPaymentUpdate(IEnumerable<VendorPaymentEditDetail> PaymentItems, int?[] DeleteItems, int VendorId, int VendorMasId, DateTime PayDate)
         {
             var result = new
             {
                 flag = false,
                 message = "Vendor Payment saving error !"
             };
+
+            if (DeleteItems != null)
+            {
+                foreach (var i in DeleteItems)
+                {
+                    //var delteItem = db.Proc_MaterialEntryDet.SingleOrDefault(x => x.ItemId == i && x.Proc_PurchaseOrderMasId == ProcPurchaseMasterId);
+                    var entryDetId = db.Proc_VendorPaymentDet.Find(i);
+                    db.Proc_VendorPaymentDet.Remove(entryDetId);
+                    db.SaveChanges();
+
+                }
+            }
+
             var flag = false;
             var master = db.Proc_VendorPaymentMas.Find(VendorMasId);
             master.VendorId = VendorId;
@@ -871,47 +884,63 @@ namespace DhaliProcurement.Controllers
 
 
 
-        public ActionResult DeleteVendorPaymentDetails(int Proc_VendorPaymentDetId)
+        public ActionResult DeleteVendorPaymentDetails(int VendorDetailId)
         {
-            var flag = false;
+            //var flag = false;
             var result = new
             {
                 flag = false,
                 message = "Delete error !"
             };
 
+
             // Proc_PurchaseOrderDet data = db.Proc_PurchaseOrderDet.Find(PurchaseOrderDetId);
-            var checkVendorPaymentDet = db.Proc_VendorPaymentDet.Where(x => x.Id == Proc_VendorPaymentDetId).FirstOrDefault();
-
-            if (checkVendorPaymentDet != null)
+            var checkVendorPaymentDet = db.Proc_VendorPaymentDet.Where(x => x.Id == VendorDetailId).ToList();
+            if (checkVendorPaymentDet.Count == 0)
             {
-                var data = db.Proc_VendorPaymentDet.Where(x => x.Id == Proc_VendorPaymentDetId).FirstOrDefault();
-                db.Proc_VendorPaymentDet.Remove(data);
-                flag = db.SaveChanges() > 0;
-
-                if (flag == true)
+                result = new
                 {
-                    result = new
-                    {
-                        flag = true,
-                        message = "Delete Successful Successful!"
-                    };
-                }
-
-                return Json(result, JsonRequestBehavior.AllowGet);
+                    flag = true,
+                    message = "Delete Successful Successful!"
+                };
             }
-
             else
             {
                 result = new
                 {
-                    flag = false,
-                    message = "Delete Failed!"
+                    flag = true,
+                    message = "This item has been used!"
                 };
-                return Json(result, JsonRequestBehavior.AllowGet);
             }
+            //if (checkVendorPaymentDet != null)
+            //{
+            //    var data = db.Proc_VendorPaymentDet.Where(x => x.Id == Proc_VendorPaymentDetId).FirstOrDefault();
+            //    db.Proc_VendorPaymentDet.Remove(data);
+            //    flag = db.SaveChanges() > 0;
 
+            //    if (flag == true)
+            //    {
+            //        result = new
+            //        {
+            //            flag = true,
+            //            message = "Delete Successful Successful!"
+            //        };
+            //    }
 
+            //    return Json(result, JsonRequestBehavior.AllowGet);
+            //}
+
+            //else
+            //{
+            //    result = new
+            //    {
+            //        flag = false,
+            //        message = "Delete Failed!"
+            //    };
+            //    return Json(result, JsonRequestBehavior.AllowGet);
+            //}
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
 
