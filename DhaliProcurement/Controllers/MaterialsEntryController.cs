@@ -748,7 +748,7 @@ namespace DhaliProcurement.Controllers
         }
 
 
-        public JsonResult EditEntry(IEnumerable<VMMaterialsEntry> EntryItems,int EntryMasId, int ProcProjectId, int ProjectId,string TNo, int SiteId ,string EDate)
+        public JsonResult EditEntry(IEnumerable<VMMaterialsEntry> EntryItems, int?[] DeleteItems, int EntryMasId, int ProcProjectId, int ProjectId,string TNo, int SiteId ,string EDate)
         {
             var result = new
             {
@@ -756,7 +756,17 @@ namespace DhaliProcurement.Controllers
                 message = "Entry saving error !"
             };
             var flag = false;
+            if (DeleteItems != null)
+            {
+                foreach (var i in DeleteItems)
+                {
+                    //var delteItem = db.Proc_MaterialEntryDet.SingleOrDefault(x => x.ItemId == i && x.Proc_PurchaseOrderMasId == ProcPurchaseMasterId);
+                    var entryDetId = db.Proc_MaterialEntryDet.Find(i);
+                    db.Proc_MaterialEntryDet.Remove(entryDetId);
+                    db.SaveChanges();
 
+                }
+            }
             var master = db.Proc_MaterialEntryMas.Find(EntryMasId);
             master.EDate = DateTime.ParseExact(EDate, "dd/MM/yyyy", CultureInfo.CurrentCulture);
             //master.EDate = EDate;
@@ -836,7 +846,7 @@ namespace DhaliProcurement.Controllers
 
         public ActionResult DeleteEntryDetailItem(int EntryDetailId)
         {
-            var flag = false;
+            
             var result = new
             {
                 flag = false,

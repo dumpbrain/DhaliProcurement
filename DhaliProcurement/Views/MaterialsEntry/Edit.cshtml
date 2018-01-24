@@ -201,6 +201,9 @@
 
     <script>
         var counter = 0;
+        var deleteCounter = 0;
+        var deleteList = [];
+
         $(document).ready(function () {
             //$('#SiteId').attr("disabled", "true");
             //$("#RCode").attr("disabled", "true");
@@ -234,11 +237,6 @@
                             counter++;
                             //cnTaskRow++;
                             var PreviousReceived = (data.List[i].TotalMaterial)-(data.List[i].RemainingQty);
-                            //var date = data.List[i].ChallanDate;
-                            //alert(date);
-                            //var i = NullHelper.DateToString(date);
-                            //alert(i);
-                            //alert( data.List[i].ChallanDate);
                             var row = $('<tr>'
                                +'<td class="index"><label name="TaskId">'+ counter + '</label><input type="hidden" name="SLNo" value="'+counter+'"/><input type="hidden" name="TenderDetailId" value="'+data.List[i].Proc_MaterialEntryDetId+'"/></td>'
                                + '<td><input value="' + data.List[i].ItemId + '" type="hidden" name="ItemId"/><label>' + data.List[i].ItemName + '<label><input value="' + data.List[i].Proc_RequisitionDetId + '" type="hidden" name="Proc_RequisitionDetId"/></td>'
@@ -256,7 +254,10 @@
                                + '<td><input value="' + data.List[i].EntryQty + '" type="text" name="MaterialEntry" class="form-control MaterialEntry" style="width:80px;"/></td>'
                                + '<td><input value="' + data.List[i].UnitPrice + '" type="hidden" name="UnitPrice" class="form-control UnitPrice" style="width:80px;"/><label>'  + data.List[i].UnitPrice + '</label></td>'
                                + '<td><input value="' + data.List[i].EntryQty * data.List[i].UnitPrice + '" type="text" name="Cost" class="form-control Cost" style="width:80px;" disabled="disabled"/></td>'
-                               + '</td><input value="' + data.List[i].Status + '" type="hidden" name="Status"/> <td><button  onclick="RemoveTask('+data.List[i].Proc_MaterialEntryDetId+')" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
+                               + '</td> <td><input value="' + data.List[i].Status + '" type="hidden" name="Status"/>'
+                               //+'<button  onclick="RemoveTask('+data.List[i].Proc_MaterialEntryDetId+')" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button>'
+                               +'<button class="btn text-warning-600 btn-flat btn-icon btn-rounded deleteDetailTask"><i class="icon-cross"></i></button>'
+                               +'</td></tr>');
                                //+'<td">'+
                                //         '<button  onclick="RemoveTask(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button>'+
                                //         ' <input type="checkbox"  />'+
@@ -268,6 +269,51 @@
                             //$("input[name='EndDate']").addClass('datepicker').datepicker();
                             RebindDatePicker();
                         }
+
+                    $('.deleteDetailTask').click(function (e) {
+                        e.preventDefault();
+                        var retVal = confirm("Do you want to delete this Item ?");
+                        if (retVal == true) {
+                            var row = $(this).closest('tr');
+                            var itemDetId = $(this).closest('tr').find('td input[name=TenderDetailId]').val();
+                            @*var ProcPurchaseMasterId= @ViewBag.ProcPurchaseMasterId;*@
+                            //alert(itemDetId);
+
+                            EntryDelete = JSON.stringify({
+                                EntryDetailId: itemDetId
+                            });
+
+                            $.ajax({
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                type: 'POST',
+                                url: '/MaterialsEntry/DeleteEntryDetailItem',
+                                data: EntryDelete,
+                                success: function (result) {
+                                    console.log(result);
+                                    if (result.flag === true) {
+                                        deleteList[deleteCounter] = itemDetId;
+                                        deleteCounter++;
+                                        row.remove();
+                                    }
+                                    else {
+                                        alert(result.message);
+                                    }
+
+
+                                },
+                                failure: function (response) {
+                                    alert('error');
+                                }
+                            });
+
+                        }
+                        else {
+                            return false;
+                        }
+
+                    });
+
 
 
                 },
@@ -718,6 +764,7 @@
 
             TaskDetails = JSON.stringify({
                 EntryItems: EntryItems,
+                DeleteItems:deleteList,
                 EntryMasId:EntryMasId,
                 ProcProjectId:ProcProjectId,
                 ProjectId: ProjectId,
@@ -725,7 +772,6 @@
                 EDate: EDate
             });
 
-            alert('Test');
             //alert('Test');
             $.ajax({
                 contentType: 'application/json; charset=utf-8',
